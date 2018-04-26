@@ -8,32 +8,30 @@ fi
 
 cd "$OPENQA_BASEDIR/repos"
 
-function clone_repo() {
-    local repo_name=${1}
-    local repo_as=${2:-$repo_name}
-    local repo_url="https://github.com/os-autoinst/$repo_name"
+function update_repo() {
+    pushd "$1"
+
+    # get current branch
+    local branch_name=$(git symbolic-ref -q HEAD)
+    local branch_name=${branch_name##refs/heads/}
+    local branch_name=${branch_name:-DETACHED}
+
+    # get new stuff from everywhere
+    git remote update
+
+    # get in clean state, we should never have any commits on local master anyways
+    [[ $branch_name == master ]] && git reset --hard origin/master
     
-    if [[ -d $repo_name ]]; then
-        echo "Skipping $repo_name; already exists."
-        return 0
+    # run configure/make
+    if [[ -f configure ]]; then
+        ./configure
+        make
     fi
     
-    git clone "$repo_url" "$repo_name"
-    pushd "$repo_name"
-    git remote add "$gh_user" "git@github.com:$gh_user/$repo_name.git"
-    git remote update
     popd
 }
 
-clone_repo openQA
-clone_repo os-autoinst
-
-mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests"
-cd "$OPENQA_BASEDIR/var/openqa/share/tests"
-
-clone_repo os-autoinst-distri-opensuse opensuse
-
-mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
-cd "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
-
-clone_repo os-autoinst-needles-opensuse needles
+update_repo "$OPENQA_BASEDIR/repos/openQA"
+update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
+update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
+update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse/needles"

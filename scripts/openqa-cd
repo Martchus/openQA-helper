@@ -1,0 +1,6 @@
+#!/bin/bash
+repo=${1:-openQA}
+[[ -d "$OPENQA_BASEDIR/repos/$repo" ]] && dir="$OPENQA_BASEDIR/repos/$repo"
+[[ -d "$OPENQA_BASEDIR/openqa/share/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/$repo"
+[[ -d "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/$repo"
+[[ $dir ]] && cd "$dir" || echo "$repo does not exist"

@@ -25,7 +25,7 @@ function clone_repo() {
         return 0
     fi
     
-    git clone "$repo_url" "$repo_name"
+    git clone "$repo_url" "$repo_name" "$repo_as"
     pushd "$repo_name"
     git remote add "$gh_user" "git@github.com:$gh_user/$repo_name.git"
     git remote update

@@ -10,6 +10,7 @@ export OPENQA_CONFIG=$OPENQA_BASEDIR/config
 export DBUS_STARTER_BUS_TYPE=session
 export PATH="$PATH:/usr/lib64/chromium:/hdd/openqa-devel/repos/openQA-helper/scripts"
 #export OPENQA_SQL_DEBUG=true
+alias openqa-cd='source openqa-cd'
 ```
 
 * Install all packages required for openQA development via `openqa-install-devel-deps`.
