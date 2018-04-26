@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+zypper ar https://download.opensuse.org/repositories/devel:/openQA/openSUSE_Tumbleweed devel-openqa
+zypper in openQA-{client,common,local-db,worker} \
+          os-autoinst \
+          chromedriver \
+          'rubygem(sass)' \
+          'perl(Mojo::RabbitMQ::Client)' \
+          'perl(Perl::Critic)' \
+          'perl(Perl::Tidy)' \
+          'perl(Selenium::Remote::Driver)' \
+          'perl(Test::Compile)' \
+          'perl(Test::MockObject)' \
+          'perl(Test::Warnings)' \
+          'perl(DBIx::Class::DeploymentHandler)' \
+          'perl(SQL::SplitStatement)' \
+          'perl(Mojolicious::Plugin::AssetPack)' \
+          'perl(DBIx::Class)' \
+          'perl(Minion)' \
+          postgresql-server

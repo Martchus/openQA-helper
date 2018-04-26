@@ -1,0 +1,5 @@
+#!/bin/bash
+cd "$OPENQA_CONFIG"
+[[ -f database-$1.ini ]] \
+    && ln -sf "database-$1.ini" "database.ini" \
+    || echo "No config for specified db $1 available."

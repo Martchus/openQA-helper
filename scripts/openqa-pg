@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+cd "$OPENQA_BASEDIR/repos/openQA"
+t/test_postgresql /dev/shm/tpg

@@ -1,0 +1,39 @@
+#!/bin/bash
+set -e
+
+if ! [[ -d $OPENQA_BASEDIR ]]; then
+    echo 'Please set $OPENQA_BASEDIR to a valid directory.'
+    exit 1
+fi
+
+cd "$OPENQA_BASEDIR/repos"
+
+function clone_repo() {
+    local repo_name=${1}
+    local repo_as=${2:-$repo_name}
+    local repo_url="https://github.com/os-autoinst/$repo_name"
+    
+    if [[ -d $repo_name ]]; then
+        echo "Skipping $repo_name; already exists."
+        return 0
+    fi
+    
+    git clone "$repo_url" "$repo_name"
+    pushd "$repo_name"
+    git remote add "$gh_user" "git@github.com:$gh_user/$repo_name.git"
+    git remote update
+    popd
+}
+
+clone_repo openQA
+clone_repo os-autoinst
+
+mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests"
+cd "$OPENQA_BASEDIR/var/openqa/share/tests"
+
+clone_repo os-autoinst-distri-opensuse opensuse
+
+mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
+cd "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
+
+clone_repo os-autoinst-needles-opensuse needles

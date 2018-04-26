@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd "$OPENQA_BASEDIR/repos/openQA"
+
+what=$1
+shift
+
+if [[ $what == webui ]]; then
+    script/openqa daemon "$@"
+else
+    script/openqa-"$what" "$@"
+fi
