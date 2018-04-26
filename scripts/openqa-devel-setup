@@ -33,17 +33,18 @@ function clone_repo() {
 }
 
 clone_repo openQA
-clone_repo os-autoinst
-
-mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests"
-cd "$OPENQA_BASEDIR/var/openqa/share/tests"
-
-clone_repo os-autoinst-distri-opensuse opensuse
-
-mkdir -p "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
-cd "$OPENQA_BASEDIR/var/openqa/share/tests/opensuse/products/opensuse"
-
-clone_repo os-autoinst-needles-opensuse needles
-
 mkdir -p "$OPENQA_BASEDIR/config"
 cp "$OPENQA_BASEDIR/repos/etc/"* "$OPENQA_BASEDIR/config"
+mkdir "$OPENQA_BASEDIR/openqa/db"
+mkdir "$OPENQA_BASEDIR/openqa/share/factory"
+
+clone_repo os-autoinst
+
+mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
+cd "$OPENQA_BASEDIR/openqa/share/tests"
+clone_repo os-autoinst-distri-opensuse opensuse
+
+mkdir -p "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
+cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
+clone_repo os-autoinst-needles-opensuse needles
+

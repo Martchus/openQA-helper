@@ -1,0 +1,2 @@
+#!/bin/bash
+"$OPENQA_BASEDIR/repos/openQA/script/tidy"

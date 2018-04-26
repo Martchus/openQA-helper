@@ -2,7 +2,19 @@
 set -e
 
 zypper ar https://download.opensuse.org/repositories/devel:/openQA/openSUSE_Tumbleweed devel-openqa
+zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl/openSUSE_Tumbleweed devel-perl
+zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl:/CPAN-M/openSUSE_Tumbleweed devel-perl-m
 zypper in openQA-{client,common,local-db,worker} \
+          automake \
+          autoconf \
+          gcc-c++ \
+          opencv-devel \
+          'perl(Module::CPANfile)' \
+          'pkgconfig(fftw3)' \
+          'pkgconfig(libpng)' \
+          'pkgconfig(sndfile)' \
+          'pkgconfig(theoraenc)' 
+          qemu-tools \
           os-autoinst \
           chromedriver \
           'rubygem(sass)' \
@@ -18,4 +30,6 @@ zypper in openQA-{client,common,local-db,worker} \
           'perl(Mojolicious::Plugin::AssetPack)' \
           'perl(DBIx::Class)' \
           'perl(Minion)' \
+          perl-Devel-NYTProf \
+          perl-Mojolicious-Plugin-NYTProf \
           postgresql-server
