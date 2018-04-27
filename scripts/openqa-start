@@ -7,20 +7,25 @@ shift
 
 declare -A shortcuts=(
     [wu]=webui
+    [wu2]=webui2
     [ws]=websockets
     [ra]=resource-allocator
     [sc]=scheduler
     [wo]=worker
     [cj]=clone-job
+    [jc]=clone-job
+    [job-clone]=job-clone
 )
 what=${shortcuts[$what]:-$what}
 
 if [[ $what == webui ]]; then
     script/openqa daemon "$@"
+elif [[ $what == webui2 ]]; then
+    script/openqa daemon -l http://127.0.0.1:12345 "$@"
 elif [[ $what == worker ]]; then
     script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
-elif [[ $what == clone-job ]]; then
-    script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --host http://localhost:9526 --from https://openqa.opensuse.org "$@"
+elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
+    script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
 else
     script/openqa-"$what" "$@"
 fi

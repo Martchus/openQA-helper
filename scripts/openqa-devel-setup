@@ -15,6 +15,7 @@ fi
 mkdir -p "$OPENQA_BASEDIR/repos"
 cd "$OPENQA_BASEDIR/repos"
 
+# define function to clone repo and add fork
 function clone_repo() {
     local repo_name=${1}
     local repo_as=${2:-$repo_name}
@@ -32,19 +33,24 @@ function clone_repo() {
     popd
 }
 
+# clone openQA and create required directories for config and test data
 clone_repo openQA
 mkdir -p "$OPENQA_BASEDIR/config"
 cp "$OPENQA_BASEDIR/repos/etc/"* "$OPENQA_BASEDIR/config"
-mkdir "$OPENQA_BASEDIR/openqa/db"
-mkdir "$OPENQA_BASEDIR/openqa/share/factory"
+mkdir -p "$OPENQA_BASEDIR/openqa/"{db,testresults,share}
+mkdir -p "$OPENQA_BASEDIR/openqa/share/factory/"{iso,other}
 
+# clone os-autoinst
 clone_repo os-autoinst
 
+# clone tests for openSUSE
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
 cd "$OPENQA_BASEDIR/openqa/share/tests"
 clone_repo os-autoinst-distri-opensuse opensuse
+ln -s opensuse sle
 
+# clone needles for openSUSE (yes, this is a subdirectory in our previous checkout)
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
 clone_repo os-autoinst-needles-opensuse needles
-
+# note: needles for SLE not incluced, checkout from internal repo manually
