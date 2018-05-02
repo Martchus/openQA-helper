@@ -19,10 +19,15 @@ user. The openQA packages are only installed to pull runtime dependencies.
   export DBUS_STARTER_BUS_TYPE=session
   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
   #export OPENQA_SQL_DEBUG=true
+  export OPENQA_KEY=set_later
+  export OPENQA_SECRET=set_later
+  export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
+  export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
   alias openqa-cd='source openqa-cd'
   ```
   Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
-  it will need a considerably amount of disk space.
+  it will need a considerably amount of disk space. The key and secret must be adjusted later when
+  created via the web UI.
 * `cd $OPENQA_BASEDIR/repos; git checkout https://github.com/Martchus/openQA-helper.git`
 * Install all packages required for openQA development via `openqa-install-devel-deps`.
 * Fork all required repos on GitHub. For the list of repos, just checkout the
