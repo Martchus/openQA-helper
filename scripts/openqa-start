@@ -26,6 +26,16 @@ elif [[ $what == worker ]]; then
     script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
     script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
+elif [[ $what == all ]]; then
+    source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
+    sessions=(
+        openQA-webui               'wu'
+        openQA-websockets          'ws'
+        openQA-resource-allocator  'ra'
+        openQA-scheduler           'sc'
+        openQA-worker1             'wo'
+    )
+    start_sessions ${sessions[@]}
 else
     script/openqa-"$what" "$@"
 fi
