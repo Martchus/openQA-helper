@@ -16,6 +16,7 @@ user. The openQA packages are only installed to pull runtime dependencies.
   ```
   export OPENQA_BASEDIR=/hdd/openqa-devel
   export OPENQA_CONFIG=$OPENQA_BASEDIR/config
+  export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
   export DBUS_STARTER_BUS_TYPE=session
   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
   #export OPENQA_SQL_DEBUG=true
