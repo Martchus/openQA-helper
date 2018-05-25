@@ -24,7 +24,13 @@ function update_repo() {
     
     # run configure/make
     if [[ -f configure ]]; then
-        ./configure
+        if ! ./configure; then
+            libtoolize --force
+            aclocal
+            automake --force-missing --add-missing
+            autoconf
+            ./configure
+        fi
         make
     fi
     
