@@ -22,6 +22,8 @@ if [[ $what == webui ]]; then
     script/openqa daemon "$@"
 elif [[ $what == webui2 ]]; then
     script/openqa daemon -l http://127.0.0.1:12345 "$@"
+elif [[ $what == client ]]; then
+    script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
     script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
@@ -36,6 +38,11 @@ elif [[ $what == all ]]; then
         openQA-worker1             'wo'
     )
     start_sessions ${sessions[@]}
-else
+elif [[ -x script/openqa-$what ]]; then
     script/openqa-"$what" "$@"
+elif [[ -x script/$what ]]; then
+    script/"$what" "$@"
+else
+    echo "Script \"$what\" not found."
+    exit -1
 fi
