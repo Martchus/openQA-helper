@@ -49,6 +49,14 @@ cd "$OPENQA_BASEDIR/openqa/share/tests"
 clone_repo os-autoinst-distri-opensuse opensuse
 ln -s opensuse sle
 
+# create symlinks for tidy
+cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
+pushd tools
+ln -s ../../../../../repos/os-autoinst/tools/tidy
+popd
+ln -s ../../../../repos/os-autoinst/.perltidyrc
+
+
 # clone needles for openSUSE (yes, this is a subdirectory in our previous checkout)
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
