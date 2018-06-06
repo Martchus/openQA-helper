@@ -47,5 +47,31 @@ script automatically resets it to the latest state on `origin`. So It is assumed
 ever use the local master to do modifications! Configure and make are for os-autoinst are run
 automatically.
 
+## Prepare running tests via Docker
+```
+sudo zypper in docker
+```
+
+Customize path for Docker stuff (I don't want it on the SSD):
+```
+SYSTEMD_EDITOR=/bin/vim sudo -E systemctl edit docker.service
+
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --containerd /run/containerd/containerd.sock --add-runtime oci=/usr/sbin/docker-runc --data-root=/hdd/docker $DOCKER_NETWORK_OPTIONS $DOCKER_OPTS
+```
+
+```
+sudo systemctl start docker.service
+sudo docker pull dasantiago/openqa-tests
+```
+
+```
+# run tests
+openqa-docker-test
+# pass env vars, eg. to run fullstack test
+openqa-docker-test -e FULLSTACK=1
+```
+
 ## More scripts
 * https://github.com/okurz/scripts
