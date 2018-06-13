@@ -47,7 +47,8 @@ script automatically resets it to the latest state on `origin`. So It is assumed
 ever use the local master to do modifications! Configure and make are for os-autoinst are run
 automatically.
 
-## Prepare running tests via Docker
+## Run tests with Docker
+### Prepare running tests via Docker
 ```
 sudo zypper in docker
 ```
@@ -66,11 +67,35 @@ sudo systemctl start docker.service
 sudo docker pull dasantiago/openqa-tests
 ```
 
+### Run tests
 ```
-# run tests
 openqa-docker-test
+
 # pass env vars, eg. to run fullstack test
 openqa-docker-test -e FULLSTACK=1
+openqa-docker-test -e DEVELOPER_FULLSTACK=1
+
+# expose ports
+# FIXME: not working for me
+openqa-docker-test -e MOJO_PORT=12345 -p 12345-12347:12345-12347
+
+# non-headless mode
+# FIXME: not working for me
+openqa-docker-test -e NOT_HEADLESS=1 -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix
+
+# set custom container name
+export CONTAINER_NAME=the-other-testrun
+```
+
+### Enter container with Bash
+```
+sudo docker exec -it openqa-testsuite bash
+```
+
+### Stop test again, get rid of container
+```
+sudo docker stop openqa-testsuite
+sudo docker container rm openqa-testsuite
 ```
 
 ## More scripts
