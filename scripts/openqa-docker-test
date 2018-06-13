@@ -1,4 +1,7 @@
 #!/bin/bash
 cd "$OPENQA_BASEDIR/repos/openQA"
+CONTAINER_NAME=${CONTAINER_NAME:-openqa-testsuite}
 
-sudo docker run --cap-add SYS_ADMIN -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" -v /var/run/dbus:/var/run/dbus "$@" dasantiago/openqa-tests make docker-tests
+for cmd in echo sudo; do
+    $cmd docker run --name "$CONTAINER_NAME" --cap-add SYS_ADMIN -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" -v /var/run/dbus:/var/run/dbus "$@" dasantiago/openqa-tests make docker-tests
+done
