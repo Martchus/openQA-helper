@@ -7,6 +7,7 @@ shift
 
 declare -A shortcuts=(
     [wu]=webui
+    [lv]=live
     [wu2]=webui2
     [ws]=websockets
     [ra]=resource-allocator
@@ -19,19 +20,28 @@ declare -A shortcuts=(
 what=${shortcuts[$what]:-$what}
 
 if [[ $what == webui ]]; then
+    echo script/openqa daemon "$@"
     script/openqa daemon "$@"
 elif [[ $what == webui2 ]]; then
+    echo script/openqa daemon -l http://127.0.0.1:12345 "$@"
     script/openqa daemon -l http://127.0.0.1:12345 "$@"
+elif [[ $what == live ]]; then
+    echo script/openqa-livehandler daemon "$@"
+    script/openqa-livehandler daemon "$@"
 elif [[ $what == client ]]; then
+    echo script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
     script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
+    echo script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
     script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
+    echo script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
     script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
 elif [[ $what == all ]]; then
     source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
     sessions=(
         openQA-webui               'wu'
+        openQA-live                'lv'
         openQA-websockets          'ws'
         openQA-resource-allocator  'ra'
         openQA-scheduler           'sc'
@@ -39,8 +49,10 @@ elif [[ $what == all ]]; then
     )
     start_sessions ${sessions[@]}
 elif [[ -x script/openqa-$what ]]; then
+    echo script/openqa-"$what" "$@"
     script/openqa-"$what" "$@"
 elif [[ -x script/$what ]]; then
+    echo script/"$what" "$@"
     script/"$what" "$@"
 else
     echo "Script \"$what\" not found."
