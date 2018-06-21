@@ -87,9 +87,9 @@ openqa-docker-test -e NOT_HEADLESS=1 -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-u
 export CONTAINER_NAME=the-other-testrun
 ```
 
-### Enter container with Bash
+### Enter running container with Bash
 ```
-sudo docker exec -it openqa-testsuite bash
+openqa-docker-bash
 ```
 
 ### Stop test again, get rid of container
