@@ -18,7 +18,12 @@ for arg in "$@"; do
         fi
     fi
 done
+
+# set default test command
 [[ $test_command ]] || test_command=(make docker-tests)
+
+# keep a bash open so we can investigate failures easier
+test_command+=(';' 'bash')
 
 # use host X
 XSOCK=/tmp/.X11-unix:/tmp/.X11-unix:rw
@@ -32,7 +37,10 @@ for cmd in echo sudo; do
         --name "$CONTAINER_NAME" \
         --cap-add SYS_ADMIN \
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
-        -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" -v /var/run/dbus:/var/run/dbus \
+        -e CUSTOM_OS_AUTOINST=1 \
+        -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" \
+        -v "$OPENQA_BASEDIR/repos/os-autoinst:/opt/os-autoinst" \
+        -v /var/run/dbus:/var/run/dbus \
         "${docker_options[@]}" registry.opensuse.org/devel/openqa/containers/openqa_dev "${test_command[@]}"
 done
 
