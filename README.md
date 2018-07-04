@@ -1,7 +1,7 @@
 # openQA helper
 Scripts and (a little bit) documentation to ease openQA development.
 
-Note this aims to get a development setup where everything is started as your regular
+Note that this aims to get a development setup where everything is started as your regular
 user. The openQA packages are only installed to pull runtime dependencies.
 
 ## Setup guide
@@ -29,10 +29,10 @@ user. The openQA packages are only installed to pull runtime dependencies.
   Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
   it will need a considerably amount of disk space. The key and secret must be adjusted later when
   created via the web UI.
-* `cd $OPENQA_BASEDIR/repos; git checkout https://github.com/Martchus/openQA-helper.git`
+* `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git checkout https://github.com/Martchus/openQA-helper.git`
 * Install all packages required for openQA development via `openqa-install-devel-deps`.
 * Fork all required repos on GitHub. For the list of repos, just checkout the
-  `openqa-devel-setup your_github_name` script.
+  `openqa-devel-setup` script.
 * Execute `openqa-devel-setup your_github_name` to clone all required repos. This also adds your
   forks.
 
@@ -80,8 +80,7 @@ openqa-docker-test -e DEVELOPER_FULLSTACK=1
 openqa-docker-test -e MOJO_PORT=12345 -p 12345-12347:12345-12347
 
 # non-headless mode
-# FIXME: not working for me
-openqa-docker-test -e NOT_HEADLESS=1 -e DISPLAY=:0 -v /tmp/.X11-unix:/tmp/.X11-unix
+openqa-docker-test -e NOT_HEADLESS=1
 
 # set custom container name
 export CONTAINER_NAME=the-other-testrun
