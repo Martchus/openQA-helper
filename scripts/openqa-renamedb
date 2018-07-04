@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+old_name=$1
+new_name=$2
+
+if ! [[ $old_name ]] || ! [[ $new_name ]]; then
+    echo "Renames the specified database"
+    echo "usage: $0 old_name new_name"
+    echo "eg. openqa-osd{,-backup}"
+    exit 1
+fi
+
+echo "ALTER DATABASE \"$old_name\" RENAME TO \"$new_name\";" | sudo sudo -u postgres psql
