@@ -97,5 +97,18 @@ sudo docker stop openqa-testsuite
 sudo docker container rm openqa-testsuite
 ```
 
+## Checking for JavaScript errors
+```
+sudo zypper in npm
+openqa-cd
+npm install jshint
+echo "node_modules/
+package-lock.json" >> .git/info/exclude
+```
+
+```
+node_modules/jshint/bin/jshint assets/javascripts/running.js
+```
+
 ## More scripts
 * https://github.com/okurz/scripts
