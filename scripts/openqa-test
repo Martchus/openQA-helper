@@ -2,5 +2,14 @@
 cd "$OPENQA_BASEDIR/repos/openQA"
 [[ $1 == 't/testinstance' ]] && basedir="$OPENQA_BASEDIR/repos/openQA/t/data" || basedir=
 [[ $NOT_HEADLESS ]] || echo 'Note: use NOT_HEADLESS=1 to watch execution of UI tests.'
+
+export SCHEDULER_FULLSTACK=1
+export DEVELOPER_FULLSTACK=1
+export FULLSTACK=1
+export LANG=en_US.utf8
+export TEST_PG='DBI:Pg:dbname=openqa_test;host=/dev/shm/tpg'
+export OPENQA_BASEDIR="$basedir"
+export MOJO_PORT="${MOJO_PORT:-12345}"
+
 echo prove -v "$@"
-TEST_PG='DBI:Pg:dbname=openqa_test;host=/dev/shm/tpg' OPENQA_BASEDIR="$basedir" MOJO_PORT="${MOJO_PORT:-12345}" prove -v "$@"
+prove -v "$@"
