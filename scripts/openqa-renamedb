@@ -12,3 +12,15 @@ if ! [[ $old_name ]] || ! [[ $new_name ]]; then
 fi
 
 echo "ALTER DATABASE \"$old_name\" RENAME TO \"$new_name\";" | sudo sudo -u postgres psql
+
+echo "Apply config"
+echo "[test]
+dsn = dbi:SQLite:dbname=:memory:
+on_connect_call = use_foreign_keys
+on_connect_do = PRAGMA synchronous = OFF
+sqlite_unicode = 1
+
+[production]
+dsn = dbi:Pg:dbname=$db_branch_name
+" > "$OPENQA_CONFIG/database-$db_branch_name.ini"
+openqa-switchdb "$db_branch_name"
