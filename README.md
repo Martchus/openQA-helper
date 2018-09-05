@@ -69,6 +69,11 @@ sudo docker pull dasantiago/openqa-tests
 
 ### Run tests
 ```
+# build the docker image
+cd "$OPENQA_BASEDIR/repos/openQA"
+make docker-test-build
+
+# run regular tests
 openqa-docker-test
 
 # pass env vars, eg. to run fullstack test
@@ -84,6 +89,9 @@ openqa-docker-test -e NOT_HEADLESS=1
 
 # set custom container name
 export CONTAINER_NAME=the-other-testrun
+
+# run custom command
+openqa-docker-test -- bash
 ```
 
 ### Enter running container with Bash

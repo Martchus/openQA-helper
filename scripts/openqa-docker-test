@@ -40,7 +40,7 @@ for cmd in echo sudo; do
         -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" \
         -v "$OPENQA_BASEDIR/repos/os-autoinst:/opt/os-autoinst" \
         -v /var/run/dbus:/var/run/dbus \
-        "${docker_options[@]}" registry.opensuse.org/devel/openqa/containers/openqa_dev "${test_command[@]}"
+        "${docker_options[@]}" openqa:latest "${test_command[@]}"
 done
 
 xhost -local:root
