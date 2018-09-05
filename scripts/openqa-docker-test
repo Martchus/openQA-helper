@@ -6,7 +6,6 @@ CONTAINER_NAME=${CONTAINER_NAME:-openqa-testsuite}
 docker_options=()
 test_command=()
 read=docker_options
-not_headless=
 for arg in "$@"; do
     if [[ $arg == -- ]]; then
         read=test_command
