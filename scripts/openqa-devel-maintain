@@ -9,7 +9,8 @@ fi
 cd "$OPENQA_BASEDIR/repos"
 
 function update_repo() {
-    pushd "$1"
+    local repo_path=$1
+    pushd "$repo_path"
 
     # get current branch
     local branch_name=$(git symbolic-ref -q HEAD)
@@ -23,7 +24,7 @@ function update_repo() {
     [[ $branch_name == master ]] && git reset --hard origin/master
     
     # run configure/make
-    if [[ -f configure ]]; then
+    if [ "${repo_path##*/}" == 'os-autoinst' ]; then
         if ! ./configure; then
             libtoolize --force
             aclocal
@@ -39,5 +40,6 @@ function update_repo() {
 
 update_repo "$OPENQA_BASEDIR/repos/openQA"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
+update_repo "$OPENQA_BASEDIR/repos/os-autoinst-clean"
 update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
 update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse/needles"

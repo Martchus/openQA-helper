@@ -30,6 +30,9 @@ XAUTH=/tmp/.docker.xauth
 xauth nlist :0 | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 xhost +local:root
 
+# note: use a clean copy of os-autoinst here since my regular checkout usually contains binaries linked against
+#       libraries as provided by Tumbleweed which might not be compatible with the libs found in the Docker container
+
 for cmd in echo sudo; do
     $cmd docker run \
         --rm -ti \
@@ -38,7 +41,7 @@ for cmd in echo sudo; do
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
         -e CUSTOM_OS_AUTOINST=1 \
         -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" \
-        -v "$OPENQA_BASEDIR/repos/os-autoinst:/opt/os-autoinst" \
+        -v "$OPENQA_BASEDIR/repos/os-autoinst-clean:/opt/os-autoinst" \
         -v /var/run/dbus:/var/run/dbus \
         "${docker_options[@]}" openqa:latest "${test_command[@]}"
 done
