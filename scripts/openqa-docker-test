@@ -37,7 +37,6 @@ for cmd in echo sudo; do
     $cmd docker run \
         --rm -ti \
         --name "$CONTAINER_NAME" \
-        --cap-add SYS_ADMIN \
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
         -e CUSTOM_OS_AUTOINST=1 \
         -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" \
