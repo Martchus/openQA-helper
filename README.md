@@ -59,7 +59,7 @@ SYSTEMD_EDITOR=/bin/vim sudo -E systemctl edit docker.service
 
 [Service]
 ExecStart=
-ExecStart=/usr/bin/dockerd --containerd /run/containerd/containerd.sock --add-runtime oci=/usr/sbin/docker-runc --data-root=/hdd/docker $DOCKER_NETWORK_OPTIONS $DOCKER_OPTS
+ExecStart=/usr/bin/dockerd --add-runtime oci=/usr/sbin/docker-runc --data-root=/hdd/docker $DOCKER_NETWORK_OPTIONS $DOCKER_OPTS
 ```
 
 ```
