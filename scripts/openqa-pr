@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+gh_user=${1:-Martchus}
+branch_name=$(git symbolic-ref -q HEAD)
+branch_name=${branch_name##refs/heads/}
+branch_name=${branch_name:-HEAD}
+xdg-open "https://github.com/$gh_user/openQA/pull/new/$branch_name"
