@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+cd "$OPENQA_BASEDIR/repos/openQA"
+find nytprof/html/ nytprof/profiles/ -ipath '*/nytprof_out_*'
