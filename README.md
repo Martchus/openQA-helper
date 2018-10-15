@@ -48,6 +48,8 @@ ever use the local master to do modifications! Configure and make are for os-aut
 automatically.
 
 ## Run tests with Docker
+See [documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#running-tests-of-openqa-itself).
+
 ### Prepare running tests via Docker
 ```
 sudo zypper in docker
