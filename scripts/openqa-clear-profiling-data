@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
 cd "$OPENQA_BASEDIR/repos/openQA"
-find nytprof/html/ nytprof/profiles/ -ipath '*/nytprof_out_*'
+find nytprof/html/ nytprof/profiles/ -ipath '*/nytprof_out_*' -delete -exec echo rm {} \;
