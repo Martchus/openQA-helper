@@ -133,6 +133,7 @@ VIRSH_HOSTNAME=127.0.0.1 # use our own machine as svirt host
 VIRSH_USERNAME=root # see notes
 VIRSH_CMDLINE=ifcfg=dhcp
 VIRSH_MAC=52:54:00:12:34:56 # not sure at which point this is used
+VIRSH_OPENQA_BASEDIR=/hdd/openqa-devel
 WORKER_CLASS=svirt,svirt-kvm
 VIRSH_INSTANCE=1
 #VIRSH_PASSWORD=# see notes
