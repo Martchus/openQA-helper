@@ -33,7 +33,7 @@ xhost +local:root
 # note: use a clean copy of os-autoinst here since my regular checkout usually contains binaries linked against
 #       libraries as provided by Tumbleweed which might not be compatible with the libs found in the Docker container
 
-for cmd in echo sudo; do
+for cmd in echo ''; do
     $cmd docker run \
         --rm -ti \
         --name "$CONTAINER_NAME" \
