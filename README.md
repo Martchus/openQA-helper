@@ -36,6 +36,12 @@ user. The openQA packages are only installed to pull runtime dependencies.
 * Execute `openqa-devel-setup your_github_name` to clone all required repos. This also adds your
   forks.
 
+### Notes
+Be aware that not everybody is aware of `OPENQA_BASEDIR`. So some code in the test distribution might
+rely on things being at the default location under `/var/lib/openqa` (eg. when using svirt backend to
+actually connect to a remote host). This can be worked around by creating (at least temporarily)
+a symlink.
+
 ## Switching between databases conveniently
 * Create files similar to the ones found under `example-config`.
 * Don't change the pattern used for the filenames.
