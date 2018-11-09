@@ -31,8 +31,8 @@ user. The openQA packages are only installed to pull runtime dependencies.
   created via the web UI.
 * `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git checkout https://github.com/Martchus/openQA-helper.git`
 * Install all packages required for openQA development via `openqa-install-devel-deps`.
-* Fork all required repos on GitHub. For the list of repos, just checkout the
-  `openqa-devel-setup` script.
+* Fork all required repos on GitHub under your name: `os-autoinst/os-autoinst`, `os-autoinst/openQA`,
+  `os-autoinst/os-autoinst-distri-opensuse` and `os-autoinst/os-autoinst-needles-opensuse`.
 * Execute `openqa-devel-setup your_github_name` to clone all required repos. This also adds your
   forks.
 

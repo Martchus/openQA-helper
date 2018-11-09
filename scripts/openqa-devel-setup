@@ -26,8 +26,8 @@ function clone_repo() {
         return 0
     fi
     
-    git clone "$repo_url" "$repo_name" "$repo_as"
-    pushd "$repo_name"
+    git clone "$repo_url" "$repo_as"
+    pushd "$repo_as"
     git remote add "$gh_user" "git@github.com:$gh_user/$repo_name.git"
     git remote update
     popd
@@ -36,7 +36,7 @@ function clone_repo() {
 # clone openQA and create required directories for config and test data
 clone_repo openQA
 mkdir -p "$OPENQA_BASEDIR/config"
-cp "$OPENQA_BASEDIR/repos/etc/"* "$OPENQA_BASEDIR/config"
+cp -r "$OPENQA_BASEDIR/repos/openQA/etc/"* "$OPENQA_BASEDIR/config"
 mkdir -p "$OPENQA_BASEDIR/openqa/"{db,testresults,share}
 mkdir -p "$OPENQA_BASEDIR/openqa/share/factory/"{iso,other}
 
