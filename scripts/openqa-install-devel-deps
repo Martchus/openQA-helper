@@ -13,7 +13,7 @@ zypper in openQA-{client,common,local-db,worker} \
           'pkgconfig(fftw3)' \
           'pkgconfig(libpng)' \
           'pkgconfig(sndfile)' \
-          'pkgconfig(theoraenc)' 
+          'pkgconfig(theoraenc)' \
           qemu-tools \
           os-autoinst \
           chromedriver \
