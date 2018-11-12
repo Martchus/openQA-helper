@@ -29,7 +29,7 @@ user. The openQA packages are only installed to pull runtime dependencies.
   Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
   it will need a considerably amount of disk space. The key and secret must be adjusted later when
   created via the web UI.
-* `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git checkout https://github.com/Martchus/openQA-helper.git`
+* `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git clone https://github.com/Martchus/openQA-helper.git`
 * Install all packages required for openQA development via `openqa-install-devel-deps`.
 * Fork all required repos on GitHub under your name: `os-autoinst/os-autoinst`, `os-autoinst/openQA`,
   `os-autoinst/os-autoinst-distri-opensuse` and `os-autoinst/os-autoinst-needles-opensuse`.
