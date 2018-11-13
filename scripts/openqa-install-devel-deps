@@ -30,6 +30,7 @@ zypper in openQA-{client,common,local-db,worker} \
           'perl(Mojolicious::Plugin::AssetPack)' \
           'perl(DBIx::Class)' \
           'perl(Minion)' \
+          'perl(XML::Writer)' \
           perl-Devel-NYTProf \
           perl-Mojolicious-Plugin-NYTProf \
           postgresql-server
