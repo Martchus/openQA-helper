@@ -36,7 +36,7 @@ function clone_repo() {
 # clone openQA and create required directories for config and test data
 clone_repo openQA
 mkdir -p "$OPENQA_BASEDIR/config"
-cp -r "$OPENQA_BASEDIR/repos/openQA/etc/"* "$OPENQA_BASEDIR/config"
+cp -r "$OPENQA_BASEDIR/repos/openQA/etc/openqa"* --target-directory="$OPENQA_BASEDIR/config"
 mkdir -p "$OPENQA_BASEDIR/openqa/"{db,testresults,share}
 mkdir -p "$OPENQA_BASEDIR/openqa/share/factory/"{iso,other}
 
