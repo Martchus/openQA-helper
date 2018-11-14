@@ -1,7 +1,7 @@
 # openQA helper
 Scripts and (a little bit) documentation to ease openQA development.
 
-Note that this aims to get a development setup where everything is started as your regular
+Note that this aims to get a development setup where everything is cloned and started as your regular
 user. The openQA packages are only installed to pull runtime dependencies.
 
 ## Setup guide
@@ -12,35 +12,64 @@ user. The openQA packages are only installed to pull runtime dependencies.
   See https://www.postgresql.org/docs/8.1/static/backup.html
 
 ### Clone and configure all required repos
-* Add to `~/.bashrc`:
-  ```
-  export OPENQA_BASEDIR=/hdd/openqa-devel
-  export OPENQA_CONFIG=$OPENQA_BASEDIR/config
-  export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
-  export DBUS_STARTER_BUS_TYPE=session
-  export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
-  #export OPENQA_SQL_DEBUG=true
-  export OPENQA_KEY=set_later
-  export OPENQA_SECRET=set_later
-  export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
-  export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
-  alias openqa-cd='source openqa-cd'
-  ```
-  Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
-  it will need a considerably amount of disk space. The key and secret must be adjusted later when
-  created via the web UI.
-* `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git clone https://github.com/Martchus/openQA-helper.git`
-* Install all packages required for openQA development via `openqa-install-devel-deps`.
-* Fork all required repos on GitHub under your name: `os-autoinst/os-autoinst`, `os-autoinst/openQA`,
-  `os-autoinst/os-autoinst-distri-opensuse` and `os-autoinst/os-autoinst-needles-opensuse`.
-* Execute `openqa-devel-setup your_github_name` to clone all required repos. This also adds your
-  forks.
+1. Add to `~/.bashrc` (or however I would like to add environment variables for the current user):
+   ```
+   export OPENQA_BASEDIR=/hdd/openqa-devel
+   export OPENQA_CONFIG=$OPENQA_BASEDIR/config
+   export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
+   export DBUS_STARTER_BUS_TYPE=session
+   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
+   export OPENQA_KEY=set_later
+   export OPENQA_SECRET=set_later
+   export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
+   export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
+   #export OPENQA_SQL_DEBUG=true # enables debug printin of SQL statements
+   alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
+   ```
+   Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
+   it will need a considerably amount of disk space. The key and secret must be adjusted later when
+   created via the web UI.
+2. `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git clone https://github.com/Martchus/openQA-helper.git`
+3. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
+   openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
+   be aware what it does and prevent eg. duplicated repositories.
+4. Fork all required repos on GitHub:
+     * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM)
+     * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
+     * [os-autoinst/os-autoinst-distri-opensuse](https://github.com/os-autoinst/os-autoinst-distri-opensuse) - the actual tests (for openSUSE)
+     * [os-autoinst/os-autoinst-needles-opensuse](https://github.com/os-autoinst/os-autoinst-needles-opensuse) - needles/reference images (for openSUSE)
+     * I also encourage you to fork *this* repository because there's still room for improvement.
+5. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
+   your forks.
+
+Now you are done and can try to start openQA's services (see next section). It will initialize the database and pull required assets (eg. jQuery) the
+first time you start it (so it might take some time).
+
+Also be aware of the official documentation under https://github.com/os-autoinst/openQA/blob/master/docs
+and https://github.com/os-autoinst/os-autoinst/tree/master/doc.
 
 ### Notes
 Be aware that not everybody is aware of `OPENQA_BASEDIR`. So some code in the test distribution might
 rely on things being at the default location under `/var/lib/openqa` (eg. when using svirt backend to
 actually connect to a remote host). This can be worked around by creating (at least temporarily)
 a symlink.
+
+## Starting the web UI and all required daemons
+This repository contains a helper to start all daemons in a consistent way. It also passed required parameters (eg. for API keys) automatically.
+
+To start the particular daemons, run the following commands:
+
+* `openqa-start wu` - starts the web UI
+* `openqa-start ws` - starts the websocket server (mainly used by the worker to connect to the web UI)
+* `openqa-start ra` - starts the "resource allocator" (required to start jobs)
+* `openqa-start sc` - starts the scheduler (required to schedule jobs)
+* `openqa-start lv` - starts the live view handler (required for the developer mode)
+* `openqa-start wo` - starts the worker
+* `openqa-start wo --instance 2` - starts another worker
+* `openqa-start all` - starts all daemons listed above, each in its own Konsole tab (only works with Konsole)
+* `openqa-start cj --from openqa.opensuse.org 1234` - clones job 1234 from o3
+
+Note that none of these commands need to be run as root. Additional parameters are simply appended to the invocation.
 
 ## Switching between databases conveniently
 * Create files similar to the ones found under `example-config`.
@@ -53,7 +82,16 @@ script automatically resets it to the latest state on `origin`. So It is assumed
 ever use the local master to do modifications! Configure and make are for os-autoinst are run
 automatically.
 
-## Run tests with Docker
+## Run tests of openQA itself
+1. Go to the openQA repository (eg. `openqa-cd`).
+2. Initialize a separate PostgreSQL database for testing via `openqa-pg`.
+3. Run a test with `openqa-test`, eg. `openqa-test t/ui/14-dashboard-parents.t`.
+
+### Notes
+* To run Selenium tests *not* headless use eg. `NOT_HEADLESS=1 openqa-test t/ui/14-dashboard-parents.t`.
+* Be sure to stop your regular worker, scheduler, ... before starting the one of the fullstack tests.
+
+## Run tests of openQA itself with Docker
 See [documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#running-tests-of-openqa-itself).
 
 ### Prepare running tests via Docker
