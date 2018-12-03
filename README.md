@@ -115,7 +115,10 @@ sudo docker pull dasantiago/openqa-tests
 
 ### Run tests
 ```
-# build the docker image
+# get latest docker image - here it is openqa**_dev**:latest
+docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest
+
+# build the docker image - here we build openqa:latest (without **_dev*)
 cd "$OPENQA_BASEDIR/repos/openQA"
 make docker-test-build
 
