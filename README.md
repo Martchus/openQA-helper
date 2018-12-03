@@ -141,6 +141,10 @@ export CONTAINER_NAME=the-other-testrun
 
 # run custom command
 openqa-docker-test -- bash
+
+# use custom os-autoinst
+# (assumes there's a clean os-autoinst checkout under "$OPENQA_BASEDIR/repos/os-autoinst-clean")
+openqa-docker-test -e DEVELOPER_FULLSTACK=1 -e CUSTOM_OS_AUTOINST=1
 ```
 
 ### Enter running container with Bash
