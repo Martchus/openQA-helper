@@ -171,6 +171,20 @@ package-lock.json" >> .git/info/exclude
 node_modules/jshint/bin/jshint assets/javascripts/running.js
 ```
 
+## Using the worker cache locally
+Add the following line to global section of `$OPENQA_CONFIG/workers.ini`:
+```
+CACHEDIRECTORY = /hdd/openqa-devel/openqa/worker/cache
+```
+
+Adjust the path to your needs and be sure it is accessible to your user.
+
+Besides the usual daemons, start:
+```
+openqa-start workercache
+openqa-start workercache-minion
+```
+
 ## Test/run svirt backend locally
 This backend basically connects to another machine via SSH and runs some
 `virsh` commands there to start a virtual machine via libvirt from there.

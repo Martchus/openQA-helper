@@ -39,6 +39,7 @@ mkdir -p "$OPENQA_BASEDIR/config"
 cp -r "$OPENQA_BASEDIR/repos/openQA/etc/openqa"* --target-directory="$OPENQA_BASEDIR/config"
 mkdir -p "$OPENQA_BASEDIR/openqa/"{db,testresults,share}
 mkdir -p "$OPENQA_BASEDIR/openqa/share/factory/"{iso,other}
+mkdir -p "$OPENQA_BASEDIR/openqa/worker/"{share,cache}
 
 # clone os-autoinst
 clone_repo os-autoinst

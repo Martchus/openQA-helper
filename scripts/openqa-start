@@ -13,6 +13,8 @@ declare -A shortcuts=(
     [ra]=resource-allocator
     [sc]=scheduler
     [wo]=worker
+    [wc]=workercache
+    [wcm]=workercache-minion
     [cj]=clone-job
     [jc]=clone-job
     [job-clone]=job-clone
@@ -40,6 +42,10 @@ elif [[ $what == client ]]; then
     start_script script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
     start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
+elif [[ $what == workercache ]]; then
+    start_script script/openqa-workercache daemon "$@"
+elif [[ $what == workercache-minion ]]; then
+    start_script script/openqa-workercache minion worker "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
     start_script script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
 elif [[ $what == all ]]; then
