@@ -1,6 +1,8 @@
 #!/bin/bash
 cd "$OPENQA_BASEDIR/repos/openQA"
 CONTAINER_NAME=${CONTAINER_NAME:-openqa-testsuite}
+OPENQA_PATH=${OPENQA_PATH:-$OPENQA_BASEDIR/repos/openQA}
+OS_AUTOINST_PATH=${OS_AUTOINST_PATH:-$OPENQA_BASEDIR/repos/os-autoinst-clean}
 
 # read docker options and test command
 docker_options=()
@@ -38,8 +40,8 @@ for cmd in echo ''; do
         --rm -ti \
         --name "$CONTAINER_NAME" \
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
-        -v "$OPENQA_BASEDIR/repos/openQA:/opt/openqa" \
-        -v "$OPENQA_BASEDIR/repos/os-autoinst-clean:/opt/os-autoinst" \
+        -v "$OPENQA_PATH:/opt/openqa" \
+        -v "$OS_AUTOINST_PATH:/opt/os-autoinst" \
         -v /var/run/dbus:/var/run/dbus \
         "${docker_options[@]}" openqa:latest "${test_command[@]}"
 done
