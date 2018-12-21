@@ -21,7 +21,7 @@ for arg in "$@"; do
 done
 
 # set default test command
-[[ $test_command ]] || test_command=(make docker-tests)
+[[ $test_command ]] || test_command=(make run-tests-within-container)
 
 # keep a bash open so we can investigate failures easier
 test_command+=(';' 'bash')
