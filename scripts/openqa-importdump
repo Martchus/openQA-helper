@@ -17,10 +17,5 @@ if ! [[ -f $dump_path ]]; then
     exit 1
 fi
 
-echo "Dropping previous devel DB"
-if ! sudo sudo -u postgres dropdb "$db_name"; then
-    echo "$db_name doesn't exist anyways"
-fi
-
 sudo sudo -u postgres createdb -O "$USER" "$db_name"
 pg_restore -c -d "$db_name" "$dump_path"
