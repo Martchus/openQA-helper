@@ -234,5 +234,18 @@ openqa-start cj --from http://localhost:9526 280 BACKEND=svirt WORKER_CLASS=svir
 openqa-start wo --instance 2
 ```
 
+## Test with tap devices locally
+Set the worker class, eg. `WORKER_CLASS=qemu_x86_64,qemu_i686,qemu_i586,tap`. Then give yourself permissions to
+the required tap devices, eg.:
+
+```
+sudo groupadd netdev
+sudo usermod -a -G netdev "$USER"
+sudo ip tuntap add dev tap6 mode tap group netdev
+sudo ip tuntap add dev tap7 mode tap group netdev
+```
+
+For Open vSwitch see http://open.qa/docs/#_multi_machine_tests_setup.
+
 ## More scripts
 * https://github.com/okurz/scripts
