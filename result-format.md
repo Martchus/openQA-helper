@@ -123,14 +123,27 @@ example. The comments in this example describe the meaning of the fields.
                }
             ],
             "name" : "first_boot-displaymanager-password-prompt-20180313",
-            "error" : 0.00160212814504912 // TODO: formula how this relates to the percentage in the web UI
+            "error" : 0.00160212814504912 // see note how it relates to the percentage shown it the web UI below
          },
          // more mismatched candidates omitted
       ],
       "needle" : "gnome-screenlock-password-Tumbleweed-20181012",
-      "error" : 0.0005 // TODO: formula how this relates to the percentage in the web UI
+      "error" : 0.0493750000000001 // TODO: formula how this relates to the percentage in the web UI
       "screenshot" : "shutdown-3.png"
    },
    // more detail steps omitted
 ]
 ```
+
+### Relation between error and percentage in the web UI
+```
+$percentage = int((1 - sqrt($error // 0)) * 100 + 0.5);
+$error      = (1 - ((($percentage - 0.5) / 100) * (($percentage - 0.5) / 100))) / 100;
+```
+
+Note that if multiple areas (with multiple similarities/percentages) exist in the match, os-autoinst takes
+the mean square of those similarities.
+
+
+### Images
+The referenced PNG files should be in the same directory. Thumbnails should be in the `.thumb` subdirectory.
