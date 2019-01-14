@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+gh_user=$1
+repo_name=$2
+if ! [[ $gh_user ]] || ! [[ $repo_name ]]; then
+    echo 'Please pass your GitHub user name as first arg and the repo name as second arg.'
+    exit 2
+fi
+
+source "$OPENQA_BASEDIR/repos/openQA-helper/lib/clone_repo.sh"
+shift 2
+clone_repo "$repo_name" "$@"

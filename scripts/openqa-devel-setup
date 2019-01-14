@@ -15,23 +15,8 @@ fi
 mkdir -p "$OPENQA_BASEDIR/repos"
 cd "$OPENQA_BASEDIR/repos"
 
-# define function to clone repo and add fork
-function clone_repo() {
-    local repo_name=${1}
-    local repo_as=${2:-$repo_name}
-    local repo_url="https://github.com/os-autoinst/$repo_name"
-    
-    if [[ -d $repo_name ]]; then
-        echo "Skipping $repo_name; already exists."
-        return 0
-    fi
-    
-    git clone "$repo_url" "$repo_as"
-    pushd "$repo_as"
-    git remote add "$gh_user" "git@github.com:$gh_user/$repo_name.git"
-    git remote update
-    popd
-}
+# include function to clone repo and add fork
+source "$OPENQA_BASEDIR/repos/openQA-helper/lib/clone_repo.sh"
 
 # clone openQA and create required directories for config and test data
 clone_repo openQA
@@ -51,6 +36,7 @@ mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
 cd "$OPENQA_BASEDIR/openqa/share/tests"
 clone_repo os-autoinst-distri-opensuse opensuse
 ln -s opensuse sle
+clone_repo os-autoinst-distri-opensuse opensuse
 
 # create symlinks for tidy
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
