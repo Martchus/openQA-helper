@@ -36,6 +36,8 @@ if [[ $what == webui ]]; then
     start_script script/openqa daemon "$@"
 elif [[ $what == webui2 ]]; then
     start_script script/openqa daemon -l http://127.0.0.1:12345 "$@"
+elif [[ $what == gru ]]; then
+    start_script script/openqa gru "$@"
 elif [[ $what == live ]]; then
     start_script script/openqa-livehandler daemon "$@"
 elif [[ $what == client ]]; then
