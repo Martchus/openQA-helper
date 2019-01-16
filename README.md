@@ -249,5 +249,19 @@ sudo ip tuntap add dev tap7 mode tap group netdev
 
 For Open vSwitch see http://open.qa/docs/#_multi_machine_tests_setup.
 
+## Profiling
+1. Install NYTProf, under Tumbleweed: `zypper in perl-Devel-NYTProf perl-Mojolicious-Plugin-NYTProf`
+2. Put `profiling_enabled = 1` in  `openqa.ini`.
+3. Optionally import production data like described in the official contributers documentation.
+4. Restart the web UI, browse some pages. Profiling is done in the background.
+5. Access profiling data via `/nytprof` route.
+
+### Note
+Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it again and disable the
+`profiling_enabled` configuration if not needed right now.
+
+Keeping too much profiling data around slows down Docker statup for the testsuite significantly as it
+copies all the data of your openQA repository checkout.
+
 ## More scripts
 * https://github.com/okurz/scripts
