@@ -21,7 +21,7 @@ function update_repo() {
     git remote update
 
     # get in clean state, we should never have any commits on local master anyways
-    [[ $branch_name == master ]] && git reset --hard origin/master
+    [[ $branch_name == master || $branch_name == DETACHED ]] && git reset --hard origin/master
     
     # run configure/make
     if [ "${repo_path##*/}" == 'os-autoinst' ]; then

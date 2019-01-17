@@ -25,7 +25,7 @@ To get an idea what's going on, have a look at [openQA's architecture](architect
    export OPENQA_SECRET=set_later
    export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
    export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
-   #export OPENQA_SQL_DEBUG=true # enables debug printin of SQL statements
+   #export OPENQA_SQL_DEBUG=true # enables debug printing of SQL statements
    alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
    ```
    Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
@@ -79,10 +79,9 @@ Note that none of these commands need to be run as root. Additional parameters a
 * Use eg. `openqa-switchdb osd` to activate the configuration `database-osd.ini`.
 
 ## Keeping repos up-to-date
-Just execute `openqa-devel-maintain`. If the local master is checked out in a repository, the
-script automatically resets it to the latest state on `origin`. So It is assumed that you'll never
-ever use the local master to do modifications! Configure and make are for os-autoinst are run
-automatically.
+Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
+script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local
+master or a detetched HEAD to do modifications! Configure and make are for os-autoinst are run automatically.
 
 ## Run tests of openQA itself
 1. Go to the openQA repository (eg. `openqa-cd`).
