@@ -6,7 +6,7 @@ function clone_repo() {
     local repo_as=${2:-$repo_name}
     local repo_url="https://github.com/os-autoinst/$repo_name"
 
-    if [[ -d $repo_name ]]; then
+    if [[ -d $repo_as ]]; then
         echo "Skipping $repo_name; already exists."
         return 0
     fi
