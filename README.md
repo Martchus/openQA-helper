@@ -268,5 +268,29 @@ Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it 
 Keeping too much profiling data around slows down Docker statup for the testsuite significantly as it
 copies all the data of your openQA repository checkout.
 
+## Testing AMQP
+1. Follow https://github.com/openSUSE/suse_msg/blob/master/amqp_infra.md#the-amqp-server to
+   setup and start the AMQP server. It needs the ports 15672 and 5672.
+2. Install RabbitMQ plugin required by openQA to connect to the AMQP server:
+   `zypper in perl-Mojo-RabbitMQ-Client`
+3. Configure openQA to connect to your AMQP server by putting the following in your `openqa.ini`:
+   ```
+   [global]
+   plugins = AMQP
+   [amqp]
+   url = amqp://openqa:secret@localhost:5672
+   topic_prefix = opensuse
+   exchange = pubsub
+   ```
+FIXME: something is missing here
+
+### Start 'suse_msg' to forward AMQP messages to IRC
+1. Clone https://github.com/openSUSE/suse_msg: `git clone https://github.com/openSUSE/suse_msg.git`
+2. Follow https://github.com/openSUSE/suse_msg/blob/master/README.md#testing to setup and start the script.
+   Beside the mentioned adjustments to `consume.py`, also put `amqp://openqa:secret@localhost:5672` as
+   server.
+3. See https://github.com/openSUSE/suse_msg/blob/master/amqp_infra.md#publishing-messages for emitting
+   test AMQP messages to test AMQP server and IRC forwarding.
+
 ## More scripts
 * https://github.com/okurz/scripts
