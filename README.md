@@ -43,6 +43,12 @@ To get an idea what's going on, have a look at [openQA's architecture](architect
      * I also encourage you to fork *this* repository because there's still room for improvement.
 5. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
    your forks.
+6. Generate API keys and put them into your `.bashrc` to amend step 1.
+7. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
+    * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9527` so the worker will directly
+      connect to the websocket server (making it unnessarary to use an HTTP reverse proxy).
+    * Useful adjustments to the config for using the svirt backend, enable caching and profiling
+      are given in the subsequent sections.
 
 Now you are done and can try to start openQA's services (see next section). It will initialize the database and pull required assets (eg. jQuery) the
 first time you start it (so it might take some time).
