@@ -1,9 +1,8 @@
 #!/bin/bash
 set -e
 cd "$OPENQA_BASEDIR/repos/openQA"
-
 what=$1
-shift
+shift || true
 
 declare -A shortcuts=(
     [wu]=webui
@@ -14,11 +13,25 @@ declare -A shortcuts=(
     [sc]=scheduler
     [wo]=worker
     [wc]=workercache
-    [wcm]=workercache-minion
+    [wm]=workercache-minion
+    [gr]=gru
     [cj]=clone-job
     [jc]=clone-job
     [job-clone]=job-clone
 )
+
+if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
+    echo "Starts an openQA daemon using repos and test data within $OPENQA_BASEDIR"
+    echo "usage: $0 daemon [args]"
+    echo "where daemon is one of:"
+    echo "   shortcut | long daemon name"
+    for daemon in wu lv ws ra sc wo sc wc wm gr cj; do
+        echo "   $daemon       | ${shortcuts[$daemon]}"
+    done
+    echo "args are forwarded to the specified daemon"
+    exit 0
+fi
+
 what=${shortcuts[$what]:-$what}
 
 function start_script {
