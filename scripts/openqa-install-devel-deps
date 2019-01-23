@@ -9,6 +9,7 @@ zypper in openQA-{client,common,local-db,worker} \
           autoconf \
           gcc-c++ \
           opencv-devel \
+          libtool \
           'perl(Module::CPANfile)' \
           'pkgconfig(fftw3)' \
           'pkgconfig(libpng)' \
