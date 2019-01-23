@@ -115,12 +115,7 @@ ExecStart=
 ExecStart=/usr/bin/dockerd --add-runtime oci=/usr/sbin/docker-runc --data-root=/hdd/docker $DOCKER_NETWORK_OPTIONS $DOCKER_OPTS
 ```
 
-```
-sudo systemctl start docker.service
-sudo docker pull dasantiago/openqa-tests
-```
-
-### Run tests
+Pull and build the latest image:
 ```
 # get latest docker image - here it is openqa**_dev**:latest
 docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest
@@ -128,7 +123,12 @@ docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest
 # build the docker image - here we build openqa:latest (without **_dev*)
 cd "$OPENQA_BASEDIR/repos/openQA"
 make docker-test-build
+```
 
+### Run tests
+To ensure the latest image is used, re-execute the commands from the previous section.
+
+```
 # run regular tests
 openqa-docker-test
 
