@@ -5,7 +5,7 @@ Note that this aims to get a development setup where everything is cloned and st
 user. The openQA packages are only installed to pull runtime dependencies.
 
 ## Setup guide
-To get an idea what's going on, have a look at [openQA's architecture](architecture.pdf).
+To get an idea what's going on, have a look at [openQA's architecture](architecture.svg).
 
 ### Create PostgreSQL user, maybe import some data
 * See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setup-postgresql
