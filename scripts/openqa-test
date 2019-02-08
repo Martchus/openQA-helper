@@ -2,6 +2,11 @@
 cd "$OPENQA_BASEDIR/repos/openQA"
 [[ $1 == 't/testinstance' ]] && basedir="$OPENQA_BASEDIR/repos/openQA/t/data" || basedir=
 [[ $NOT_HEADLESS ]] || echo 'Note: use NOT_HEADLESS=1 to watch execution of UI tests.'
+if ! [[ -e /dev/shm/tpg ]]; then
+    'Start database for test with openqa-pg first.'
+    exit -1
+fi
+echo 'Note: one might use "psql --host=/dev/shm/tpg openqa_test" to investigate the database used during this test'
 
 export SCHEDULER_FULLSTACK=1
 export DEVELOPER_FULLSTACK=1
