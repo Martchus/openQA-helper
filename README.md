@@ -125,8 +125,11 @@ cd "$OPENQA_BASEDIR/repos/openQA"
 make docker-test-build
 ```
 
+For convenience, these helper also provide the `openqa-docker-update` commands which executes the commands
+above.
+
 ### Run tests
-To ensure the latest image is used, re-execute the commands from the previous section.
+To ensure the latest image is used, re-execute the command(s) from the previous section.
 
 ```
 # run regular tests
@@ -294,3 +297,14 @@ FIXME: something is missing here
 
 ## More scripts
 * https://github.com/okurz/scripts
+
+## Environment variables for Mojolicious
+* MOJO_PORT
+* MOJO_LOG_LEVEL
+* MOJO_CLIENT_DEBUG
+* MOJO_SERVER_DEBUG
+* MOJO_EVENTEMITTER_DEBUG
+* MOJO_IOLOOP_DEBUG
+* MOJO_WEBSOCKET_DEBUG
+
+Outdated but maybe still useful: https://github.com/mojolicious/mojo/wiki/%25ENV
