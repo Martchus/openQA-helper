@@ -1,0 +1,2 @@
+#!/bin/bash -e
+xdg-open "$OPENQA_BASEDIR/config/${1:-openqa}.ini"
