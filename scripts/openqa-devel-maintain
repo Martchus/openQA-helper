@@ -38,8 +38,34 @@ function update_repo() {
     popd
 }
 
+echo "==> INFO: Updating openQA"
 update_repo "$OPENQA_BASEDIR/repos/openQA"
+
+echo "==> INFO: Updating os-autoinst"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst-clean"
-update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
-update_repo "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse/needles"
+
+declare -A products_by_distro=(
+    [opensuse]="opensuse sle"
+    [openqa]="openQA"
+    [obs]=""
+)
+for test_distro in "${!products_by_distro[@]}"; do
+    tests_dir=$OPENQA_BASEDIR/openqa/share/tests/$test_distro
+    if [[ ! -d $tests_dir ]]; then
+        echo "==> WARNING: Skipping test distribution $test_distro because \"$tests_dir\" does not exist."
+        continue
+    fi
+    echo "==> INFO: Updating test distribution $test_distro"
+    update_repo "$tests_dir"
+
+    for product in ${products_by_distro[$test_distro]}; do
+        product_dir=$OPENQA_BASEDIR/openqa/share/tests/$test_distro/products/$product/needles
+        if [[ ! -d $product_dir ]]; then
+            echo "==> WARNING: Skipping product $product because \"$product_dir\" does not exist."
+            continue
+        fi
+        echo "==> INFO: Updating needle dir for product $product (belongs to distro $test_distro)"
+        update_repo "$product_dir"
+    done
+done
