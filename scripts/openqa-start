@@ -69,7 +69,7 @@ elif [[ $what == all ]]; then
         openQA-webui               'wu'
         openQA-live                'lv'
         openQA-websockets          'ws'
-        openQA-resource-allocator  'ra'
+        openQA-GRU                 'gru'
         openQA-scheduler           'sc'
         openQA-worker1             'wo'
     )
