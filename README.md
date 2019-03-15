@@ -73,9 +73,9 @@ To start the particular daemons, run the following commands:
 
 * `openqa-start wu` - starts the web UI
 * `openqa-start ws` - starts the websocket server (mainly used by the worker to connect to the web UI)
-* `openqa-start ra` - starts the "resource allocator" (required to start jobs)
 * `openqa-start sc` - starts the scheduler (required to schedule jobs)
 * `openqa-start lv` - starts the live view handler (required for the developer mode)
+* `openqa-start gru run` - starts the GRU/Minion daemon required to run background tasks (cleanup, needling)
 * `openqa-start wo` - starts the worker
 * `openqa-start wo --instance 2` - starts another worker
 * `openqa-start all` - starts all daemons listed above, each in its own Konsole tab (only works with Konsole)
