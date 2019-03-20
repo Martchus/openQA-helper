@@ -62,9 +62,15 @@ and https://github.com/os-autoinst/os-autoinst/tree/master/doc.
 
 ### Notes
 Be aware that not everybody is aware of `OPENQA_BASEDIR`. So some code in the test distribution might
-rely on things being at the default location under `/var/lib/openqa` (eg. when using svirt backend to
-actually connect to a remote host). This can be worked around by creating (at least temporarily)
-a symlink.
+rely on things being at the default location under `/var/lib/openqa`.
+This can be worked around by creating (at least temporarily) a symlink.
+
+To use the openQA instance located under `OPENQA_BASEDIR` (temporarily) with the apache2 reverse proxy
+one has to adjust the apache2 configuration:
+```
+sed -e "s:/var/lib/openqa:$OPENQA_BASEDIR/openqa:g" -i /etc/apache2/vhosts.d/openqa-common.inc
+```
+Otherwise images won't load.
 
 ## Starting the web UI and all required daemons
 This repository contains a helper to start all daemons in a consistent way. It also passed required parameters (eg. for API keys) automatically.
