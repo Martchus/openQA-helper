@@ -1,21 +1,43 @@
 # openQA helper
-Scripts and (a little bit) documentation to ease openQA development.
+Scripts and (a little bit) documentation to ease openQA development. The focus lies on developing
+openQA (and os-autoinst) itself. This setup might be an overkill if one simply wants to run some
+tests.
 
-Note that this aims to get a development setup where everything is cloned and started as your regular
-user. The openQA packages are only installed to pull runtime dependencies.
+These helpers and the setup guide aim for a development setup where
+
+* everything is cloned and lives under a single directory-tree owned by your regular user.
+* everything is started as your regular user.
+* all dependencies are installed via zypper (rather than language-specific package managers).
+* no containers are used. One can optionally use Docker to run tests, though.
+
+I recommend to use Tumbleweed as development system for openQA - at least when using these helpers.
+It has proven to be stable enough for me. Using Leap you might miss some of the required packages.
+
+Note that the subsequent setup guide is merely a result of me documenting the steps I took when
+setting up my own workstation.
 
 ## Setup guide
-To get an idea what's going on, have a look
-at [openQA's architecture](https://github.com/os-autoinst/openQA/blob/master/docs/GettingStarted.asciidoc#architecture).
+It makes sense to get an idea of the *thing* you're going to install before installing it.
+
+So have a look
+at [openQA's architecture](https://github.com/os-autoinst/openQA/blob/master/docs/GettingStarted.asciidoc#architecture)
+to see what's going on.
 
 To really get an idea what's going on, have a look
 at [the more detailed diagram](https://github.com/os-autoinst/openQA/blob/master/docs/images/architecture.svg).
 
+Especially take care that none of the mentioned ports are already in use.
+
 ### Create PostgreSQL user, maybe import some data
 * See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setup-postgresql
-
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
   See https://www.postgresql.org/docs/8.1/static/backup.html
+* Imporing database dumps from our production instances is useful for local testing. The dumps can be
+  found on wotan (not publicly accessible). Example using `sshfs`:
+  ```
+  mkdir -p ~/wotan && sshfs ${WOTAN_USER_NAME}@wotan.suse.de:/ ~/wotan
+  ln -s ~/wotan/mounts/work_users/coolo/SQL-DUMPS $OPENQA_BASEDIR/sql-dumps-on-wotan
+  ```
 
 ### Clone and configure all required repos
 1. Add to `~/.bashrc` (or however I would like to add environment variables for the current user):
