@@ -1,12 +1,15 @@
 # openQA helper
 Scripts and (a little bit) documentation to ease openQA development. The focus lies on developing
 openQA (and os-autoinst) itself. This setup might be an overkill if one simply wants to run some
-tests.
+tests. Maybe [openqa-bootstrap](https://github.com/os-autoinst/openQA/blob/master/script/openqa-bootstrap)
+or [openqa-bootstrap-container](https://github.com/os-autoinst/openQA/blob/master/script/openqa-bootstrap-container)
+are
 
 These helpers and the setup guide aim for a development setup where
 
 * everything is cloned and lives under a single directory-tree owned by your regular user.
-* everything is started as your regular user.
+* everything is built and started as your regular user.
+* os-autoinst's native binaries are built manually.
 * all dependencies are installed via zypper (rather than language-specific package managers).
 * no containers are used. One can optionally use Docker to run tests, though.
 
@@ -71,8 +74,11 @@ Especially take care that none of the mentioned ports are already in use.
    your forks.
 6. Generate API keys and put them into your `.bashrc` to amend step 1.
 7. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
-    * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9527` so the worker will directly
-      connect to the websocket server (making it unnessarary to use an HTTP reverse proxy).
+    * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9526` so the worker will directly
+      connect to the web UI and websocket server (making it unnessarary to use an HTTP reverse proxy).
+    * For this setup it makes most sense to set `WORKER_HOSTNAME` to `127.0.0.1` in `worker.ini`. Note that for remote workers (not covered by this setup
+      guide) the variable must be set to an IP or domin which the web UI can use to connect to the worker host
+      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.asciidoc#steps-to-debug-developer-mode-setup)).
     * Useful adjustments to the config for using the svirt backend, enable caching and profiling
       are given in the subsequent sections.
 
@@ -95,7 +101,8 @@ sed -e "s:/var/lib/openqa:$OPENQA_BASEDIR/openqa:g" -i /etc/apache2/vhosts.d/ope
 Otherwise images won't load.
 
 ## Starting the web UI and all required daemons
-This repository contains a helper to start all daemons in a consistent way. It also passed required parameters (eg. for API keys) automatically.
+This repository contains a helper to start all daemons in a consistent way. It also passes required parameters (e.g. for API keys)
+automatically.
 
 To start the particular daemons, run the following commands:
 
@@ -109,21 +116,51 @@ To start the particular daemons, run the following commands:
 * `openqa-start all` - starts all daemons listed above, each in its own Konsole tab (only works with Konsole)
 * `openqa-start cj --from openqa.opensuse.org 1234` - clones job 1234 from o3
 
-Note that none of these commands need to be run as root. Additional parameters are simply appended to the invocation.
+Additional parameters are simply appended to the invocation. That works of course also for `--help`.
 
+**Note that none of these commands should to be run as root.**
 Running one of these commands accidently as root breaks the setup because then newly created files and directories are
 owned by root and you run into permission errors when starting as your regular user again.
 
 It is possible start multiple instances web UIs at the same time by adjusting the ports to be used. In general this works by
 setting the environment variable `MOJO_LISTEN`. For convenience the start scripts also support `OPENQA_BASE_PORT` which
 can be set just to a port number, e.g. to `9626`. Then the core web UI will use port `9626`, the web socket server
-port `9627`, the live view handler port `9628` and so on. To start multiple workers, just use `--instance` as shown in the
-examples above.
+port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_BASE_PORT` will be appended to `OPENQA_CONFIG`
+so you can configure different databases for your instances (see 'Copying a database' section).
+To start multiple workers, just use `--instance` as shown in the examples above.
 
-## Switching between databases conveniently
+## Managing databases
+### Switching between databases conveniently
 * Create files similar to the ones found under `example-config`.
 * Don't change the pattern used for the filenames.
 * Use eg. `openqa-switchdb osd` to activate the configuration `database-osd.ini`.
+
+### Copying a database
+One can use transactions to roll back changes. However, sometimes it is still useful to copy a database, e.g. for running
+multiple web UIs on your host forking the database from your initial web UI.
+
+```
+sudo sudo -u postgres createdb -O $USER -T openqa-local openqa-local-copy
+```
+
+### Update migration scripts and create a fork of a database
+The official documentation describes
+[how to update the database schema](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#how-to-update-the-database-schema).
+It mentiones that you should backup your database before actually running the migration because it is likely that you
+need to go back to do further adjustments.
+
+The script `openqa-renewdb` tries to ease the process. Call it without arguments for an example how to use it.
+Note that the script attempts to delete a previously created fork.
+
+### Misc
+#### Delete database
+```
+dropdb database-to-drop
+```
+#### Rename database and switch to it
+```
+openqa-renamedb old_name new_name
+```
 
 ## Keeping repos up-to-date
 Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the

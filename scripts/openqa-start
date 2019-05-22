@@ -46,6 +46,7 @@ if [[ $OPENQA_BASE_PORT ]]; then
         echo "OPENQA_BASE_PORT not supported for $what"
         exit -1
     fi
+    export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
     export MOJO_LISTEN=http://127.0.0.1:$(($OPENQA_BASE_PORT + $instance_port))
 fi
 
@@ -73,7 +74,7 @@ elif [[ $what == live ]]; then
 elif [[ $what == client ]]; then
     start_script script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
-    start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --host localhost:9526 --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
+    start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == workercache ]]; then
     start_script script/openqa-workercache daemon "$@"
 elif [[ $what == workercache-minion ]]; then
