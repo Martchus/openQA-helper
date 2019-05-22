@@ -29,10 +29,25 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
         echo "   $daemon       | ${shortcuts[$daemon]}"
     done
     echo "args are forwarded to the specified daemon"
+    echo "set OPENQA_BASE_PORT to customize ports (see README.md)"
     exit 0
 fi
 
 what=${shortcuts[$what]:-$what}
+
+if [[ $OPENQA_BASE_PORT ]]; then
+    declare -A ports=(
+        [webui]=0
+        [websockets]=1
+        [live]=2
+    )
+    instance_port=${ports[$what]}
+    if [[ $instance_port == '' ]]; then
+        echo "OPENQA_BASE_PORT not supported for $what"
+        exit -1
+    fi
+    export MOJO_LISTEN=http://127.0.0.1:$(($OPENQA_BASE_PORT + $instance_port))
+fi
 
 function start_script {
     echo "$@"
