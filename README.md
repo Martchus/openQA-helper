@@ -12,6 +12,7 @@ These helpers and the setup guide aim for a development setup where
 * os-autoinst's native binaries are built manually.
 * all dependencies are installed via zypper (rather than language-specific package managers).
 * no containers are used. One can optionally use Docker to run tests, though.
+* `sudo` is used explicitly if root privileges are required.
 
 I recommend to use Tumbleweed as development system for openQA - at least when using these helpers.
 It has proven to be stable enough for me. Using Leap you might miss some of the required packages.
@@ -182,6 +183,7 @@ See [documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Contr
 ### Prepare running tests via Docker
 ```
 sudo zypper in docker
+sudo systemctl start docker
 ```
 
 Customize path for Docker stuff (I don't want it on the SSD):
@@ -207,7 +209,9 @@ For convenience, these helper also provide the `openqa-docker-update` commands w
 above.
 
 ### Run tests
-To ensure the latest image is used, re-execute the command(s) from the previous section.
+* To ensure the latest image is used, re-execute the command(s) from the previous section.
+* This always appends `bash` so you have a shell for further investigation.
+* If it hangs on startup get rid of profiling data using `openqa-clear-profiling-data`.
 
 ```
 # run regular tests
@@ -218,19 +222,20 @@ openqa-docker-test -e FULLSTACK=1
 openqa-docker-test -e DEVELOPER_FULLSTACK=1
 
 # expose ports
-# FIXME: not working for me
+# FIXME: not working for me - suggestions are welcome
 openqa-docker-test -e MOJO_PORT=12345 -p 12345-12347:12345-12347
 
 # non-headless mode
+# FIXME: not working *anymore* - any suggestions are welcome
 openqa-docker-test -e NOT_HEADLESS=1
 
 # set custom container name
 export CONTAINER_NAME=the-other-testrun
 
 # run custom command
-openqa-docker-test -- bash
+openqa-docker-test -- prove -v t/ui/15-comments.t
 
-# use custom os-autoinst
+# use custom os-autoinst (mind the caveats mentioned in the documentation linked above!)
 # (assumes there's a clean os-autoinst checkout under "$OPENQA_BASEDIR/repos/os-autoinst-clean")
 openqa-docker-test -e DEVELOPER_FULLSTACK=1 -e CUSTOM_OS_AUTOINST=1
 ```
