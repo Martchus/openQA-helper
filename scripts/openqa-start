@@ -40,6 +40,7 @@ if [[ $OPENQA_BASE_PORT ]]; then
         [webui]=0
         [websockets]=1
         [live]=2
+        [scheduler]=3
     )
     instance_port=${ports[$what]}
     if [[ $instance_port == '' ]]; then
