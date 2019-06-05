@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+prefix="$OPENQA_BASEDIR/custom-perl-prefixes/$1"
+mkdir -p "$prefix"
+shift
+echo "Custom Perl prefix: $prefix"
+cpanm -L "$prefix" "$@"

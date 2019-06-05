@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+prefix="$OPENQA_BASEDIR/custom-perl-prefixes/$1"
+if [[ ! -d $prefix ]]; then
+    echo "Directory $prefix does not exist."
+    exit -1
+fi
+shift
+echo "Using custom Perl prefix: $prefix"
+export PATH="$prefix/bin:$PATH"
+export PERL5LIB="$prefix/lib/perl5"
+"$@"

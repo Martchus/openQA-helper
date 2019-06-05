@@ -3,7 +3,7 @@ Scripts and (a little bit) documentation to ease openQA development. The focus l
 openQA (and os-autoinst) itself. This setup might be an overkill if one simply wants to run some
 tests. Maybe [openqa-bootstrap](https://github.com/os-autoinst/openQA/blob/master/script/openqa-bootstrap)
 or [openqa-bootstrap-container](https://github.com/os-autoinst/openQA/blob/master/script/openqa-bootstrap-container)
-are
+are better alternatives for these use-cases.
 
 These helpers and the setup guide aim for a development setup where
 
@@ -263,6 +263,23 @@ package-lock.json" >> .git/info/exclude
 ```
 node_modules/jshint/bin/jshint assets/javascripts/running.js
 ```
+
+## Installing a custom version of Perl dependencies like Perl::Tidy
+This setup aims to install every dependency using the package manager. This is only intended
+for exceptional cases like installing multiple versions of `Perl::Tidy`.
+
+Install `cpanm`:
+```
+sudo zypper in perl-App-cpanminus
+```
+
+Install and use the Perl dependency, e.g.:
+```
+openqa-perl-prefix-install perltidy-new Perl::Tidy@version_number
+openqa-perl-prefix-run perltidy-new tools/tidy
+```
+
+As always, everything is stored under `$OPENQA_BASEDIR` and owned by your regular user.
 
 ## Using the worker cache locally
 Add the following line to global section of `$OPENQA_CONFIG/workers.ini`:
