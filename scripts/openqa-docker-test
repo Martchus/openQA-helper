@@ -42,7 +42,6 @@ for cmd in echo ''; do
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
         -v "$OPENQA_PATH:/opt/openqa" \
         -v "$OS_AUTOINST_PATH:/opt/os-autoinst" \
-        -v /var/run/dbus:/var/run/dbus \
         "${docker_options[@]}" openqa:latest "${test_command[@]}"
 done
 
