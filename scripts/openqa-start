@@ -81,7 +81,7 @@ elif [[ $what == workercache ]]; then
 elif [[ $what == workercache-minion ]]; then
     start_script script/openqa-workercache minion worker "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
-    start_script script/clone_job.pl --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
+    start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
 elif [[ $what == all ]]; then
     source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
     sessions=(
