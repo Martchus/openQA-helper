@@ -130,6 +130,9 @@ port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_BA
 so you can (and should) configure different databases for your instances (see 'Copying a database' section).
 To start multiple workers, just use `--instance` as shown in the examples above.
 
+FIXME: openQA's internal clients need to be adjusted so that the multi-web-UI setup actually works:
+https://progress.opensuse.org/issues/52685
+
 ## Managing databases
 ### Switching between databases conveniently
 * Create files similar to the ones found under `example-config`.
@@ -335,7 +338,7 @@ sudo systemctl start sshd
  `bash -c "cat /home/$USER/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"`. Or preferrably allow some other user to use
  `virsh` and manipluate contents of `/var/lib/libvirt/images` and set its name via `VIRSH_USERNAME`.
 
-## Running a job
+### Running a job
 So far I have just cloned an arbitrary job (opensuse-15.0-KDE-Live-x86_64-Build20.71-kde-live-wayland@64bit_virtio-2G)
 which I had usually running via qemu backend and started the previously configured worker instance:
 
@@ -405,6 +408,19 @@ FIXME: something is missing here
 
 If the `update-cache.sh` fails this might be due to changes in `osc`s service which the update script relies on
 to download the sources. In this case adapt the script to those changes first.
+
+## Monitor currently running job without web UI
+Current `QEMU`-line:
+
+```
+xargs -0 < "/proc/$(pidof qemu-system-x86_64)/cmdline"
+```
+
+View currently running job via VNC:
+
+```
+vncviewer localhost:91 -Shared
+```
 
 ## More scripts
 * https://github.com/okurz/scripts
