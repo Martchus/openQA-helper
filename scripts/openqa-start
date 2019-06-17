@@ -9,7 +9,6 @@ declare -A shortcuts=(
     [lv]=live
     [wu2]=webui2
     [ws]=websockets
-    [ra]=resource-allocator
     [sc]=scheduler
     [wo]=worker
     [wc]=workercache
@@ -36,19 +35,7 @@ fi
 what=${shortcuts[$what]:-$what}
 
 if [[ $OPENQA_BASE_PORT ]]; then
-    declare -A ports=(
-        [webui]=0
-        [websockets]=1
-        [live]=2
-        [scheduler]=3
-    )
-    instance_port=${ports[$what]}
-    if [[ $instance_port == '' ]]; then
-        echo "OPENQA_BASE_PORT not supported for $what"
-        exit -1
-    fi
     export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
-    export MOJO_LISTEN=http://127.0.0.1:$(($OPENQA_BASE_PORT + $instance_port))
 fi
 
 function start_script {
@@ -72,6 +59,10 @@ elif [[ $what == gru-run ]]; then
     start_script script/openqa gru run "$@"
 elif [[ $what == live ]]; then
     start_script script/openqa-livehandler daemon "$@"
+elif [[ $what == live ]]; then
+    start_script script/openqa-scheduler daemon "$@"
+elif [[ $what == live ]]; then
+    start_script script/openqa-websockets daemon "$@"
 elif [[ $what == client ]]; then
     start_script script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
