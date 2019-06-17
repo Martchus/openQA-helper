@@ -223,6 +223,7 @@ openqa-docker-test
 # pass env vars, eg. to run fullstack test
 openqa-docker-test -e FULLSTACK=1
 openqa-docker-test -e DEVELOPER_FULLSTACK=1
+openqa-docker-test -e SCHEDULER_FULLSTACK=1
 
 # expose ports
 # FIXME: not working for me - suggestions are welcome
@@ -237,6 +238,8 @@ export CONTAINER_NAME=the-other-testrun
 
 # run custom command
 openqa-docker-test -- prove -v t/ui/15-comments.t
+# note: Fullstack tests need a special setup so use the environment variables for them instead
+#       of trying to run prove directly.
 
 # use custom os-autoinst (mind the caveats mentioned in the documentation linked above!)
 # (assumes there's a clean os-autoinst checkout under "$OPENQA_BASEDIR/repos/os-autoinst-clean")
