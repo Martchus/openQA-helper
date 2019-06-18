@@ -34,14 +34,17 @@ fi
 
 what=${shortcuts[$what]:-$what}
 
+default_port=9526
 if [[ $OPENQA_INSTANCE ]]; then
-    export OPENQA_BASE_PORT=$((9526 + $OPENQA_INSTANCE * 100))
+    export OPENQA_BASE_PORT=$(($default_port + $OPENQA_INSTANCE * 100))
     export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_INSTANCE
+    host_params=localhost:$OPENQA_BASE_PORT
     echo "starting as instance $OPENQA_INSTANCE"
     echo "  OPENQA_BASE_PORT=$OPENQA_BASE_PORT"
     echo "  OPENQA_CONFIG=$OPENQA_CONFIG"
 else
     OPENQA_INSTANCE=0
+    host_params=localhost:$default_port
     if [[ $OPENQA_BASE_PORT ]]; then
         export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
     fi
@@ -86,8 +89,8 @@ elif [[ $what == websockets ]]; then
     set_title ws-$OPENQA_INSTANCE
     start_script script/openqa-websockets daemon "$@"
 elif [[ $what == client ]]; then
-    set_title cl
-    start_script script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
+    set_title cl-$OPENQA_INSTANCE
+    start_script script/client --host $host_params --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
     set_title wo
     start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
@@ -98,8 +101,8 @@ elif [[ $what == workercache-minion ]]; then
     set_title wm
     start_script script/openqa-workercache minion worker "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
-    set_title cj
-    start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
+    set_title cj-$OPENQA_INSTANCE
+    start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
 elif [[ $what == all ]]; then
     if [[ ! $KONSOLE_DBUS_SESSION ]]; then
         echo "only works with Konsole"
