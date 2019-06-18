@@ -124,14 +124,11 @@ Running one of these commands accidently as root breaks the setup because then n
 owned by root and you run into permission errors when starting as your regular user again.
 
 It is possible start multiple web UI instances at the same time by adjusting the ports to be used. In general this works by
-setting the environment variable `MOJO_LISTEN`. For convenience the start script also supports `OPENQA_BASE_PORT` which
-can be set just to a port number, e.g. to `9626`. Then the core web UI will use port `9626`, the web socket server
-port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_BASE_PORT` will be appended to `OPENQA_CONFIG`
+setting the environment variable `OPENQA_BASE_PORT`. For convenience the start script also supports `OPENQA_INSTANCE` which
+can be set an integer, e.g. to `1`. Then the core web UI will use port `9626`, the web socket server
+port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_INSTANCE` will be appended to `OPENQA_CONFIG`
 so you can (and should) configure different databases for your instances (see 'Copying a database' section).
 To start multiple workers, just use `--instance` as shown in the examples above.
-
-FIXME: openQA's internal clients need to be adjusted so that the multi-web-UI setup actually works:
-https://progress.opensuse.org/issues/52685
 
 ## Managing databases
 ### Switching between databases conveniently

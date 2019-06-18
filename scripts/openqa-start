@@ -34,11 +34,22 @@ fi
 
 what=${shortcuts[$what]:-$what}
 
-if [[ $OPENQA_BASE_PORT ]]; then
-    export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
+if [[ $OPENQA_INSTANCE ]]; then
+    export OPENQA_BASE_PORT=$((9526 + $OPENQA_INSTANCE * 100))
+    export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_INSTANCE
+    echo "starting as instance $OPENQA_INSTANCE"
+    echo "  OPENQA_BASE_PORT=$OPENQA_BASE_PORT"
+    echo "  OPENQA_CONFIG=$OPENQA_CONFIG"
+else
+    OPENQA_INSTANCE=0
+    if [[ $OPENQA_BASE_PORT ]]; then
+        export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
+    fi
 fi
 
-function start_script {
+
+function start_script
+{
     echo "$@"
     if [[ $PERL_DEBUGGER_GUI ]]; then
         perl -d:ptkdb "$@"
@@ -49,31 +60,51 @@ function start_script {
     fi
 }
 
+function set_title
+{
+    [[ $KONSOLE_DBUS_SESSION ]] || return
+    local konsole_service=${KONSOLE_SERVICE:-$(qdbus-qt5 | grep konsole | head -n1)}
+    qdbus-qt5 $konsole_service "$KONSOLE_DBUS_SESSION" setTitle 1 "$@"
+}
+
 if [[ $what == webui ]]; then
+    set_title wu-$OPENQA_INSTANCE
     start_script script/openqa daemon "$@"
-elif [[ $what == webui2 ]]; then
-    start_script script/openqa daemon -l http://127.0.0.1:12345 "$@"
 elif [[ $what == gru ]]; then
+    set_title gru-$OPENQA_INSTANCE
     start_script script/openqa gru "$@"
 elif [[ $what == gru-run ]]; then
+    set_title gru-run-$OPENQA_INSTANCE
     start_script script/openqa gru run "$@"
 elif [[ $what == live ]]; then
+    set_title lv-$OPENQA_INSTANCE
     start_script script/openqa-livehandler daemon "$@"
-elif [[ $what == live ]]; then
+elif [[ $what == scheduler ]]; then
+    set_title sc-$OPENQA_INSTANCE
     start_script script/openqa-scheduler daemon "$@"
-elif [[ $what == live ]]; then
+elif [[ $what == websockets ]]; then
+    set_title ws-$OPENQA_INSTANCE
     start_script script/openqa-websockets daemon "$@"
 elif [[ $what == client ]]; then
+    set_title cl
     start_script script/client --host localhost:9526 --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
+    set_title wo
     start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == workercache ]]; then
+    set_title wc
     start_script script/openqa-workercache daemon "$@"
 elif [[ $what == workercache-minion ]]; then
+    set_title wm
     start_script script/openqa-workercache minion worker "$@"
 elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
+    set_title cj
     start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host localhost:9526 "$@"
 elif [[ $what == all ]]; then
+    if [[ ! $KONSOLE_DBUS_SESSION ]]; then
+        echo "only works with Konsole"
+        exit -2
+    fi
     source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
     sessions=(
         openQA-webui               'wu'

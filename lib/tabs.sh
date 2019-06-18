@@ -22,15 +22,15 @@ function start_sessions()
         i=$((i + 1))
 
         echo "Creating $name: $command"
-        local session_num=$(qdbus $konsole_service /Windows/1 newSession)
+        local session_num=$(qdbus-qt5 $konsole_service /Windows/1 newSession)
         sleep 0.1
-        qdbus $konsole_service /Sessions/$session_num setTitle 0 $name
+        qdbus-qt5 $konsole_service /Sessions/$session_num setTitle 0 $name
         sleep 0.1
-        qdbus $konsole_service /Sessions/$session_num setTitle 1 $name
+        qdbus-qt5 $konsole_service /Sessions/$session_num setTitle 1 $name
         sleep 0.1
-        qdbus $konsole_service /Sessions/$session_num sendText "openqa-start $command"
+        qdbus-qt5 $konsole_service /Sessions/$session_num sendText "openqa-start $command"
         sleep 0.1
-        qdbus $konsole_service /Sessions/$session_num sendText $'\n'
+        qdbus-qt5 $konsole_service /Sessions/$session_num sendText $'\n'
         sleep 0.1
 
         nsessions=$((nsessions + 1))
