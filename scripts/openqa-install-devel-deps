@@ -8,22 +8,25 @@ zypper in openQA-{client,common,local-db,worker} \
           automake \
           autoconf \
           gcc-c++ \
+          os-autoinst \
           opencv-devel \
           libtool \
-          'perl(Module::CPANfile)' \
+          qemu-tools \
+          chromedriver \
+          postgresql-server \
+          ShellCheck \
+          'rubygem(sass)' \
           'pkgconfig(fftw3)' \
           'pkgconfig(libpng)' \
           'pkgconfig(sndfile)' \
           'pkgconfig(theoraenc)' \
-          qemu-tools \
-          os-autoinst \
-          chromedriver \
-          'rubygem(sass)' \
+          'perl(Module::CPANfile)' \
           'perl(Mojo::RabbitMQ::Client)' \
+          'perl(Mojolicious::Plugin::NYTProf)' \
           'perl(Perl::Critic)' \
           'perl(Perl::Tidy)' \
           'perl(Selenium::Remote::Driver)' \
-          'perl(Test::Compile)' \
+          'perl(Test::Strict)' \
           'perl(Test::MockObject)' \
           'perl(Test::Warnings)' \
           'perl(DBIx::Class::DeploymentHandler)' \
@@ -32,6 +35,4 @@ zypper in openQA-{client,common,local-db,worker} \
           'perl(DBIx::Class)' \
           'perl(Minion)' \
           'perl(XML::Writer)' \
-          perl-Devel-NYTProf \
-          perl-Mojolicious-Plugin-NYTProf \
-          postgresql-server
+          'perl(Devel::NYTProf)'
