@@ -24,7 +24,7 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     echo "usage: $0 daemon [args]"
     echo "where daemon is one of:"
     echo "   shortcut | long daemon name"
-    for daemon in wu lv ws ra sc wo sc wc wm gr cj; do
+    for daemon in wu lv ws sc wo sc wc wm gr cj; do
         echo "   $daemon       | ${shortcuts[$daemon]}"
     done
     echo "args are forwarded to the specified daemon"
