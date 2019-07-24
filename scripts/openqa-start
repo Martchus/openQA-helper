@@ -38,13 +38,13 @@ default_port=9526
 if [[ $OPENQA_INSTANCE ]]; then
     export OPENQA_BASE_PORT=$(($default_port + $OPENQA_INSTANCE * 100))
     export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_INSTANCE
-    host_params=localhost:$OPENQA_BASE_PORT
+    host_params=http://localhost:$OPENQA_BASE_PORT
     echo "starting as instance $OPENQA_INSTANCE"
     echo "  OPENQA_BASE_PORT=$OPENQA_BASE_PORT"
     echo "  OPENQA_CONFIG=$OPENQA_CONFIG"
 else
     OPENQA_INSTANCE=0
-    host_params=localhost:$default_port
+    host_params=http://localhost:$default_port
     if [[ $OPENQA_BASE_PORT ]]; then
         export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
     fi
