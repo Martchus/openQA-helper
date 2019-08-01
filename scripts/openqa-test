@@ -17,5 +17,5 @@ export OPENQA_BASEDIR="$basedir"
 export OPENQA_CONFIG=
 export MOJO_PORT="${MOJO_PORT:-12345}"
 
-echo prove -v "$@"
-prove -v "$@"
+echo prove -l -v "$@"
+prove -l -v "$@"
