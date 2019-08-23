@@ -1,38 +1,31 @@
 #!/bin/bash
 set -e
 
-zypper ar https://download.opensuse.org/repositories/devel:/openQA/openSUSE_Tumbleweed devel-openqa
-zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl/openSUSE_Tumbleweed devel-perl
-zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl:/CPAN-M/openSUSE_Tumbleweed devel-perl-m
-zypper in openQA-{client,common,local-db,worker} \
-          automake \
-          autoconf \
-          gcc-c++ \
-          os-autoinst \
-          opencv-devel \
-          libtool \
-          qemu-tools \
-          chromedriver \
-          postgresql-server \
-          ShellCheck \
-          'rubygem(sass)' \
-          'pkgconfig(fftw3)' \
-          'pkgconfig(libpng)' \
-          'pkgconfig(sndfile)' \
-          'pkgconfig(theoraenc)' \
+# This script installs all dependencies required for os-autoinst and openQA development including special
+# packages e.g. for profiling. It also installs the packaged version of os-autoinst and openQA itself which
+# might be useful sometimes as well.
+
+# add required repos
+zypper ar https://download.opensuse.org/repositories/devel:/openQA/openSUSE_Tumbleweed devel-openqa # for the latest and greatest
+zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl/openSUSE_Tumbleweed devel-perl # still required?
+zypper ar https://download.opensuse.org/repositories/devel:/languages:/perl:/CPAN-M/openSUSE_Tumbleweed devel-perl-m # still required?
+zypper ar https://download.opensuse.org/repositories/home:/mkittler:/branches:/science/openSUSE_Tumbleweed mkittler:branches:science # for OpenCV 4
+
+# add devel dependencies
+zypper source-install --build-deps-only os-autoinst
+zypper source-install --build-deps-only openQA
+zypper in os-autoinst-distri-opensuse-deps
+
+# add packaged version of os-autoinst/openQA
+zypper in os-autoinst \
+          openQA \
+          openQA-{client,common,local-db,worker}
+
+# add other dependencies not covered by these packages but useful for development
+zypper in ShellCheck \
+          'perl(Devel::NYTProf)' \
+          'perl(Perl::Tidy)'
           'perl(Module::CPANfile)' \
           'perl(Mojo::RabbitMQ::Client)' \
           'perl(Mojolicious::Plugin::NYTProf)' \
-          'perl(Perl::Critic)' \
-          'perl(Perl::Tidy)' \
-          'perl(Selenium::Remote::Driver)' \
-          'perl(Test::Strict)' \
-          'perl(Test::MockObject)' \
-          'perl(Test::Warnings)' \
-          'perl(DBIx::Class::DeploymentHandler)' \
-          'perl(SQL::SplitStatement)' \
-          'perl(Mojolicious::Plugin::AssetPack)' \
-          'perl(DBIx::Class)' \
-          'perl(Minion)' \
-          'perl(XML::Writer)' \
-          'perl(Devel::NYTProf)'
+          'pkgconfig(opencv4)'
