@@ -36,7 +36,6 @@ mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
 cd "$OPENQA_BASEDIR/openqa/share/tests"
 clone_repo os-autoinst-distri-opensuse opensuse
 ln -s opensuse sle
-clone_repo os-autoinst-distri-opensuse opensuse
 
 # create symlinks for tidy
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
