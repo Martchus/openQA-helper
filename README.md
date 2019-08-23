@@ -34,14 +34,17 @@ Especially take care that none of the mentioned ports are already in use.
 
 ### Create PostgreSQL user, maybe import some data
 * See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setup-postgresql
-* Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
-  See https://www.postgresql.org/docs/8.1/static/backup.html
+    * You can of course skip `pg_restore`. Starting with an empty database is likely sufficient for the beginning.
+    * It makes sense to use a different name for the database than `openqa`. I usually use `openqa-local` and when
+      importing later production data from OSD and o3 `openqa-osd` and `openqa-o3`.
 * Imporing database dumps from our production instances is useful for local testing. The dumps can be
   found on wotan (not publicly accessible). Example using `sshfs`:
   ```
   mkdir -p ~/wotan && sshfs ${WOTAN_USER_NAME}@wotan.suse.de:/ ~/wotan
   ln -s ~/wotan/mounts/work_users/coolo/SQL-DUMPS $OPENQA_BASEDIR/sql-dumps-on-wotan
   ```
+* Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
+  See https://www.postgresql.org/docs/8.1/static/backup.html
 
 ### Clone and configure all required repos
 1. Add to `~/.bashrc` (or however I would like to add environment variables for the current user):
@@ -73,8 +76,11 @@ Especially take care that none of the mentioned ports are already in use.
      * I also encourage you to fork *this* repository because there's still room for improvement.
 5. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
    your forks.
-6. Generate API keys and put them into your `.bashrc` to amend step 1.
-7. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
+6. Now you are almost done and can try to start openQA's services (see next section). Until finishing this guide, only start the web UI. It will
+   initialize the database and pull required assets (e.g. jQuery) the first time you start it (so it might take some time).
+7. Generate API keys and put them into your `.bashrc` to amend step 1. To generate API keys you need to access the web UI page http://localhost:9526/api_keys,
+   specify an expiration date and click on "Create".
+8. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
     * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9526` so the worker will directly
       connect to the web UI and websocket server (making it unnessarary to use an HTTP reverse proxy).
     * For this setup it makes most sense to set `WORKER_HOSTNAME` to `127.0.0.1` in `worker.ini`. Note that for remote workers (not covered by this setup
@@ -82,9 +88,8 @@ Especially take care that none of the mentioned ports are already in use.
       (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.asciidoc#steps-to-debug-developer-mode-setup)).
     * Useful adjustments to the config for using the svirt backend, enable caching and profiling
       are given in the subsequent sections.
-
-Now you are done and can try to start openQA's services (see next section). It will initialize the database and pull required assets (eg. jQuery) the
-first time you start it (so it might take some time).
+9. You can now also try to start the other services (as described in the next section) to check whether they're running. In practise I usually
+   only start the services which I require right now (to keep things simple).
 
 Also be aware of the official documentation under https://github.com/os-autoinst/openQA/blob/master/docs
 and https://github.com/os-autoinst/os-autoinst/tree/master/doc.
