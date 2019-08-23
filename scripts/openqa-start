@@ -65,9 +65,10 @@ function start_script
 
 function set_title
 {
-    [[ $KONSOLE_DBUS_SESSION ]] || return
-    local konsole_service=${KONSOLE_SERVICE:-$(qdbus-qt5 | grep konsole | head -n1)}
-    qdbus-qt5 $konsole_service "$KONSOLE_DBUS_SESSION" setTitle 1 "$@"
+    if [[ $KONSOLE_DBUS_SESSION ]]; then
+        local konsole_service=${KONSOLE_SERVICE:-$(qdbus-qt5 | grep konsole | head -n1)}
+        qdbus-qt5 $konsole_service "$KONSOLE_DBUS_SESSION" setTitle 1 "$@"
+    fi
 }
 
 if [[ $what == webui ]]; then
