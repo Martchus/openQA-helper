@@ -90,6 +90,8 @@ Especially take care that none of the mentioned ports are already in use.
       are given in the subsequent sections.
 9. You can now also try to start the other services (as described in the next section) to check whether they're running. In practise I usually
    only start the services which I require right now (to keep things simple).
+10. Before you can run a job you also need to build isotovideo from the sources cloned via Git in previous steps.
+    To do so, just invoke `openqa-devel-maintain` (see section "Keeping repos up-to-date" for details).
 
 Also be aware of the official documentation under https://github.com/os-autoinst/openQA/blob/master/docs
 and https://github.com/os-autoinst/os-autoinst/tree/master/doc.
@@ -135,6 +137,11 @@ port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_IN
 so you can (and should) configure different databases for your instances (see 'Copying a database' section).
 To start multiple workers, just use `--instance` as shown in the examples above.
 
+## Keeping repos up-to-date
+Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
+script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local
+master or a detetched HEAD to do modifications! Configure and make are for os-autoinst are run automatically.
+
 ## Managing databases
 ### Switching between databases conveniently
 * Create files similar to the ones found under `example-config`.
@@ -167,11 +174,6 @@ dropdb database-to-drop
 ```
 openqa-renamedb old_name new_name
 ```
-
-## Keeping repos up-to-date
-Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
-script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local
-master or a detetched HEAD to do modifications! Configure and make are for os-autoinst are run automatically.
 
 ## Run tests of openQA itself
 1. Go to the openQA repository (eg. `openqa-cd`).
