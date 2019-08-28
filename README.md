@@ -163,11 +163,22 @@ sudo sudo -u postgres createdb -O $USER -T openqa-local openqa-local-copy
 ### Update migration scripts and create a fork of a database
 The official documentation describes
 [how to update the database schema](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#how-to-update-the-database-schema).
-It mentiones that you should backup your database before actually running the migration because it is likely that you
-need to go back to do further adjustments.
 
-The script `openqa-renewdb` tries to ease the process. Call it without arguments for an example how to use it.
-Note that the script attempts to delete a previously created fork.
+One can also `openqa-start` to invoke the scripts the official documentation mentions with `--force`:
+```
+openqa-start dbup
+```
+
+The official documentation also mentiones that you should backup your database before actually running the migration because it is
+likely that you need to go back to do further adjustments. To ease this process there's the script `openqa-renewdb`.
+It will update the deployment scripts and create a "fork" of the specified database under a different name.
+It will also configure openQA to use that database.
+
+There's also `openqa-branchdb` which does the same as `openqa-renewdb` except that `initdb` and `updatedb` are not executed.
+
+#### Remarks
+* Be sure to stop all services using the database before running the script.
+* A previously created fork is dropped and replaced by a new one.
 
 ### Misc
 #### Delete database

@@ -18,17 +18,18 @@ declare -A shortcuts=(
     [job-clone]=clone-job
     [cl]=client
     [cmd]=command
+    [dbup]=db-update
 )
 
 if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
-    echo "Starts an openQA daemon using repos and test data within $OPENQA_BASEDIR"
-    echo "usage: $0 daemon [args]"
-    echo "where daemon is one of:"
+    echo "Starts an openQA service/script using repos and test data within $OPENQA_BASEDIR"
+    echo "usage: $0 service_or_script_name [args]"
+    echo "where service_or_script_name is one of:"
     echo "   shortcut | long daemon name"
-    for daemon in wu lv ws sc wo sc wc wm gr cj cl; do
-        echo "   $daemon       | ${shortcuts[$daemon]}"
+    for daemon in 'wu  ' 'lv  ' 'ws  ' 'sc  ' 'wo  ' 'sc  ' 'wc  ' 'wm  ' 'gr  ' 'cj  ' 'cl  ' 'cmd ' 'dbup'; do
+        echo "   $daemon     | ${shortcuts[${daemon%% *}]}"
     done
-    echo "args are forwarded to the specified daemon"
+    echo "args are forwarded to the specified service/script"
     echo "set OPENQA_BASE_PORT to customize ports (see README.md)"
     exit 0
 fi
@@ -108,6 +109,9 @@ elif [[ $what == workercache-minion ]]; then
 elif [[ $what == clone-job ]]; then
     set_title cj-$OPENQA_INSTANCE
     start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
+elif [[ $what == db-update ]]; then
+    start_script script/initdb --prepare_init --force "$@"
+    start_script script/upgradedb --prepare_upgrades --force "$@"
 elif [[ $what == all ]]; then
     if [[ ! $KONSOLE_DBUS_SESSION ]]; then
         echo "only works with Konsole"

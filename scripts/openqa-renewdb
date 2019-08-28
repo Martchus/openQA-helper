@@ -22,3 +22,15 @@ fi
 
 echo "Creating new devel DB"
 sudo sudo -u postgres createdb -O "$USER" -T "$db_base_name" "$db_branch_name"
+
+echo "Apply config"
+echo "[test]
+dsn = dbi:SQLite:dbname=:memory:
+on_connect_call = use_foreign_keys
+on_connect_do = PRAGMA synchronous = OFF
+sqlite_unicode = 1
+
+[production]
+dsn = dbi:Pg:dbname=$db_branch_name
+" > "$OPENQA_CONFIG/database-$db_branch_name.ini"
+openqa-switchdb "$db_branch_name"
