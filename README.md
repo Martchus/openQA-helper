@@ -123,6 +123,10 @@ To start the particular daemons, run the following commands:
 * `openqa-start wo --instance 2` - starts another worker
 * `openqa-start all` - starts all daemons listed above, each in its own Konsole tab (only works with Konsole)
 * `openqa-start cj --from openqa.opensuse.org 1234` - clones job 1234 from o3
+* `openqa-start cl ` - invokes the client with the options to connect to the local web UI
+* `openqa-start cmd` - invokes the specified command on the web UI app, e.g.:
+    * `openqa-start cmd eval -V 'app->schema->resultset("Jobs")->count'` - do *something* with the app/database
+    * `openqa-start cmd minion job -h` - view options regarding Minion jobs
 
 Additional parameters are simply appended to the invocation. That works of course also for `--help`.
 

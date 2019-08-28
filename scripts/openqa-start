@@ -7,7 +7,6 @@ shift || true
 declare -A shortcuts=(
     [wu]=webui
     [lv]=live
-    [wu2]=webui2
     [ws]=websockets
     [sc]=scheduler
     [wo]=worker
@@ -16,7 +15,9 @@ declare -A shortcuts=(
     [gr]=gru
     [cj]=clone-job
     [jc]=clone-job
-    [job-clone]=job-clone
+    [job-clone]=clone-job
+    [cl]=client
+    [cmd]=command
 )
 
 if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
@@ -24,7 +25,7 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     echo "usage: $0 daemon [args]"
     echo "where daemon is one of:"
     echo "   shortcut | long daemon name"
-    for daemon in wu lv ws sc wo sc wc wm gr cj; do
+    for daemon in wu lv ws sc wo sc wc wm gr cj cl; do
         echo "   $daemon       | ${shortcuts[$daemon]}"
     done
     echo "args are forwarded to the specified daemon"
@@ -74,6 +75,9 @@ function set_title
 if [[ $what == webui ]]; then
     set_title wu-$OPENQA_INSTANCE
     start_script script/openqa daemon "$@"
+elif [[ $what == command ]]; then
+    set_title cmd-$OPENQA_INSTANCE
+    start_script script/openqa "$@"
 elif [[ $what == gru ]]; then
     set_title gru-$OPENQA_INSTANCE
     start_script script/openqa gru "$@"
@@ -101,7 +105,7 @@ elif [[ $what == workercache ]]; then
 elif [[ $what == workercache-minion ]]; then
     set_title wm
     start_script script/openqa-workercache minion worker "$@"
-elif [[ $what == clone-job ]] || [[ $what == job-clone ]]; then
+elif [[ $what == clone-job ]]; then
     set_title cj-$OPENQA_INSTANCE
     start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
 elif [[ $what == all ]]; then
