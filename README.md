@@ -126,7 +126,8 @@ To start the particular daemons, run the following commands:
 * `openqa-start cl ` - invokes the client with the options to connect to the local web UI
 * `openqa-start cmd` - invokes the specified command on the web UI app, e.g.:
     * `openqa-start cmd eval -V 'app->schema->resultset("Jobs")->count'` - do *something* with the app/database
-    * `openqa-start cmd minion job -h` - view options regarding Minion jobs
+    * `openqa-start cmd minion job -e minion_job_name` - enqueue a Minion job
+    * `openqa-start cmd minion job -h` - view other options regarding Minion jobs
 
 Additional parameters are simply appended to the invocation. That works of course also for `--help`.
 
