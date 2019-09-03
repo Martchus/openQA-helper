@@ -58,7 +58,6 @@ Especially take care that none of the mentioned ports are already in use.
    export OPENQA_SECRET=set_later
    export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
    export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
-   #export OPENQA_SQL_DEBUG=true # enables debug printing of SQL statements
    alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
    ```
    Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
@@ -447,6 +446,10 @@ vncviewer localhost:91 -Shared
 
 ## More scripts
 * https://github.com/okurz/scripts
+
+## Environment variables for DBI(x)
+* `OPENQA_SQL_DEBUG=1`: enables debug printing for DBIx queries
+* `DBI_TRACE=1`: enables debug printing for all DBI queries
 
 ## Environment variables for Mojolicious
 * MOJO_PORT
