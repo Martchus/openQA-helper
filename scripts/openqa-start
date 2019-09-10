@@ -98,8 +98,14 @@ elif [[ $what == client ]]; then
     set_title cl-$OPENQA_INSTANCE
     start_script script/client --host $host_params --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == worker ]]; then
-    set_title wo
-    start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" --instance 1 --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
+    read= instance=1
+    for arg in "$@"; do
+        [[ $read == instance ]] && instance=$arg && break
+        [[ $arg == --instance ]] && read=instance
+    done
+    set_title "wo-$instance"
+    [[ -z $read ]] && instance_arg='--instance 1' || instance_arg=
+    start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/os-autoinst/isotovideo" $instance_arg --no-cleanup --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == workercache ]]; then
     set_title wc
     start_script script/openqa-workercache daemon "$@"
