@@ -144,7 +144,7 @@ To start multiple workers, just use `--instance` as shown in the examples above.
 ## Keeping repos up-to-date
 Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
 script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local
-master or a detetched HEAD to do modifications! Configure and make are for os-autoinst are run automatically.
+master or a detetched HEAD to do modifications! Configure and make are run for os-autoinst automatically.
 
 ## Managing databases
 ### Switching between databases conveniently
@@ -164,7 +164,7 @@ sudo sudo -u postgres createdb -O $USER -T openqa-local openqa-local-copy
 The official documentation describes
 [how to update the database schema](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#how-to-update-the-database-schema).
 
-One can also `openqa-start` to invoke the scripts the official documentation mentions with `--force`:
+One can also use `openqa-start` to invoke the scripts the official documentation mentions with `--force`:
 ```
 openqa-start dbup
 ```
