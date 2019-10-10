@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+sudo mkdir -p "/sys/fs/cgroup/systemd/openqa/$USER"
+sudo chown "$USER" "/sys/fs/cgroup/systemd/openqa/$USER"

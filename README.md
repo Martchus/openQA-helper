@@ -52,6 +52,8 @@ Especially take care that none of the mentioned ports are already in use.
    export OPENQA_BASEDIR=/hdd/openqa-devel
    export OPENQA_CONFIG=$OPENQA_BASEDIR/config
    export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
+   export OPENQA_LOCAL_CODE=$OPENQA_BASEDIR/repos/openQA
+   export OPENQA_CGROUP_SLICE=systemd/openqa/$USER
    export DBUS_STARTER_BUS_TYPE=session
    export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
    export OPENQA_KEY=set_later
