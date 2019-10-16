@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+export LANG=en_US.utf8
+pg_ctl -D /dev/shm/tpg stop
