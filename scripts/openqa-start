@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 cd "$OPENQA_BASEDIR/repos/openQA"
+export LANG=en_US.utf8
 what=$1
 shift || true
 
