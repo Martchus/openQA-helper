@@ -54,17 +54,16 @@ Especially take care that none of the mentioned ports are already in use.
    export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
    export OPENQA_LOCAL_CODE=$OPENQA_BASEDIR/repos/openQA
    export OPENQA_CGROUP_SLICE=systemd/openqa/$USER
-   export DBUS_STARTER_BUS_TYPE=session
-   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
    export OPENQA_KEY=set_later
    export OPENQA_SECRET=set_later
    export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
    export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
+   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
    alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
    ```
    Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
-   it will need a considerably amount of disk space. The key and secret must be adjusted later when
-   created via the web UI.
+   it will need a considerably amount of disk space. The `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
+   created via the web UI (see step 7).
 2. `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git clone https://github.com/Martchus/openQA-helper.git`
 3. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
    openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
@@ -102,12 +101,8 @@ Be aware that not everybody is aware of `OPENQA_BASEDIR`. So some code in the te
 rely on things being at the default location under `/var/lib/openqa`.
 This can be worked around by creating (at least temporarily) a symlink.
 
-To use the openQA instance located under `OPENQA_BASEDIR` (temporarily) with the apache2 reverse proxy
-one has to adjust the apache2 configuration:
-```
-sed -e "s:/var/lib/openqa:$OPENQA_BASEDIR/openqa:g" -i /etc/apache2/vhosts.d/openqa-common.inc
-```
-Otherwise images won't load.
+To use the openQA instance located under `OPENQA_BASEDIR` with the apache2 reverse proxy one has to adjust the apache2
+configuration using `openqa-make-apache2-use-basedir`. Otherwise images won't load.
 
 ## Starting the web UI and all required daemons
 This repository contains a helper to start all daemons in a consistent way. It also passes required parameters (e.g. for API keys)
@@ -136,7 +131,7 @@ Additional parameters are simply appended to the invocation. That works of cours
 Running one of these commands accidently as root breaks the setup because then newly created files and directories are
 owned by root and you run into permission errors when starting as your regular user again.
 
-It is possible start multiple web UI instances at the same time by adjusting the ports to be used. In general this works by
+It is possible to start multiple web UI instances at the same time by adjusting the ports to be used. In general this works by
 setting the environment variable `OPENQA_BASE_PORT`. For convenience the start script also supports `OPENQA_INSTANCE` which
 can be set an integer, e.g. to `1`. Then the core web UI will use port `9626`, the web socket server
 port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_INSTANCE` will be appended to `OPENQA_CONFIG`
@@ -361,6 +356,8 @@ sudo systemctl start sshd
 * Either put your (root) password in the worker config or even use
  `bash -c "cat /home/$USER/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"`. Or preferrably allow some other user to use
  `virsh` and manipluate contents of `/var/lib/libvirt/images` and set its name via `VIRSH_USERNAME`.
+* Usually QEMU isn't used via svirt so this setup isn't well tested. When I tried it recently, the QEMU line was wrong
+  preventing the system to boot from the image.
 
 ### Running a job
 So far I have just cloned an arbitrary job (opensuse-15.0-KDE-Live-x86_64-Build20.71-kde-live-wayland@64bit_virtio-2G)
