@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+default_basedir=/var/lib
+configured_basedir=${OPENQA_BASEDIR:-$default_basedir}
+sudo sed -e "s:$default_basedir/openqa:$configured_basedir/openqa:g" -i /etc/apache2/vhosts.d/openqa-common.inc
+sudo systemctl restart apache2
