@@ -419,14 +419,10 @@ FIXME: something is missing here
 3. See https://github.com/openSUSE/suse_msg/blob/master/amqp_infra.md#publishing-messages for emitting
    test AMQP messages to test AMQP server and IRC forwarding.
 
-## Update asset cache for RPM package
-1. Clone the repository (or a branch to it if you don't have the rights to push directly) locally, e.g. `osc co devel:openQA/openQA`.
-2. Run `bash update-cache.sh` inside the repository folder. Follow the log checking no download errors occurred.
-4. Do a sanity check on the generated `cache.txz`. It usually shouldn't be smaller than before, contain the newly
-   added sources and must not contain any empty files.
-5. Add an entry to the changes file using `osc vc openQA.changes`.
-6. osc ci -m 'Update asset cache'
+## Adding dependencies (Perl modules, JavaScript libs, ...)
+Now found within the [official documentation](http://open.qa/docs/#_handling_of_dependencies).
 
+### Further notes regarding asset updates
 If the `update-cache.sh` fails this might be due to changes in `osc`s service which the update script relies on
 to download the sources. In this case adapt the script to those changes first.
 
