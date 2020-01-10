@@ -20,6 +20,7 @@ declare -A shortcuts=(
     [cl]=client
     [cmd]=command
     [dbup]=db-update
+    [doc]=generate-documentation
 )
 
 if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
@@ -119,6 +120,11 @@ elif [[ $what == clone-job ]]; then
 elif [[ $what == db-update ]]; then
     start_script script/initdb --prepare_init --force "$@"
     start_script script/upgradedb --prepare_upgrades --force "$@"
+elif [[ $what == generate-documentation ]]; then
+    export SKIP_REMOVING_OUTPUT=1
+    [[ -d "$OPENQA_BASEDIR/repos/openQA/out" ]] && rm -fr "$OPENQA_BASEDIR/repos/openQA/out"
+    start_script script/"$what" "$@"
+    echo "documentation should be under: file://$OPENQA_BASEDIR/repos/openQA/out/docs/index.html"
 elif [[ $what == all ]]; then
     if [[ ! $KONSOLE_DBUS_SESSION ]]; then
         echo "only works with Konsole"
