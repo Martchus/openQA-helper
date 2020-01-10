@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd "$OPENQA_BASEDIR/repos/openQA"
+
+job_id=$1
+if [[ ! $job_id ]]; then
+    echo "Shows the log of a minon job"
+    echo "usage: $0 job_id"
+    exit 1
+fi
+
+openqa-start cmd eval -V "print(app->minion->job($job_id)->info->{result})" | head -n -1
