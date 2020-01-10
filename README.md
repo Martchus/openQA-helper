@@ -69,7 +69,7 @@ Especially take care that none of the mentioned ports are already in use.
    openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
    be aware what it does and prevent eg. duplicated repositories.
 4. Fork all required repos on GitHub:
-     * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM)
+     * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM
      * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
      * [os-autoinst/os-autoinst-distri-opensuse](https://github.com/os-autoinst/os-autoinst-distri-opensuse) - the actual tests (for openSUSE)
      * [os-autoinst/os-autoinst-needles-opensuse](https://github.com/os-autoinst/os-autoinst-needles-opensuse) - needles/reference images (for openSUSE)
