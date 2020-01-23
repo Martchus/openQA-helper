@@ -298,8 +298,10 @@ sudo zypper in perl-App-cpanminus
 
 Install and use the Perl dependency, e.g.:
 ```
-openqa-perl-prefix-install perltidy-new Perl::Tidy@version_number
-openqa-perl-prefix-run perltidy-new tools/tidy
+version_number=20191203
+openqa-perl-prefix-install perltidy-$version_number Perl::Tidy@$version_number
+openqa-perl-prefix-run perltidy-$version_number tools/tidy
+openqa-perl-prefix-run perltidy-$version_number script/tidy --only-changed
 ```
 
 As always, everything is stored under `$OPENQA_BASEDIR` and owned by your regular user.
