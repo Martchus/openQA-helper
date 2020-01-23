@@ -41,6 +41,7 @@ ln -s opensuse sle
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
 pushd tools
 ln -s ../../../../../repos/os-autoinst/tools/tidy
+ln -s ../../../../../repos/os-autoinst/tools/absolutize
 popd
 ln -s ../../../../repos/os-autoinst/.perltidyrc
 
