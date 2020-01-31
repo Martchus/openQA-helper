@@ -1,0 +1,3 @@
+#!/bin/bash
+cd "$OPENQA_BASEDIR/repos/openQA"
+find t -iname '*.t' -not -iname '*tidy*' -exec openqa-test {} +
