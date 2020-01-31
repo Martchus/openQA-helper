@@ -15,7 +15,8 @@ export LANG=en_US.utf8
 export TEST_PG='DBI:Pg:dbname=openqa_test;host=/dev/shm/tpg'
 export OPENQA_BASEDIR="$basedir"
 export OPENQA_CONFIG=
-export MOJO_PORT="${MOJO_PORT:-12345}"
+#export MOJO_PORT=${MOJO_PORT:-12345}
+export PROVE_ARGS=${PROVE_ARGS:--l -v}
 
-echo prove -l -v "$@"
-prove -l -v "$@"
+echo prove $PROVE_ARGS "$@"
+prove $PROVE_ARGS "$@"

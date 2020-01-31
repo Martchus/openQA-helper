@@ -1,3 +1,4 @@
 #!/bin/bash
 cd "$OPENQA_BASEDIR/repos/openQA"
-find t -iname '*.t' -not -iname '*tidy*' -exec openqa-test {} +
+export PROVE_ARGS=${PROVE_ARGS:--l -j $(nproc)}
+find t -iname '*.t' -not -iname '*tidy*' -exec openqa-test "$@" {} +
