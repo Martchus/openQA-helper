@@ -38,11 +38,18 @@ Especially take care that none of the mentioned ports are already in use.
     * It makes sense to use a different name for the database than `openqa`. I usually use `openqa-local` and when
       importing later production data from OSD and o3 `openqa-osd` and `openqa-o3`.
 * Imporing database dumps from our production instances is useful for local testing. The dumps can be
-  found on wotan (not publicly accessible). Example using `sshfs`:
-  ```
-  mkdir -p ~/wotan && sshfs ${WOTAN_USER_NAME}@wotan.suse.de:/ ~/wotan
-  ln -s ~/wotan/mounts/work_users/coolo/SQL-DUMPS $OPENQA_BASEDIR/sql-dumps-on-wotan
-  ```
+  found on wotan (not publicly accessible).
+    * Example using `sshfs`:
+      ```
+      mkdir -p ~/wotan && sshfs ${WOTAN_USER_NAME}@wotan.suse.de:/ ~/wotan
+      ln -s ~/wotan/mounts/work_users/coolo/SQL-DUMPS $OPENQA_BASEDIR/sql-dumps-on-wotan
+      ```
+    * Example using `rsync`:
+      ```
+      rsync -aHP \
+        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.opensuse.org/$(date +%F).dump" \
+        "$OPENQA_BASEDIR/sql-dumps-on-wotan/openqa.opensuse.org"
+      ```
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
   See https://www.postgresql.org/docs/8.1/static/backup.html
 
