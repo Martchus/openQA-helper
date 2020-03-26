@@ -54,7 +54,7 @@ Especially take care that none of the mentioned ports are already in use.
   See https://www.postgresql.org/docs/8.1/static/backup.html
 
 ### Clone and configure all required repos
-1. Add to `~/.bashrc` (or however I would like to add environment variables for the current user):
+1. Add to `~/.bashrc` (or *somehow* add the following environment variables for the current user):
    ```
    export OPENQA_BASEDIR=/hdd/openqa-devel
    export OPENQA_CONFIG=$OPENQA_BASEDIR/config
@@ -71,10 +71,10 @@ Especially take care that none of the mentioned ports are already in use.
    Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
    it will need a considerably amount of disk space. The `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
    created via the web UI (see step 7).
-2. `mkdir -p $OPENQA_BASEDIR/repos; cd $OPENQA_BASEDIR/repos; git clone https://github.com/Martchus/openQA-helper.git`
+2. `mkdir -p $OPENQA_BASEDIR/repos && cd $OPENQA_BASEDIR/repos && git clone https://github.com/Martchus/openQA-helper.git`
 3. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
    openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
-   be aware what it does and prevent eg. duplicated repositories.
+   be aware what it does and prevent e.g. duplicated repositories.
 4. Fork all required repos on GitHub:
      * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM
      * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
