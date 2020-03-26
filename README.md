@@ -470,6 +470,13 @@ e.g. `telegraf --test --config "$OPENQA_BASEDIR/repos/openQA-helper/monitoring/t
 6. Play around; an example JSON for a PostgreSQL query can be found in the `monitoring` folder
    of this repo
 
+### Fix PostgreSQL authentification problems
+
+If you run into trouble with ident authentification, change it to password in the config
+file `/var/lib/pgsql/data/pg_hba.conf`. Be sure your user has a password, e.g. set one
+via `ALTER USER user_name WITH PASSWORD 'new_password';`. Specify the password in the Telegraf
+config like in the example `monitoring/telegraf-psql.conf`.
+
 ## More scripts
 * https://github.com/okurz/scripts
 
