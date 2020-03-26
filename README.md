@@ -449,6 +449,27 @@ View currently running job via VNC:
 vncviewer localhost:91 -Shared
 ```
 
+## Monitoring with Telegraf/InfluxDB/Grafana
+
+### Test Telegraf configuration
+
+e.g. `telegraf --test --config "$OPENQA_BASEDIR/repos/openQA-helper/monitoring/telegraf-psql.conf"`
+
+### Local setup preparations for InfluxDB and Grafana
+
+1. Install and start services:
+   ```
+   sudo zypper in telegraf influxdb grafana
+   sudo systemctl start influxdb grafana-server
+   ```
+2. Run `telegraf` without `--test` to actually populate InfluxDB
+    * It will create the database on its own with the name specified in the config
+    * See `monitoring/telegraf-psql.conf` for an example config with PostgreSQL
+4. Access Grafana under http://localhost:3000
+5. Add InfluxDB via Grafana's UI
+6. Play around; an example JSON for a PostgreSQL query can be found in the `monitoring` folder
+   of this repo
+
 ## More scripts
 * https://github.com/okurz/scripts
 
