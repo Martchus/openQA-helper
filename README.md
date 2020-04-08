@@ -48,7 +48,10 @@ Especially take care that none of the mentioned ports are already in use.
       ```
       rsync -aHP \
         "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.opensuse.org/$(date +%F).dump" \
-        "$OPENQA_BASEDIR/sql-dumps-on-wotan/openqa.opensuse.org"
+        "$OPENQA_BASEDIR/sql-dumps/openqa.opensuse.org"
+      rsync -aHP \
+        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.suse.de/$(date +%F).dump" \
+        "$OPENQA_BASEDIR/sql-dumps/openqa.suse.de"
       ```
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
   See https://www.postgresql.org/docs/8.1/static/backup.html
