@@ -480,6 +480,26 @@ file `/var/lib/pgsql/data/pg_hba.conf`. Be sure your user has a password, e.g. s
 via `ALTER USER user_name WITH PASSWORD 'new_password';`. Specify the password in the Telegraf
 config like in the example `monitoring/telegraf-psql.conf`.
 
+## Run aarch64 tests locally on x86_64 machine
+
+1. Install `qemu-arm` and `qemu-uefi-aarch64` (grab the latter from http://download.opensuse.org/ports/aarch64/tumbleweed/repo/oss/noarch)
+2. Setup a worker like this:
+   ```
+   [1234]
+   BACKEND=qemu
+   WORKER_CLASS=qemu_aarch64
+   QEMUCPU=cortex-a57
+   QEMUMACHINE=virt
+   QEMU_HUGE_PAGES_PATH=
+   QEMU_NO_KVM=1
+   ```
+3. Now simply clone an aarch64 job. When your fan speed increases it works.
+
+---
+
+If it does not pick up the variables ensure the pool directory is cleaned up and has not files
+from previous x86_64 jobs in it.
+
 ## More scripts
 * https://github.com/okurz/scripts
 
