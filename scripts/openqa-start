@@ -18,6 +18,7 @@ declare -A shortcuts=(
     [jc]=clone-job
     [job-clone]=clone-job
     [cl]=client
+    [q]=api
     [cmd]=command
     [dbup]=db-update
     [doc]=generate-documentation
@@ -99,6 +100,9 @@ elif [[ $what == websockets ]]; then
 elif [[ $what == client ]]; then
     set_title cl-$OPENQA_INSTANCE
     start_script script/client --host $host_params --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
+elif [[ $what == api ]]; then
+    set_title api-$OPENQA_INSTANCE
+    start_script script/openqa-cli api --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET -H $host_params "$@"
 elif [[ $what == worker ]]; then
     read= instance=1
     for arg in "$@"; do
