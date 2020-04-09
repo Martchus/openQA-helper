@@ -33,7 +33,7 @@ at [the more detailed diagram](https://github.com/os-autoinst/openQA/blob/master
 Especially take care that none of the mentioned ports are already in use.
 
 ### Create PostgreSQL user, maybe import some data
-* See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setup-postgresql
+* See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setting-up-the-postgresql-database
     * You can of course skip `pg_restore`. Starting with an empty database is likely sufficient for the beginning.
     * It makes sense to use a different name for the database than `openqa`. I usually use `openqa-local` and when
       importing later production data from OSD and o3 `openqa-osd` and `openqa-o3`.
@@ -47,10 +47,10 @@ Especially take care that none of the mentioned ports are already in use.
     * Example using `rsync`:
       ```
       rsync -aHP \
-        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.opensuse.org/$(date +%F).dump" \
+        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.opensuse.org/$(date --date="1 day ago" +%F).dump" \
         "$OPENQA_BASEDIR/sql-dumps/openqa.opensuse.org"
       rsync -aHP \
-        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.suse.de/$(date +%F).dump" \
+        "${WOTAN_USER_NAME}@wotan.suse.de:/mounts/work/users/coolo/SQL-DUMPS/openqa.suse.de/$(date --date="1 day ago" +%F).dump" \
         "$OPENQA_BASEDIR/sql-dumps/openqa.suse.de"
       ```
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
