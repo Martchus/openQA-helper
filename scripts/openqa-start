@@ -127,7 +127,7 @@ elif [[ $what == db-update ]]; then
 elif [[ $what == generate-documentation ]]; then
     export KEEP_OUTPUT=1
     [[ -d "$OPENQA_BASEDIR/repos/openQA/out" ]] && rm -fr "$OPENQA_BASEDIR/repos/openQA/out"
-    start_script script/"$what" "$@"
+    start_script tools/"$what" "$@"
     echo "documentation should be under: file://$OPENQA_BASEDIR/repos/openQA/out/docs/index.html"
 elif [[ $what == all ]]; then
     if [[ ! $KONSOLE_DBUS_SESSION ]]; then
@@ -147,6 +147,10 @@ elif [[ -x script/openqa-$what ]]; then
     start_script script/openqa-"$what" "$@"
 elif [[ -x script/$what ]]; then
     start_script script/"$what" "$@"
+elif [[ -x tools/openqa-$what ]]; then
+    start_script tools/openqa-"$what" "$@"
+elif [[ -x tools/$what ]]; then
+    start_script tools/"$what" "$@"
 else
     echo "Script \"$what\" not found."
     exit -1
