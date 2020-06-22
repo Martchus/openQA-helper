@@ -541,5 +541,6 @@ from previous x86_64 jobs in it.
 * MOJO_EVENTEMITTER_DEBUG
 * MOJO_IOLOOP_DEBUG
 * MOJO_WEBSOCKET_DEBUG
+* MOJO_PROCESS_DEBUG
 
 Outdated but maybe still useful: https://github.com/mojolicious/mojo/wiki/%25ENV
