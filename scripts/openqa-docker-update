@@ -1,4 +1,8 @@
 #!/bin/bash -e
 cd "$OPENQA_BASEDIR/repos/openQA"
-docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest
-make docker-test-build
+docker pull registry.opensuse.org/devel/openqa/ci/containers/base:latest # used by CircleCI
+docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest # the "other one"
+
+make docker-test-build # for running tests according to contributors guide
+
+.circleci/build_local_docker.sh # for CircleCI; will create image based on content of dependnencies.txt and autoinst

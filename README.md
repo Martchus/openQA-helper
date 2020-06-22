@@ -227,18 +227,44 @@ ExecStart=/usr/bin/dockerd --add-runtime oci=/usr/sbin/docker-runc --data-root=/
 
 Pull and build the latest image:
 ```
-# get latest docker image - here it is openqa**_dev**:latest
+# get latest Docker image - here it is openqa**_dev**:latest
 docker pull registry.opensuse.org/devel/openqa/containers/openqa_dev:latest
+
+# get the docker image used by CircleCI
+docker pull registry.opensuse.org/devel/openqa/ci/containers/base:latest
 
 # build the docker image - here we build openqa:latest (without **_dev*)
 cd "$OPENQA_BASEDIR/repos/openQA"
 make docker-test-build
+
+# build the docker image used by CircleCI according to dependnencies.txt
+# note: Adjust dependnencies.txt if the version it wants to install is not available.
+.circleci/build_local_docker.sh
 ```
 
 For convenience, these helper also provide the `openqa-docker-update` commands which executes the commands
 above.
 
-### Run tests
+### Run tests in the Docker container used by CircleCI
+Get a shell within the container:
+
+```
+IMAGE_NAME=localtest PATH_INSIDE_CONTAINER=/opt/testing_area openqa-docker-test -- bash
+```
+
+Then you can run tests as usual from that shell. You can also try to run e.g. `make test …` directly but it might
+not work when `$(PWD)` is used.
+
+To access the database:
+
+```
+psql -h /dev/shm/tpg openqa_test
+```
+
+It seems like the storage the database uses is quite limited. One can adjust `OpenQA::Test::Database` to use always
+the same schema to avoid that.
+
+### Run tests (pre CircleCI)
 * To ensure the latest image is used, re-execute the command(s) from the previous section.
 * This always appends `bash` so you have a shell for further investigation.
 * If it hangs on startup get rid of profiling data using `openqa-clear-profiling-data`.

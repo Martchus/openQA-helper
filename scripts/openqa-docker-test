@@ -3,6 +3,8 @@ cd "$OPENQA_BASEDIR/repos/openQA"
 CONTAINER_NAME=${CONTAINER_NAME:-openqa-testsuite}
 OPENQA_PATH=${OPENQA_PATH:-$OPENQA_BASEDIR/repos/openQA}
 OS_AUTOINST_PATH=${OS_AUTOINST_PATH:-$OPENQA_BASEDIR/repos/os-autoinst-clean}
+IMAGE_NAME=${IMAGE_NAME:-openqa:latest}
+PATH_INSIDE_CONTAINER=${PATH_INSIDE_CONTAINER:-/opt/testing_area}
 
 # read docker options and test command
 docker_options=()
@@ -24,7 +26,7 @@ done
 [[ $test_command ]] || test_command=(make run-tests-within-container)
 
 # keep a bash open so we can investigate failures easier
-test_command+=(';' 'bash')
+[[ $KEEP_OPEN ]] && test_command+=(';' 'bash')
 
 # use host X
 XSOCK=/tmp/.X11-unix:/tmp/.X11-unix:rw
@@ -40,10 +42,10 @@ for cmd in echo ''; do
         --rm -ti \
         --name "$CONTAINER_NAME" \
         -v "$XSOCK" -v "$XAUTH" -e XAUTHORITY="$XAUTH" -e DISPLAY="$DISPLAY" --device /dev/dri --device /dev/snd \
-        -v "$OPENQA_PATH:/opt/openqa" \
+        -v "$OPENQA_PATH:$PATH_INSIDE_CONTAINER" \
         -v "$OS_AUTOINST_PATH:/opt/os-autoinst" \
         -e PERL5LIB=lib \
-        "${docker_options[@]}" openqa:latest "${test_command[@]}"
+        "${docker_options[@]}" "$IMAGE_NAME" "${test_command[@]}"
 done
 
 xhost -local:root
