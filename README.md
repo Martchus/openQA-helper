@@ -261,8 +261,8 @@ To access the database:
 psql -h /dev/shm/tpg openqa_test
 ```
 
-It seems like the storage the database uses is quite limited. One can adjust `OpenQA::Test::Database` to use always
-the same schema to avoid that.
+It seems like the temporary storage is quite limited. One can adjust `OpenQA::Test::Database` to use always
+the same schema and clean the `/tmp` directory.
 
 ### Run tests (pre CircleCI)
 * To ensure the latest image is used, re-execute the command(s) from the previous section.
@@ -309,6 +309,15 @@ openqa-docker-bash
 sudo docker stop openqa-testsuite
 sudo docker container rm openqa-testsuite
 ```
+
+## Useful commands
+* Do something with a container
+    1. Find container ID with `docker ps`
+    2. Most useful commands: `docker exec/stop/rm $container_id …`
+* Monitor traffic within the container
+    1. Install `tcpdump` within the container.
+    2. Use it like `docker exec $container_id sudo tcpdump -vvAls0 -i lo` to monitor traffic on a certain interface
+       within the container.
 
 ## Checking for JavaScript errors
 ```
