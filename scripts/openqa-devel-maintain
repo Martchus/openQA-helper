@@ -31,11 +31,16 @@ function update_repo() {
         mkdir -p "$build_dir"
         pushd "$build_dir"
         if [[ -f CMakeCache.txt ]]; then
+            # do not override any settings if CMake has already been invoked (manually)
             cmake .
         else
             cmake -DCMAKE_BUILD_TYPE=Debug "$src_dir"
         fi
-        make -j$(nproc) symlinks
+        local make_tool=make
+        if [[ -f build.ninja ]]; then
+            make_tool=ninja
+        fi
+        "$make_tool" -j$(nproc) symlinks
         popd
     fi
     
