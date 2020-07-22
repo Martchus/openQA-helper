@@ -102,6 +102,9 @@ Especially take care that none of the mentioned ports are already in use.
    only start the services which I require right now (to keep things simple).
 10. Before you can run a job you also need to build isotovideo from the sources cloned via Git in previous steps.
     To do so, just invoke `openqa-devel-maintain` (see section "Keeping repos up-to-date" for details).
+    * These helpers are using the CMake build system.
+    * The build directory is `$OPENQA_BASEDIR/build/os-autoinst`. It is of course possible to invoke CMake in that directory manually to tweak
+      the configuration, e.g. to use Ninja or to set cache variables.
 
 Also be aware of the official documentation under https://github.com/os-autoinst/openQA/blob/master/docs
 and https://github.com/os-autoinst/os-autoinst/tree/master/doc.
@@ -149,10 +152,17 @@ port `9627`, the live view handler port `9628` and so on. Note that `/$OPENQA_IN
 so you can (and should) configure different databases for your instances (see 'Copying a database' section).
 To start multiple workers, just use `--instance` as shown in the examples above.
 
+To use a custom checkout of Mojo-IOLoop-ReadWriteProcess located under `$OPENQA_BASEDIR/repos/Mojo-IOLoop-ReadWriteProcess`
+set the environment variable `CUSTOM_MOJO_IO_LOOP_READ_WRITE_PROCESS`.
+
+To use a different os-autoinst checkout located under `$OPENQA_BASEDIR/repos/directory-of-custom-checkout` set the
+environment variable `CUSTOM_OS_AUTOINST_DIR` to `directory-of-custom-checkout`.
+
 ## Keeping repos up-to-date
 Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
 script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local
-master or a detetched HEAD to do modifications! Configure and make are run for os-autoinst automatically.
+master or a detetched HEAD to do modifications! The os-autoinst build is updated automatically (without overriding any
+custom CMake cache variables).
 
 ## Managing databases
 ### Switching between databases conveniently
