@@ -27,7 +27,9 @@ function update_repo() {
     local repo_name=${repo_path##*/}
     if [[ $repo_name  == 'os-autoinst' ]]; then
         local src_dir=$PWD
-        pushd "$OPENQA_BASEDIR/build/$repo_name"
+        local build_dir=$OPENQA_BASEDIR/build/$repo_name
+        mkdir -p "$build_dir"
+        pushd "$build_dir"
         if [[ -f CMakeCache.txt ]]; then
             cmake .
         else
