@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
-cd "$OPENQA_BASEDIR/repos/openQA"
+export OPENQA_CODEBASE=$OPENQA_BASEDIR/repos/openQA # used to get POD from controllers
 export LANG=en_US.utf8
+cd "$OPENQA_CODEBASE"
 what=$1
 shift || true
 
@@ -67,7 +68,6 @@ else
         export OPENQA_CONFIG=$OPENQA_CONFIG/$OPENQA_BASE_PORT
     fi
 fi
-
 
 function start_script
 {
