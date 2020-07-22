@@ -12,4 +12,5 @@ sudo zypper ar https://download.opensuse.org/repositories/devel:/openQA/openSUSE
 # add packaged version of os-autoinst/openQA, additional devel dependencies and perl modules for profiling
 sudo zypper in os-autoinst openQA openQA-{client,common,local-db,worker} \
                os-autoinst-devel openQA-devel os-autoinst-distri-opensuse-deps \
+               cmake \
                'perl(Devel::NYTProf)' 'perl(Mojolicious::Plugin::NYTProf)'

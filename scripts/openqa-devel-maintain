@@ -22,17 +22,19 @@ function update_repo() {
 
     # get in clean state, we should never have any commits on local master anyways
     [[ $branch_name == master || $branch_name == DETACHED ]] && git reset --hard origin/master
-    
-    # run configure/make
-    if [ "${repo_path##*/}" == 'os-autoinst' ]; then
-        if ! ./configure; then
-            libtoolize --force
-            aclocal
-            automake --force-missing --add-missing
-            autoconf
-            ./configure
+
+    # re-configure build and rebuild executables
+    local repo_name=${repo_path##*/}
+    if [[ $repo_name  == 'os-autoinst' ]]; then
+        local src_dir=$PWD
+        pushd "$OPENQA_BASEDIR/build/$repo_name"
+        if [[ -f CMakeCache.txt ]]; then
+            cmake .
+        else
+            cmake -DCMAKE_BUILD_TYPE=Debug "$src_dir"
         fi
-        make
+        make -j$(nproc) symlinks
+        popd
     fi
     
     popd
