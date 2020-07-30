@@ -27,14 +27,14 @@ function update_repo() {
     local repo_name=${repo_path##*/}
     if [[ $repo_name  == 'os-autoinst' ]]; then
         local src_dir=$PWD
-        local build_dir=$OPENQA_BASEDIR/build/$repo_name
+        local build_dir=$OPENQA_BASEDIR/build/${repo_name}${OS_AUTOINST_CONFIG:--ninja}
         mkdir -p "$build_dir"
         pushd "$build_dir"
         if [[ -f CMakeCache.txt ]]; then
-            # do not override any settings if CMake has already been invoked (manually)
-            cmake .
+            # do not override any settings by default if CMake has already been invoked (manually)
+            cmake ${OS_AUTOINST_CMAKE_ARGS} .
         else
-            cmake -DCMAKE_BUILD_TYPE=Debug "$src_dir"
+            cmake ${OS_AUTOINST_CMAKE_INIT_ARGS:--G Ninja -DCMAKE_BUILD_TYPE=Debug} "$src_dir"
         fi
         local make_tool=make
         if [[ -f build.ninja ]]; then
