@@ -453,6 +453,90 @@ Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it 
 Keeping too much profiling data around slows down Docker statup for the testsuite significantly as it
 copies all the data of your openQA repository checkout.
 
+## Schedule jobs via "isos post" locally to test dependency handling
+This example is about creating directly chained dependencies but the same applies to other dependency
+types.
+
+Usually I don't care much which exact job is being executed. In these examples I've just downloaded the
+lastest TW build from o3 into the `isos` directory and set `BUILD` and `ISO` accordingly. In addition, I
+set the `SCHEDULE` variable to reduce the number of test modules.
+
+### Configuration steps
+
+Create a test suite for the parent, e.g.:
+
+```
+name: directly-chained-parent
+settings:
+DESKTOP=minimalx
+SCHEDULE=tests/installation/isosize,tests/installation/bootloader_start
+```
+
+Create a test suite for the child, e.g.:
+
+```
+name: directly-chained-child-01
+settings:
+DESKTOP=minimalx
+SCHEDULE=tests/installation/isosize,tests/installation/bootloader_start
+START_DIRECTLY_AFTER_TEST=directly-chained-parent
+```
+
+You may create more similar child test suites to create a bigger cluster.
+
+Create a medium type if you don't already have one, e.g.:
+
+```
+distri: opensuse
+version: *
+flavor: DVD
+arch: x86_64
+settings: ISO_MAXSIZE=4700372992
+```
+
+Create a machine if you don't already have one, e.g.:
+
+```
+name: 64bit
+backend: qemu
+settings:
+HDDSIZEGB=20
+QEMUCPU=qemu64
+VIRTIO_CONSOLE=1
+WORKER_CLASS=qemu_x86_64
+```
+
+Create a new job group or reuse an existing one and add the job template like this:
+
+```
+defaults:
+  x86_64:
+    machine: 64bit
+    priority: 50
+products:
+  opensuse-*-DVD-x86_64:
+    distri: opensuse
+    flavor: DVD
+    version: '*'
+scenarios:
+  x86_64:
+    opensuse-*-DVD-x86_64:
+    - directly-chained-parent
+    - directly-chained-01-child
+```
+
+Schedule the job cluster, e.g.:
+
+```
+openqa-start client isos post ISO=openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200803-Media.iso DISTRI=opensuse ARCH=x86_64 FLAVOR=DVD VERSION=Tumbleweed BUILD=20200803
+```
+
+### Further notes
+
+Tests with dependencies found in production also sometimes use to use the `YAML_SCHEDULE` variable, e.g.
+`YAML_SCHEDULE=schedule/yast/raid/raid0_opensuse_gpt.yaml` is set as schedule for the parent and
+`YAML_SCHEDULE=schedule/yast/raid/raid1_opensuse_gpt.yaml` for the child.
+
 ## Testing AMQP
 1. Follow https://github.com/openSUSE/suse_msg/blob/master/amqp_infra.md#the-amqp-server to
    setup and start the AMQP server. It needs the ports 15672 and 5672.
