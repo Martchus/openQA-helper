@@ -43,7 +43,7 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     echo "usage: $0 service_or_script_name [args]"
     echo "where service_or_script_name is one of:"
     echo "   shortcut | long daemon name"
-    for daemon in 'wu  ' 'lv  ' 'ws  ' 'sc  ' 'wo  ' 'sc  ' 'wc  ' 'wm  ' 'gr  ' 'cj  ' 'cl  ' 'cmd ' 'dbup'; do
+    for daemon in 'wu  ' 'lv  ' 'ws  ' 'sc  ' 'wo  ' 'sc  ' 'wc  ' 'wm  ' 'gr  ' 'cj  ' 'cl  ' 'cmd ' 'dbup' 'doc '; do
         echo "   $daemon     | ${shortcuts[${daemon%% *}]}"
     done
     echo "args are forwarded to the specified service/script"
