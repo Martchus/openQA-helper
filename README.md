@@ -528,7 +528,7 @@ scenarios:
 Schedule the job cluster, e.g.:
 
 ```
-openqa-start client isos post ISO=openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200803-Media.iso DISTRI=opensuse ARCH=x86_64 FLAVOR=DVD VERSION=Tumbleweed BUILD=20200803
+openqa-start api -X POST isos ISO=openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200803-Media.iso DISTRI=opensuse ARCH=x86_64 FLAVOR=DVD VERSION=Tumbleweed BUILD=20200803
 ```
 
 ### Further notes
