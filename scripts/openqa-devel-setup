@@ -28,8 +28,6 @@ mkdir -p "$OPENQA_BASEDIR/openqa/worker/"{share,cache}
 
 # clone os-autoinst
 clone_repo os-autoinst
-# preserve a clean copy of os-autoinst
-cp -r "$OPENQA_BASEDIR/repos/os-autoinst"{,-clean}
 
 # clone tests for openSUSE
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"

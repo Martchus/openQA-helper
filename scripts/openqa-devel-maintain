@@ -52,7 +52,6 @@ update_repo "$OPENQA_BASEDIR/repos/openQA"
 
 echo "==> INFO: Updating os-autoinst"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
-update_repo "$OPENQA_BASEDIR/repos/os-autoinst-clean"
 
 declare -A products_by_distro=(
     [opensuse]="opensuse sle"
