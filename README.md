@@ -32,11 +32,36 @@ at [the more detailed diagram](https://github.com/os-autoinst/openQA/blob/master
 
 Especially take care that none of the mentioned ports are already in use.
 
+### Configure environment variables
+Add to `~/.bashrc` (or *somehow* add the following environment variables for the current user):
+```
+export OPENQA_BASEDIR=/hdd/openqa-devel
+export OPENQA_CONFIG=$OPENQA_BASEDIR/config
+export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
+export OPENQA_LOCAL_CODE=$OPENQA_BASEDIR/repos/openQA
+export OPENQA_CGROUP_SLICE=systemd/openqa/$USER
+export OPENQA_KEY=set_later
+export OPENQA_SECRET=set_later
+export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
+export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
+export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
+alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
+```
+
+Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
+it will need a considerably amount of disk space. The `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
+created via the web UI (see step 6 of subsequent section "Clone and configure all required repos").
+
 ### Create PostgreSQL user, maybe import some data
 * See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setting-up-the-postgresql-database
     * You can of course skip `pg_restore`. Starting with an empty database is likely sufficient for the beginning.
     * It makes sense to use a different name for the database than `openqa`. I usually use `openqa-local` and when
       importing later production data from OSD and o3 `openqa-osd` and `openqa-o3`.
+        * You will need to update the database configuration file as the linked instructions say. However, the
+          relevant file under `$OPENQA_CONFIG/database.ini` has not been created so far so we will come back to
+          this point later.
+        * Note that the database configuration file under `/etc/openqa` or the Git checkout are not used by this
+          setup and changing it will have no effect.
 * Imporing database dumps from our production instances is useful for local testing. The dumps can be
   found on wotan (not publicly accessible).
     * Example using `sshfs`:
@@ -57,40 +82,25 @@ Especially take care that none of the mentioned ports are already in use.
   See https://www.postgresql.org/docs/8.1/static/backup.html
 
 ### Clone and configure all required repos
-1. Add to `~/.bashrc` (or *somehow* add the following environment variables for the current user):
-   ```
-   export OPENQA_BASEDIR=/hdd/openqa-devel
-   export OPENQA_CONFIG=$OPENQA_BASEDIR/config
-   export OPENQA_LIBPATH=$OPENQA_BASEDIR/repos/openQA/lib # for foursixnine's way to let os-autoinst find openQA libs
-   export OPENQA_LOCAL_CODE=$OPENQA_BASEDIR/repos/openQA
-   export OPENQA_CGROUP_SLICE=systemd/openqa/$USER
-   export OPENQA_KEY=set_later
-   export OPENQA_SECRET=set_later
-   export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
-   export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
-   export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
-   alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
-   ```
-   Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
-   it will need a considerably amount of disk space. The `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
-   created via the web UI (see step 7).
-2. `mkdir -p $OPENQA_BASEDIR/repos && cd $OPENQA_BASEDIR/repos && git clone https://github.com/Martchus/openQA-helper.git`
-3. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
+1. `mkdir -p $OPENQA_BASEDIR/repos && cd $OPENQA_BASEDIR/repos && git clone https://github.com/Martchus/openQA-helper.git`
+2. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
    openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
    be aware what it does and prevent e.g. duplicated repositories.
-4. Fork all required repos on GitHub:
+3. Fork all required repos on GitHub:
      * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM
      * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
      * [os-autoinst/os-autoinst-distri-opensuse](https://github.com/os-autoinst/os-autoinst-distri-opensuse) - the actual tests (for openSUSE)
      * [os-autoinst/os-autoinst-needles-opensuse](https://github.com/os-autoinst/os-autoinst-needles-opensuse) - needles/reference images (for openSUSE)
      * I also encourage you to fork *this* repository because there's still room for improvement.
-5. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
+4. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
    your forks.
-6. Now you are almost done and can try to start openQA's services (see next section). Until finishing this guide, only start the web UI. It will
+5. Now you are almost done and can try to start openQA's services (see next section). Until finishing this guide, only start the web UI. It will
    initialize the database and pull required assets (e.g. jQuery) the first time you start it (so it might take some time).
-7. Generate API keys and put them into your `.bashrc` to amend step 1. To generate API keys you need to access the web UI page http://localhost:9526/api_keys,
-   specify an expiration date and click on "Create".
-8. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
+6. Generate API keys and update the environment variables configured in the previous section "Configure environment variables". To generate API keys
+   you need to access the web UI page http://localhost:9526/api_keys, specify an expiration date and click on "Create".
+7. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
+    * If you've chosen a database name other than `openqa` as suggested, update `$OPENQA_CONFIG/database.ini` accordingly
+      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#database)).
     * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9526` so the worker will directly
       connect to the web UI and websocket server (making it unnessarary to use an HTTP reverse proxy).
     * For this setup it makes most sense to set `WORKER_HOSTNAME` to `127.0.0.1` in `worker.ini`. Note that for remote workers (not covered by this setup
@@ -98,9 +108,9 @@ Especially take care that none of the mentioned ports are already in use.
       (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.asciidoc#steps-to-debug-developer-mode-setup)).
     * Useful adjustments to the config for using the svirt backend, enable caching and profiling
       are given in the subsequent sections.
-9. You can now also try to start the other services (as described in the next section) to check whether they're running. In practise I usually
+8. You can now also try to start the other services (as described in the next section) to check whether they're running. In practise I usually
    only start the services which I require right now (to keep things simple).
-10. Before you can run a job you also need to build isotovideo from the sources cloned via Git in previous steps.
+9. Before you can run a job you also need to build isotovideo from the sources cloned via Git in previous steps.
     To do so, just invoke `openqa-devel-maintain` (see section "Keeping repos up-to-date" for details).
     * These helpers are using the CMake build system.
     * The build directory is `$OPENQA_BASEDIR/build/os-autoinst`. It is of course possible to invoke CMake in that directory manually to tweak
