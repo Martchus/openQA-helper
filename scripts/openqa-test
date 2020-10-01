@@ -8,6 +8,8 @@ if ! [[ -e /dev/shm/tpg ]]; then
 fi
 echo 'Note: one might use "psql --host=/dev/shm/tpg openqa_test" to investigate the database used during this test'
 
+source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
+
 export SCHEDULER_FULLSTACK=1
 export DEVELOPER_FULLSTACK=1
 export FULLSTACK=1
