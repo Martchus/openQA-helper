@@ -27,6 +27,12 @@ declare -A shortcuts=(
     [doc]=generate-documentation
 )
 
+if [[ $OPENQA_PREFORK ]]; then
+    daemon_or_prefork=prefork
+else
+    daemon_or_prefork=daemon
+fi
+
 if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     echo "Starts an openQA service/script using repos and test data within $OPENQA_BASEDIR"
     echo "usage: $0 service_or_script_name [args]"
@@ -37,6 +43,7 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     done
     echo "args are forwarded to the specified service/script"
     echo "set OPENQA_BASE_PORT to customize ports (see README.md)"
+    echo "set OPENQA_PREFORK to enable preforking"
     exit 0
 fi
 
@@ -80,7 +87,7 @@ function set_title
 
 if [[ $what == webui ]]; then
     set_title wu-$OPENQA_INSTANCE
-    start_script script/openqa daemon "$@"
+    start_script script/openqa "$daemon_or_prefork" "$@"
 elif [[ $what == command ]]; then
     set_title cmd-$OPENQA_INSTANCE
     start_script script/openqa "$@"
@@ -92,13 +99,13 @@ elif [[ $what == gru-run ]]; then
     start_script script/openqa gru run "$@"
 elif [[ $what == live ]]; then
     set_title lv-$OPENQA_INSTANCE
-    start_script script/openqa-livehandler daemon "$@"
+    start_script script/openqa-livehandler "$daemon_or_prefork" "$@"
 elif [[ $what == scheduler ]]; then
     set_title sc-$OPENQA_INSTANCE
-    start_script script/openqa-scheduler daemon "$@"
+    start_script script/openqa-scheduler "$daemon_or_prefork" "$@"
 elif [[ $what == websockets ]]; then
     set_title ws-$OPENQA_INSTANCE
-    start_script script/openqa-websockets daemon "$@"
+    start_script script/openqa-websockets "$daemon_or_prefork" "$@"
 elif [[ $what == client ]]; then
     set_title cl-$OPENQA_INSTANCE
     start_script script/client --host $host_params --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
@@ -116,7 +123,7 @@ elif [[ $what == worker ]]; then
     start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/$os_autoinst_dir/isotovideo" $instance_arg --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == workercache ]]; then
     set_title wc
-    start_script script/openqa-workercache daemon "$@"
+    start_script script/openqa-workercache "$daemon_or_prefork" "$@"
 elif [[ $what == workercache-minion ]]; then
     set_title wm
     start_script script/openqa-workercache minion worker "$@"
