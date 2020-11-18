@@ -14,8 +14,18 @@ These helpers and the setup guide aim for a development setup where
 * no containers are used. One can optionally use Docker to run tests, though.
 * `sudo` is used explicitly if root privileges are required.
 
+## What about my existing openQA setup
+Since all files are installed to a single directory-tree of your choice the interference with other
+openQA setups (e.g. the packaged version) is minimal. If you have already installed openQA via a
+different method there's no need to uninstall it first - just take care that both versions are not
+running at the same time when using the standard ports. You should also consider using a separate
+database. To get rid of this openQA setup again, just delete the directory-tree and additional
+PostgreSQL databases you might have created (via `dropdb`).
+
+## Further notes
 I recommend to use Tumbleweed as development system for openQA - at least when using these helpers.
 It has proven to be stable enough for me. Using Leap you might miss some of the required packages.
+Besides, the script `openqa-install-devel-deps` only works under Tumbleweed.
 
 Note that the subsequent setup guide is merely a result of me documenting the steps I took when
 setting up my own workstation.
@@ -84,8 +94,9 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
 ### Clone and configure all required repos
 1. `mkdir -p $OPENQA_BASEDIR/repos && cd $OPENQA_BASEDIR/repos && git clone https://github.com/Martchus/openQA-helper.git`
 2. Install all packages required for openQA development via `openqa-install-devel-deps`. This script will work only for
-   openSUSE. It will also add some required repositories. Maybe you better open the script before just running it to
-   be aware what it does and prevent e.g. duplicated repositories.
+   Tumbleweed. It will also add some required repositories. Maybe you better open the script before just running it to
+   be aware what it does and prevent e.g. duplicated repositories. When not using Tumbleweed, checkout files within the
+   [dist](https://github.com/os-autoinst/openQA/tree/master/dist) directory for required dependencies.
 3. Fork all required repos on GitHub:
      * [os-autoinst/os-autoinst](https://github.com/os-autoinst/os-autoinst) - "backend", the thing that starts/controls the VM
      * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
