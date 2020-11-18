@@ -75,6 +75,7 @@ function start_script
     else
         "$@"
     fi
+    exit $?
 }
 
 function set_title
