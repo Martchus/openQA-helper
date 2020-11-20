@@ -649,6 +649,12 @@ config like in the example `monitoring/telegraf-psql.conf`.
 If it does not pick up the variables ensure the pool directory is cleaned up and has not files
 from previous x86_64 jobs in it.
 
+## View Minion dashboard from o3 workers locally
+```
+martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.opensuse.org (ariel)
+ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
+```
+
 ## More scripts
 * https://github.com/okurz/scripts
 
