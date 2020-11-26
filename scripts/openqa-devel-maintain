@@ -36,11 +36,7 @@ function update_repo() {
         else
             cmake ${OS_AUTOINST_CMAKE_INIT_ARGS:--G Ninja -DCMAKE_BUILD_TYPE=Debug} "$src_dir"
         fi
-        local make_tool=make
-        if [[ -f build.ninja ]]; then
-            make_tool=ninja
-        fi
-        "$make_tool" -j$(nproc) symlinks
+        cmake --build . --target symlinks
         popd
     fi
     
