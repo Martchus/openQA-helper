@@ -1,0 +1,16 @@
+#!/bin/bash
+if [[ ! -f CMakeCache.txt ]]; then
+    # change to default build directory (in consistency with openqa-devel-maintain) if
+    # not already in a CMake build directory
+    build_dir=$OPENQA_BASEDIR/build/os-autoinst${OS_AUTOINST_CONFIG:--ninja}
+    echo "Build directory: $build_dir"
+    cd "$build_dir"
+fi
+
+source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
+
+export LANG=en_US.UTF-8
+export PROVE_ARGS=${PROVE_ARGS:--v}
+export WITH_COVER_OPTIONS=1
+export TESTS="$@"
+cmake --build . --target test-perl-testsuite
