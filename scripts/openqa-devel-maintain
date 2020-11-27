@@ -49,6 +49,11 @@ update_repo "$OPENQA_BASEDIR/repos/openQA"
 echo "==> INFO: Updating os-autoinst"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
 
+if [[ -d $OPENQA_BASEDIR/repos/scripts ]]; then
+    echo "==> INFO: Updating scripts"
+    update_repo "$OPENQA_BASEDIR/repos/scripts"
+fi
+
 declare -A products_by_distro=(
     [opensuse]="opensuse sle"
     [openqa]="openQA"

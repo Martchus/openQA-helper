@@ -102,6 +102,7 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
      * [os-autoinst/openQA](https://github.com/os-autoinst/openQA) - mainly the web UI, scheduler, worker and documentation
      * [os-autoinst/os-autoinst-distri-opensuse](https://github.com/os-autoinst/os-autoinst-distri-opensuse) - the actual tests (for openSUSE)
      * [os-autoinst/os-autoinst-needles-opensuse](https://github.com/os-autoinst/os-autoinst-needles-opensuse) - needles/reference images (for openSUSE)
+     * [scripts](https://github.com/os-autoinst/scripts) - additional scripts (e.g. for monitoring)
      * I also encourage you to fork *this* repository because there's still room for improvement.
 4. Execute `openqa-devel-setup your_github_name` to clone all required repos to the correct directories inside `$OPENQA_BASEDIR`. This also adds
    your forks.
@@ -656,6 +657,7 @@ ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 ```
 
 ## More scripts
+* https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts
 
 ## Environment variables for DBI(x)

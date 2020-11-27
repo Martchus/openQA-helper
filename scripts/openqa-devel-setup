@@ -29,6 +29,9 @@ mkdir -p "$OPENQA_BASEDIR/openqa/worker/"{share,cache}
 # clone os-autoinst
 clone_repo os-autoinst
 
+# clone further repos
+clone_repo scripts
+
 # clone tests for openSUSE
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
 cd "$OPENQA_BASEDIR/openqa/share/tests"
