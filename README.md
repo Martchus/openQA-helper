@@ -180,6 +180,17 @@ set the environment variable `CUSTOM_MOJO_IO_LOOP_READ_WRITE_PROCESS`.
 To use a different os-autoinst checkout located under `$OPENQA_BASEDIR/repos/directory-of-custom-checkout` set the
 environment variable `CUSTOM_OS_AUTOINST_DIR` to `directory-of-custom-checkout`.
 
+### Run a service with systemd
+Sometimes it can be useful to run a service with systemd to see how changes behave in this case. Maybe you also want to test
+changes within the systemd service file at the same time.
+
+As explaind **none of the services should be run as root**. Hence it is not a good idea to amend your regular systemd service
+files. Instead, add a systemd service file to your home directory under `~/.config/systemd/user` and start it as your regular
+user via e.g. `systemctl start --user openqa-worker@1` (and follow logs via e.g. `journalctl --user -fu openqa-worker@1`).
+
+An example user unit for the worker can be found within the `example-systemd` directory. It is basically a copy of the regular
+service file with everything unwanted removed/replaced (most notably the command, the user and dependencies).
+
 ## Keeping repos up-to-date
 Just execute `openqa-devel-maintain`. If the local master or a detetched HEAD is checked out in a repository, the
 script automatically resets it to the latest state on `origin`. So it is assumed that you'll never ever use the local

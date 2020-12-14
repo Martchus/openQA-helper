@@ -1,0 +1,18 @@
+# unit description file for openQA worker processes
+# start using e.g.
+# systemctl start --user openqa-worker@1.service
+# replace '1' with the instance number you want
+[Unit]
+Description=openQA Worker #%i
+Wants=network.target
+
+[Service]
+Type=simple
+PermissionsStartOnly=True
+ExecStart=/hdd/openqa-devel/repos/openQA-helper/scripts/openqa-start wo --instance %i
+KillMode=mixed
+Restart=on-failure
+Delegate=yes
+
+[Install]
+WantedBy=default.target
