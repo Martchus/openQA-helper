@@ -235,6 +235,12 @@ openqa-renamedb old_name new_name
 2. Initialize a separate PostgreSQL database for testing via `openqa-pg`.
 3. Run a test with `openqa-test`, eg. `openqa-test t/ui/14-dashboard-parents.t`.
 
+## Run tests of os-autoinst itself
+* Use the helper `os-autoinst-test`, e.g. `os-autoinst-test 30-mmapi.t`.
+    * Run the helper in an arbitrary directory to use the default build.
+    * Run the helper in a specific build directory to use that build.
+* Read os-autoinst's README for more options.
+
 ### Notes
 * To run Selenium tests *not* headless use eg. `NOT_HEADLESS=1 openqa-test t/ui/14-dashboard-parents.t`.
 * Be sure to stop your regular worker, scheduler, ... before starting the one of the fullstack tests.
