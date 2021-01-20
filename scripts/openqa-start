@@ -135,10 +135,10 @@ elif [[ $what == db-update ]]; then
     start_script script/initdb --prepare_init --force "$@"
     start_script script/upgradedb --prepare_upgrades --force "$@"
 elif [[ $what == generate-documentation ]]; then
-    export KEEP_OUTPUT=1
+    export KEEP_OUTPUT=1 FORMATS=html
+    echo "documentation appear under: file://$OPENQA_BASEDIR/repos/openQA/out/docs/index.html"
     [[ -d "$OPENQA_BASEDIR/repos/openQA/out" ]] && rm -fr "$OPENQA_BASEDIR/repos/openQA/out"
-    start_script tools/"$what" "$@"
-    echo "documentation should be under: file://$OPENQA_BASEDIR/repos/openQA/out/docs/index.html"
+    start_script tools/"$what" "$@" || true
 elif [[ $what == all ]]; then
     if [[ ! $KONSOLE_DBUS_SESSION ]]; then
         echo "only works with Konsole"
