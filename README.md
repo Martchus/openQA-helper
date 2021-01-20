@@ -359,7 +359,7 @@ sudo docker stop openqa-testsuite
 sudo docker container rm openqa-testsuite
 ```
 
-## Useful commands
+### Useful commands
 * Do something with a container
     1. Find container ID with `docker ps`
     2. Most useful commands: `docker exec/stop/rm $container_id …`
