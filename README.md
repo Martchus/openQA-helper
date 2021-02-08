@@ -647,6 +647,14 @@ file `/var/lib/pgsql/data/pg_hba.conf`. Be sure your user has a password, e.g. s
 via `ALTER USER user_name WITH PASSWORD 'new_password';`. Specify the password in the Telegraf
 config like in the example `monitoring/telegraf-psql.conf`.
 
+### Troubelshooting
+
+Try a minimal config with debugging options, e.g. `telegraf --test --debug --config minimal.conf`.
+If there's no error logged you can only guess what's wrong:
+
+* DB authentification doesn't work
+* Access for specific table is not granted (can be granted via `grant select on table TABLE_NAME to USER_NAME;`)
+
 ## Run aarch64 tests locally on x86_64 machine
 
 1. Install `qemu-arm` and `qemu-uefi-aarch64` (grab the latter from http://download.opensuse.org/ports/aarch64/tumbleweed/repo/oss/noarch)
