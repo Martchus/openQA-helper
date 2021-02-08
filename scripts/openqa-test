@@ -1,5 +1,5 @@
 #!/bin/bash
-cd "$OPENQA_BASEDIR/repos/openQA"
+cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}"
 [[ $1 == 't/testinstance' ]] && basedir="$OPENQA_BASEDIR/repos/openQA/t/data" || basedir=
 [[ $NOT_HEADLESS ]] || echo 'Note: use NOT_HEADLESS=1 to watch execution of UI tests.'
 if ! [[ -e /dev/shm/tpg ]]; then
@@ -20,5 +20,6 @@ export OPENQA_CONFIG=
 #export MOJO_PORT=${MOJO_PORT:-12345}
 export PROVE_ARGS=${PROVE_ARGS:--l -v}
 
+echo "Using openQA checkout: $PWD"
 echo prove $PROVE_ARGS "$@"
 prove $PROVE_ARGS "$@"
