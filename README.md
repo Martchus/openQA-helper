@@ -683,7 +683,8 @@ ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 
 ## More scripts
 * https://github.com/os-autoinst/scripts
-* https://github.com/okurz/scripts
+* https://github.com/okurz/scripts - e.g.:
+    * `time env runs=400 "$OPENQA_BASEDIR/repos/okurz-github-scripts/count_fail_ratio" openqa-test t/full-stack.t`
 
 ## Environment variables for DBI(x)
 * `OPENQA_SQL_DEBUG=1`: enables debug printing for DBIx queries
