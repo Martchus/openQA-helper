@@ -1,4 +1,6 @@
 #!/bin/bash
+parent_dir=${PWD%/*}
+[[ $parent_dir == "$OPENQA_BASEDIR/repos" ]] && OPENQA_CHECKOUT=${OPENQA_CHECKOUT:-${PWD##*/}}
 cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}"
 [[ $1 == 't/testinstance' ]] && basedir="$OPENQA_BASEDIR/repos/openQA/t/data" || basedir=
 [[ $NOT_HEADLESS ]] || echo 'Note: use NOT_HEADLESS=1 to watch execution of UI tests.'
