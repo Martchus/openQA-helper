@@ -681,6 +681,26 @@ martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.o
 ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 ```
 
+## Dealing with production setup
+
+### Useful Salt commands
+see https://gitlab.suse.de/openqa/salt-states-openqa#common-salt-commands-to-use
+
+### Useful systemd commands
+
+Take out auto-restarting workers without stopping ongoing jobs:
+
+```
+# prevent worker services from restarting
+systemctl mask openqa-worker-auto-restart@{1..28}
+# ensure idling worker services stop now (`--kill-who=main` ensures only the worker receives the signal and *not* isotovideo)
+systemctl kill --kill-who=main --signal HUP openqa-worker-auto-restart@{1..28}
+```
+
+(see
+[official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#stoppingrestarting-workers-without-interrupting-currently-running-jobs)
+for additional info)
+
 ## More scripts
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
