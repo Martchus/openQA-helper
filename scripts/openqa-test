@@ -19,6 +19,8 @@ export LANG=en_US.utf8
 export TEST_PG='DBI:Pg:dbname=openqa_test;host=/dev/shm/tpg'
 export OPENQA_BASEDIR="$basedir"
 export OPENQA_CONFIG=
+export OPENQA_SCHEDULER_HOST=
+export OPENQA_WEB_SOCKETS_HOST=
 #export MOJO_PORT=${MOJO_PORT:-12345}
 export PROVE_ARGS=${PROVE_ARGS:--l -v}
 
