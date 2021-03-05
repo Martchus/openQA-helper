@@ -681,6 +681,15 @@ martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.o
 ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 ```
 
+## Test openqa-investigate against local setup
+
+```
+export dry_run=1 scheme=http host=localhost:9526
+echo '1838' | ./openqa-investigate # where 1838 is a job ID
+```
+
+To log client calls, uncomment `>/dev/nul` in the `clone` function.
+
 ## Dealing with production setup
 
 ### Useful Salt commands
