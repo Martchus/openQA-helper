@@ -675,12 +675,6 @@ If there's no error logged you can only guess what's wrong:
 If it does not pick up the variables ensure the pool directory is cleaned up and has not files
 from previous x86_64 jobs in it.
 
-## View Minion dashboard from o3 workers locally
-```
-martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.opensuse.org (ariel)
-ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
-```
-
 ## Test openqa-investigate against local setup
 
 ```
@@ -709,6 +703,12 @@ systemctl kill --kill-who=main --signal HUP openqa-worker-auto-restart@{1..28}
 (see
 [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#stoppingrestarting-workers-without-interrupting-currently-running-jobs)
 for additional info)
+
+### View Minion dashboard from o3 workers locally
+```
+martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.opensuse.org (ariel)
+ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
+```
 
 ## More scripts
 * https://github.com/os-autoinst/scripts
