@@ -710,6 +710,29 @@ martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.o
 ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 ```
 
+### Show PostgreSQL table sizes
+
+Size per table including indexes:
+```
+openqa=# select table_name, pg_size_pretty(pg_total_relation_size(quote_ident(table_name))), pg_total_relation_size(quote_ident(table_name)) from information_schema.tables where table_schema = 'public' order by 3 desc;
+```
+
+Use `pg_table_size` to exclude indexes. Use `pg_indexes_size` to show only the index size. E.g.:
+
+```
+openqa=# select table_name, pg_size_pretty(pg_table_size(quote_ident(table_name))), pg_size_pretty(pg_indexes_size(quote_ident(table_name))), pg_indexes_size(quote_ident(table_name)) from information_schema.tables where table_schema = 'public' order by 4 desc;
+```
+
+Total size, e.g. of indexes:
+
+```
+openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) from information_schema.tables where table_schema = 'public';
+ pg_size_pretty
+----------------
+ 39 GB
+(1 Zeile)
+```
+
 ## More scripts
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
