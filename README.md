@@ -414,10 +414,20 @@ openqa-start workercache-minion
 ```
 
 ## Test/run svirt backend locally
+### Using an svirt host from production
+One can try to [take out](#useful-systemd-commands) an svirt worker slot from production and configure a local
+worker slot to use the production svirt host. For that, just copy the settings found in the worker config on the
+production host for the particular worker slot to the local worker config. Note that taking out the production
+worker slot is necessary to avoid multiple jobs from using the same svirt host in parallel.
+
+Please inform team members about this before, leave a note in the corresponding ticket and take the production
+worker slot back-in when you're done.
+
+### Using QEMU/KVM to test completely locally (might not work)
 This backend basically connects to another machine via SSH and runs some
 `virsh` commands there to start a virtual machine via libvirt from there.
 
-### Configuration
+#### Configuration
 Example config for local testing (add to `$OPENQA_CONFIG/workers.ini`):
 ```
 [2]
@@ -455,7 +465,7 @@ sudo systemctl start sshd
 * Usually QEMU isn't used via svirt so this setup isn't well tested. When I tried it recently, the QEMU line was wrong
   preventing the system to boot from the image.
 
-### Running a job
+#### Running a job
 So far I have just cloned an arbitrary job (opensuse-15.0-KDE-Live-x86_64-Build20.71-kde-live-wayland@64bit_virtio-2G)
 which I had usually running via qemu backend and started the previously configured worker instance:
 
