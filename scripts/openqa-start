@@ -14,6 +14,7 @@ declare -A shortcuts=(
     [ws]=websockets
     [sc]=scheduler
     [wo]=worker
+    [wos]=worker-single-shot
     [wc]=workercache
     [wm]=workercache-minion
     [gr]=gru
@@ -113,7 +114,7 @@ elif [[ $what == client ]]; then
 elif [[ $what == api ]]; then
     set_title api-$OPENQA_INSTANCE
     start_script script/openqa-cli api --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
-elif [[ $what == worker ]]; then
+elif [[ $what == worker ]] || [[ $what == worker-single-shot ]]; then
     read= instance=1
     for arg in "$@"; do
         [[ $read == instance ]] && instance=$arg && break
@@ -121,6 +122,7 @@ elif [[ $what == worker ]]; then
     done
     set_title "wo-$instance"
     [[ -z $read ]] && instance_arg='--instance 1' || instance_arg=
+    [[ $what == worker-single-shot ]] && export OPENQA_WORKER_TERMINATE_AFTER_JOBS_DONE=1
     start_script script/worker --isotovideo "$OPENQA_BASEDIR/repos/$os_autoinst_dir/isotovideo" $instance_arg --verbose --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET "$@"
 elif [[ $what == workercache ]]; then
     set_title wc
