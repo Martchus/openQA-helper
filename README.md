@@ -694,6 +694,30 @@ echo '1838' | ./openqa-investigate # where 1838 is a job ID
 
 To log client calls, uncomment `>/dev/nul` in the `clone` function.
 
+## Enable support for hugepages
+If you get `qemu-system-aarch64: unable to map backing store for guest RAM: Cannot allocate memory`,
+add `default_hugepagesz=1G hugepagesz=1G hugepages=64"` to the kernel start parameters.
+When using GRUB it goes under `/etc/default/grub` and is applied via
+`grub2-mkconfig -o /boot/grub2/grub.cfg`.
+
+If you get `qemu-system-aarch64: can't open backing store /dev/hugepages/ for guest RAM: Permission denied`,
+make hugepages accessible to all users, e.g. by creating/enabling a systemd service:
+
+```
+/etc/systemd/system/writable-hugepages.service
+---
+[Unit]
+Description=Systemd service to make hugepages accessible by all users
+After=dev-hugepages.mount
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/chmod o+w /dev/hugepages/
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## Dealing with production setup
 
 ### Useful Salt commands
