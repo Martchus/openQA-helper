@@ -744,6 +744,11 @@ martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.o
 ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
 ```
 
+### Reboot OSD workers via IPMI in loop
+```
+for run in {01..10}; do for host in QA-Power8-4-kvm.qa QA-Power8-5-kvm.qa powerqaworker-qam-1 malbec.arch grenache-1.qa; do echo -n "run: $run, $host: ping .. " && timeout -k 5 600 sh -c "until ping -c30 $host >/dev/null; do :; done" && echo -n "ok, ssh .. " && timeout -k 5 600 sh -c "until nc -z -w 1 $host 22; do :; done" && echo -n "ok, salt .. " && timeout -k 5 600 sh -c " until salt --timeout=300 --no-color $host\* test.ping >/dev/null; do :; done" && echo -n "ok, uptime/reboot: " && salt $host\* cmd.run "uptime && systemctl disable --now openqa-worker-cacheservice.service >/dev/null" && salt $host\* system.reboot 1 || break; done || break; done
+```
+
 ### Show PostgreSQL table sizes
 
 Size per table including indexes:
