@@ -12,6 +12,7 @@ echo 'Note: one might use "psql --host=/dev/shm/tpg openqa_test" to investigate 
 
 source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
 
+export HEAVY=1
 export SCHEDULER_FULLSTACK=1
 export DEVELOPER_FULLSTACK=1
 export FULLSTACK=1
