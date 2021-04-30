@@ -38,7 +38,7 @@ function start_sessions()
 
      # activate first session
     while [[ $session_count -gt 1 ]]; do
-        qdbus "$KONSOLE_SERVICE" /Konsole prevSession
+        qdbus-qt5 "$KONSOLE_SERVICE" /Konsole prevSession
         session_count=$((session_count - 1))
     done
 }
