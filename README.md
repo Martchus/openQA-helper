@@ -772,14 +772,16 @@ openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) fr
 (1 Zeile)
 ```
 
-## More scripts
+## More scripts and documentation
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
     * `time env runs=400 "$OPENQA_BASEDIR/repos/okurz-github-scripts/count_fail_ratio" openqa-test t/full-stack.t`
+* https://kalikiana.gitlab.io/post/2021-04-27-working-with-openqa-via-the-command-line
 
 ## Environment variables for DBI(x)
 * `OPENQA_SQL_DEBUG=1`: enables debug printing for DBIx queries
 * `DBI_TRACE=1`: enables debug printing for all DBI queries
+* `DBIC_TRACE=1`: enables debug printing for all DBIx queries
 
 ## Environment variables for Mojolicious
 * MOJO_PORT
