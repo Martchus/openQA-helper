@@ -772,6 +772,17 @@ openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) fr
 (1 Zeile)
 ```
 
+### Run infrastructure-related scripts like in GitLab pipeline
+
+Example:
+
+```
+cd "$OPENQA_BASEDIR/repos/grafana-webhook-actions"
+docker pull $image_from_ci_config
+docker images # check tag/checksum of image
+docker run --rm --env EMAIL=foo --env MACHINE=bar --volume "$PWD:/pwd" a59105e4d071 /pwd/ipmi-recover-worker
+```
+
 ## More scripts and documentation
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
