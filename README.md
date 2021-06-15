@@ -152,7 +152,7 @@ To start the particular daemons, run the following commands:
 * `openqa-start gru run` - starts the GRU/Minion daemon required to run background tasks (cleanup, needling)
 * `openqa-start wo` - starts the worker
 * `openqa-start wo --instance 2` - starts another worker
-* `openqa-start all` - starts all daemons listed above, each in its own Konsole tab (only works with Konsole)
+* `openqa-start all` - starts all daemons listed above, each in its own tab (works with Konsole and tmux)
 * `openqa-start cj --from openqa.opensuse.org 1234` - clones job 1234 from o3
 * `openqa-start cl ` - invokes the client with the options to connect to the local web UI
 * `openqa-start cmd` - invokes the specified command on the web UI app, e.g.:

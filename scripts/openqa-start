@@ -142,19 +142,16 @@ elif [[ $what == generate-documentation ]]; then
     [[ -d "$OPENQA_BASEDIR/repos/openQA/out" ]] && rm -fr "$OPENQA_BASEDIR/repos/openQA/out"
     start_script tools/"$what" "$@" || true
 elif [[ $what == all ]]; then
-    if [[ ! $KONSOLE_DBUS_SESSION ]]; then
-        echo "only works with Konsole"
-        exit -2
-    fi
     source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
     sessions=(
         openQA-webui               'wu'
         openQA-live                'lv'
         openQA-websockets          'ws'
         openQA-scheduler           'sc'
+        openQA-gru                 'gru run'
         openQA-worker1             'wo'
     )
-    start_sessions ${sessions[@]}
+    start_sessions sessions
 elif [[ -x script/openqa-$what ]]; then
     start_script script/openqa-"$what" "$@"
 elif [[ -x script/$what ]]; then
