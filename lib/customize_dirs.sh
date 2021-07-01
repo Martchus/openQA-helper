@@ -8,4 +8,6 @@ if [[ $CUSTOM_MOJO_IO_LOOP_READ_WRITE_PROCESS ]]; then
     fi
     export PERL5LIB=$read_write_process_path:$PERL5LIB
 fi
-echo "PERL5LIB: $PERL5LIB"
+if [[ $OPENQA_START_VERBOSE ]]; then
+    echo "PERL5LIB: $PERL5LIB"
+fi
