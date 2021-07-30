@@ -54,6 +54,7 @@ export OPENQA_KEY=set_later
 export OPENQA_SECRET=set_later
 export OPENQA_SCHEDULER_WAKEUP_ON_REQUEST=1
 export OPENQA_SCHEDULER_SCHEDULE_TICK_MS=1000
+export EXTRA_PROVE_ARGS="-v" # for verbose output of openQA's own unit tests
 export PATH="$PATH:/usr/lib64/chromium:$OPENQA_BASEDIR/repos/openQA-helper/scripts"
 alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the openQA repository
 ```
