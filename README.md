@@ -778,6 +778,17 @@ openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) fr
 (1 Zeile)
 ```
 
+### Useful SQL queries
+Specific incompletes finished after some date with their workers:
+```
+select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
+```
+
+Worker hosts and their online slot count and processed assets and jobs as of some date:
+```
+select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
+```
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
