@@ -73,7 +73,7 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
           this point later.
         * Note that the database configuration file under `/etc/openqa` or the Git checkout are not used by this
           setup and changing it will have no effect.
-* Imporing database dumps from our production instances is useful for local testing. The dumps can be
+* Importing database dumps from our production instances is useful for local testing. The dumps can be
   found on wotan (not publicly accessible).
     * Example using `sshfs`:
       ```
@@ -165,7 +165,7 @@ To start the particular daemons, run the following commands:
 Additional parameters are simply appended to the invocation. That works of course also for `--help`.
 
 **Note that none of these commands should to be run as root.**
-Running one of these commands accidently as root breaks the setup because then newly created files and directories are
+Running one of these commands accidentally as root breaks the setup because then newly created files and directories are
 owned by root and you run into permission errors when starting as your regular user again.
 
 It is possible to start multiple web UI instances at the same time by adjusting the ports to be used. In general this works by
@@ -461,8 +461,8 @@ sudo systemctl start sshd
 #### Notes
 * So this setup for the svirt backend will connect via SSH to the local machine and start qemu via libvirtd/virsh.
 * Either put your (root) password in the worker config or even use
- `bash -c "cat /home/$USER/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"`. Or preferrably allow some other user to use
- `virsh` and manipluate contents of `/var/lib/libvirt/images` and set its name via `VIRSH_USERNAME`.
+ `bash -c "cat /home/$USER/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"`. Or preferably allow some other user to use
+ `virsh` and manipulate contents of `/var/lib/libvirt/images` and set its name via `VIRSH_USERNAME`.
 * Usually QEMU isn't used via svirt so this setup isn't well tested. When I tried it recently, the QEMU line was wrong
   preventing the system to boot from the image.
 
@@ -491,7 +491,7 @@ For Open vSwitch see http://open.qa/docs/#_multi_machine_tests_setup.
 ## Profiling
 1. Install NYTProf, under Tumbleweed: `zypper in perl-Devel-NYTProf perl-Mojolicious-Plugin-NYTProf`
 2. Put `profiling_enabled = 1` in  `openqa.ini`.
-3. Optionally import production data like described in the official contributers documentation.
+3. Optionally import production data like described in the official contributors documentation.
 4. Restart the web UI, browse some pages. Profiling is done in the background.
 5. Access profiling data via `/nytprof` route.
 
@@ -499,7 +499,7 @@ For Open vSwitch see http://open.qa/docs/#_multi_machine_tests_setup.
 Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it again and disable the
 `profiling_enabled` configuration if not needed right now.
 
-Keeping too much profiling data around slows down Docker statup for the testsuite significantly as it
+Keeping too much profiling data around slows down Docker startup for the testsuite significantly as it
 copies all the data of your openQA repository checkout.
 
 ## Schedule jobs via "isos post" locally to test dependency handling
@@ -507,7 +507,7 @@ This example is about creating directly chained dependencies but the same applie
 types.
 
 Usually I don't care much which exact job is being executed. In these examples I've just downloaded the
-lastest TW build from o3 into the `isos` directory and set `BUILD` and `ISO` accordingly. In addition, I
+latest TW build from o3 into the `isos` directory and set `BUILD` and `ISO` accordingly. In addition, I
 set the `SCHEDULE` variable to reduce the number of test modules.
 
 ### Configuration steps
@@ -651,9 +651,9 @@ e.g. `telegraf --test --config "$OPENQA_BASEDIR/repos/openQA-helper/monitoring/t
 6. Play around; an example JSON for a PostgreSQL query can be found in the `monitoring` folder
    of this repo
 
-### Fix PostgreSQL authentification problems
+### Fix PostgreSQL authentication problems
 
-If you run into trouble with ident authentification, change it to password in the config
+If you run into trouble with ident authentication, change it to password in the config
 file `/var/lib/pgsql/data/pg_hba.conf`. Be sure your user has a password, e.g. set one
 via `ALTER USER user_name WITH PASSWORD 'new_password';`. Specify the password in the Telegraf
 config like in the example `monitoring/telegraf-psql.conf`.
@@ -663,7 +663,7 @@ config like in the example `monitoring/telegraf-psql.conf`.
 Try a minimal config with debugging options, e.g. `telegraf --test --debug --config minimal.conf`.
 If there's no error logged you can only guess what's wrong:
 
-* DB authentification doesn't work
+* DB authentication doesn't work
 * Access for specific table is not granted (can be granted via `grant select on table TABLE_NAME to USER_NAME;`)
 
 ## Run aarch64 tests locally on x86_64 machine
