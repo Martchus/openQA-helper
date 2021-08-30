@@ -784,9 +784,19 @@ Specific incompletes finished after some date with their workers:
 select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
 ```
 
+Incompletes on a specific worker host:
+```
+select id, t_finished, result, reason from jobs where (select host from workers where id = assigned_worker_id) = 'openqaworker13' and result = 'incomplete' and t_finished >= '2021-08-24T00:00:00' order by t_finished;
+```
+
 Worker hosts and their online slot count and processed assets and jobs as of some date:
 ```
-select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
+select host, count(id) as online_slots, (select array[((select sum(size) from assets where id = any(array_agg(distinct jobs_assets.asset_id))) / 1024 / 1024 / 1024), count(distinct id)] from jobs join jobs_assets on jobs.id = jobs_assets.job_id where assigned_worker_id = any(array_agg(w.id)) and t_finished >= '2021-08-06T00:00:00') as recent_asset_size_in_gb_and_job_count from workers as w where t_updated > (timezone('UTC', now()) - interval '1 hour') group by host order by recent_asset_size_in_gb_and_job_count desc;
+```
+
+Recently abandoned jobs by worker host (total count and per hour):
+```
+select host, count(id) as online_slots, (select array[count(distinct id), count(distinct id) / (extract(epoch FROM (timezone('UTC', now()) - '2021-08-12T00:00:00')) / 3600)] from jobs join jobs_assets on jobs.id = jobs_assets.job_id where assigned_worker_id = any(array_agg(w.id)) and t_finished >= '2021-08-12T00:00:00' and reason like '%abandoned: associated worker%') as recently_abandoned_jobs_total_and_per_hour from workers as w where t_updated > (timezone('UTC', now()) - interval '1 hour') group by host order by recently_abandoned_jobs_total_and_per_hour desc;
 ```
 
 ### Run infrastructure-related scripts like in GitLab pipeline
