@@ -837,7 +837,20 @@ cd /tmp
 # prepare the migration
 # note: Be sure to use initdb from the target version (like it is done here) and also no newer
 #       version which is possibly installed on the system as well.
-sudo -u postgres /usr/lib/postgresql$newver/bin/initdb -D /var/lib/pgsql/data.$newver
+# note: Lookup the locale settings in `/var/lib/pgsql/data.$oldver/postgresql.conf` or via
+        `sudo -u geekotest psql openqa -c 'show all;' | grep lc_` to pass locale settings
+        listed by `initdb --help` as appropriate. On my machine I didn't need to pass any
+        settings but on o3 it was required to pass the following settings:
+          --encoding=UTF8 --locale=en_US.UTF-8 --lc-collate=C --lc-ctype=en_US.UTF-8
+          --lc-messages=C --lc-monetary=C --lc-numeric=C --lc-time=C
+sudo -u postgres /usr/lib/postgresql$newver/bin/initdb [locale-settings] -D /var/lib/pgsql/data.$newver
+
+# take over any relevant changes from the old config to the new one
+# note: There shouldn't be a diff in the locale settings, otherwise `pg_upgrade` will
+        complain.
+sudo -u postgres vimdiff \
+    /var/lib/pgsql/data.$oldver/postgresql.conf \
+    /var/lib/pgsql/data.$newver/postgresql.conf
 
 # shutdown postgres server and related services as appropriate for your setup, e.g.:
 sudo systemctl stop openqa-webui openqa-scheduler openqa-livehandler openqa-gru
@@ -848,7 +861,7 @@ sudo systemctl stop postgresql
 # note: Be sure to use pg_upgrade from the target version (like it is done here) and also no newer
 #       version which is possibly installed on the system as well.
 #       See https://www.postgresql.org/docs/current/pgupgrade.html for details.
-sudo -u postgres /usr/lib/postgresql$newver/bin/pg_upgrade --link
+sudo -u postgres /usr/lib/postgresql$newver/bin/pg_upgrade --link \
     --old-bindir=/usr/lib/postgresql$oldver/bin \
     --new-bindir=/usr/lib/postgresql$newver/bin \
     --old-datadir=/var/lib/pgsql/data.$oldver \
@@ -857,21 +870,21 @@ sudo -u postgres /usr/lib/postgresql$newver/bin/pg_upgrade --link
 # change symlink to use the new data directory
 sudo ln --force --no-dereference --relative --symbolic /var/lib/pgsql/data.$newver /var/lib/pgsql/data
 
-# check whether usual role and database are present and running on the new version
-sudo -u geekotest psql -c 'select version();' openqa # example for setup using openSUSE packages
-psql -c 'select version();' openqa-local             # example for helpers setup
-
 # start services again as appropriate for your setup, e.g.:
 # note: No need to take care of starting the new version. The start script checks the version of
 #       the data directory and starts the correct version.
 sudo systemctl start postgresql
 sudo systemctl start openqa-webui openqa-scheduler openqa-livehandler openqa-gru
 
+# check whether usual role and database are present and running on the new version
+sudo -u geekotest psql -c 'select version();' openqa # example for setup using openSUSE packages
+psql -c 'select version();' openqa-local             # example for helpers setup
+
 # remove old postgres packages if not needed anymore
 sudo zypper rm postgresql$oldver-server postgresql$oldver-contrib postgresql$oldver
 
 # delete old data directory if not needed anymore
-sudo rm -r /var/lib/pgsql/data.$oldver
+sudo -u postgres rm -r /var/lib/pgsql/data.$oldver
 ```
 
 ## More scripts and documentation
