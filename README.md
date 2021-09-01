@@ -907,5 +907,8 @@ sudo -u postgres rm -r /var/lib/pgsql/data.$oldver
 * MOJO_IOLOOP_DEBUG
 * MOJO_WEBSOCKET_DEBUG
 * MOJO_PROCESS_DEBUG
+* MOJO_MAX_MESSAGE_SIZE (https://docs.mojolicious.org/Mojo/Message#max_message_size)
+* MOJO_MAX_BUFFER_SIZE (https://docs.mojolicious.org/Mojo/Content#max_buffer_size)
+* MOJO_MAX_LINE_SIZE (https://docs.mojolicious.org/Mojo/Message#max_line_size)
 
 Outdated but maybe still useful: https://github.com/mojolicious/mojo/wiki/%25ENV
