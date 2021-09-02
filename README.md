@@ -369,6 +369,55 @@ sudo docker container rm openqa-testsuite
     2. Use it like `docker exec $container_id sudo tcpdump -vvAls0 -i lo` to monitor traffic on a certain interface
        within the container.
 
+## Run openQA and a worker via docker-compose
+If TLS is required, edit `container/webui/docker-compose.yaml` to point it to your certificate. By default, a
+test certificate is used.
+
+Edit `container/webui/conf/openqa.ini` as needed, e.g. change `[auth] method = Fake` or the logging level.
+
+Edit `container/webui/nginx.conf` to customize the NGINX configuration.
+
+The web UI will be available under http://localhost and https://localhost. So it is using default ports
+by default. Make sure those ports are not used by another service yet or change ports in the *nginx section*
+of `container/webui/docker-compose.yaml`.
+
+Start all openQA "web UI host" services:
+```
+cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}/container/webui"
+docker-compose up  # maybe you need to add --build to give it a fresh build
+```
+
+Generate an API key/secret in the web UI and configure it in `container/webui/conf/client.conf` *and*
+`container/worker/conf/client.conf`. Restart the web UI container to apply the configuration changes:
+
+```
+cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}/container/webui"
+docker-compose restart
+```
+
+Note that the web UI services need it as well for internal API requests.
+
+Start a worker:
+```
+cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}/container/worker"
+docker-compose up  # maybe you need to add --build to give it a fresh build
+```
+
+Clone a job:
+```
+$OPENQA_BASEDIR/repos/openQA/script/openqa-clone-job \
+    --dir $OPENQA_BASEDIR/repos/openQA/container/webui/workdir/data/factory
+    --show-progress \
+    --apikey $apikey --apisecret $apisecret \
+    --host http://localhost \
+    https://openqa.opensuse.org/tests/1896520
+```
+
+### Useful commands
+* To list all launched containers and check their status use `docker-compose top`.
+* Use e.g. `docker exec -it webui_websockets_1 bash` to enter any of these containers for manual investigation.
+* To rebuild a container, e.g. use `docker-compose build nginx` to apply NGINX config
+
 ## Checking for JavaScript errors
 ```
 sudo zypper in npm
