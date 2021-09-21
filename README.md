@@ -790,8 +790,9 @@ for additional info)
 
 ### View Minion dashboard from o3 workers locally
 ```
-martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4 # on openqa.opensuse.org (ariel)
-ssh -L 9530:localhost:9530 -N openqa.opensuse.org                  # locally
+martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4      # on openqa.opensuse.org (ariel)
+ssh -L 9530:localhost:9530 -N openqa.opensuse.org                       # locally
+ssh -J openqa.opensuse.org -L 9530:localhost:9530 -N root@openqaworker5 # using the -J flag
 ```
 
 ### Delete specific Minion jobs
