@@ -40,11 +40,10 @@ ln -s opensuse sle
 
 # create symlinks for tidy
 cd "$OPENQA_BASEDIR/openqa/share/tests/opensuse"
-pushd tools
-ln -s ../../../../../repos/os-autoinst/tools/tidy
-ln -s ../../../../../repos/os-autoinst/tools/absolutize
-popd
-ln -s ../../../../repos/os-autoinst/.perltidyrc
+ln -rs "$OPENQA_BASEDIR/repos/os-autoinst" "os-autoinst"
+for tool in lib absolutize tidy; do
+    ln -rs "$OPENQA_BASEDIR/repos/os-autoinst/tools/$tool" "tools/$tool"
+done
 
 # clone needles for openSUSE (yes, this is a subdirectory in our previous checkout)
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/opensuse"
