@@ -447,6 +447,12 @@ openqa-perl-prefix-install perltidy-$version_number Perl::Tidy@$version_number
 openqa-perl-prefix-run perltidy-$version_number tools/tidy --only-changed
 ```
 
+or for `Pod::AsciiDoctor` to generate documentation:
+```
+openqa-perl-prefix-install doc Pod::AsciiDoctor
+openqa-perl-prefix-run openqa-start doc
+```
+
 As always, everything is stored under `$OPENQA_BASEDIR` and owned by your regular user.
 
 ## Using the worker cache locally
