@@ -849,6 +849,11 @@ Recently abandoned jobs by worker host (total count and per hour):
 select host, count(id) as online_slots, (select array[count(distinct id), count(distinct id) / (extract(epoch FROM (timezone('UTC', now()) - '2021-08-12T00:00:00')) / 3600)] from jobs join jobs_assets on jobs.id = jobs_assets.job_id where assigned_worker_id = any(array_agg(w.id)) and t_finished >= '2021-08-12T00:00:00' and reason like '%abandoned: associated worker%') as recently_abandoned_jobs_total_and_per_hour from workers as w where t_updated > (timezone('UTC', now()) - interval '1 hour') group by host order by recently_abandoned_jobs_total_and_per_hour desc;
 ```
 
+Scheduled jobs which have been restarted:
+```
+select count(j1.id) from jobs as j1 where state = 'scheduled' and (select j2.id from jobs as j2 where j1.id = j2.clone_id limit 1) is not null;
+```
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
