@@ -809,6 +809,11 @@ ssh -J openqa.opensuse.org -L 9530:localhost:9530 -N root@openqaworker5 # using 
 sudo -u geekotest /usr/share/openqa/script/openqa eval -V 'for (my ($jobs, $job) = app->minion->jobs({states => ["failed"], tasks => ["download_asset"]}); $job = $jobs->next;) { app->minion->job($job->{id})->remove }'
 ```
 
+### Search for Minion job
+```
+select * from minion_jobs where args::TEXT ~ '%7275485%';
+```
+
 ### Reboot OSD workers via IPMI in loop
 ```
 for run in {01..10}; do for host in QA-Power8-4-kvm.qa QA-Power8-5-kvm.qa powerqaworker-qam-1 malbec.arch grenache-1.qa; do echo -n "run: $run, $host: ping .. " && timeout -k 5 600 sh -c "until ping -c30 $host >/dev/null; do :; done" && echo -n "ok, ssh .. " && timeout -k 5 600 sh -c "until nc -z -w 1 $host 22; do :; done" && echo -n "ok, salt .. " && timeout -k 5 600 sh -c " until salt --timeout=300 --no-color $host\* test.ping >/dev/null; do :; done" && echo -n "ok, uptime/reboot: " && salt $host\* cmd.run "uptime && systemctl disable --now openqa-worker-cacheservice.service >/dev/null" && salt $host\* system.reboot 1 || break; done || break; done
@@ -822,19 +827,22 @@ openqa=# select table_name, pg_size_pretty(pg_total_relation_size(quote_ident(ta
 ```
 
 Use `pg_table_size` to exclude indexes. Use `pg_indexes_size` to show only the index size. E.g.:
-
 ```
 openqa=# select table_name, pg_size_pretty(pg_table_size(quote_ident(table_name))), pg_size_pretty(pg_indexes_size(quote_ident(table_name))), pg_indexes_size(quote_ident(table_name)) from information_schema.tables where table_schema = 'public' order by 4 desc;
 ```
 
 Total size, e.g. of indexes:
-
 ```
 openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) from information_schema.tables where table_schema = 'public';
  pg_size_pretty
 ----------------
  39 GB
 (1 Zeile)
+```
+
+Show vacuuming stats:
+```
+select relname,last_vacuum, last_autovacuum, last_analyze, last_autoanalyze from pg_stat_user_tables;
 ```
 
 ### Useful SQL queries
@@ -861,6 +869,16 @@ select host, count(id) as online_slots, (select array[count(distinct id), count(
 Scheduled jobs which have been restarted:
 ```
 select count(j1.id) from jobs as j1 where state = 'scheduled' and (select j2.id from jobs as j2 where j1.id = j2.clone_id limit 1) is not null;
+```
+
+Ratio of job results within a certain set of jobs (here jobs with parallel dependencies):
+```
+with mm_jobs as (select distinct id, result from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select result, count(id) * 100. / (select count(id) from mm_jobs) as ratio from mm_jobs group by mm_jobs.result order by ratio desc;
+```
+
+Fail ratio of jobs on selected worker hosts:
+```
+with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2021-10-28' group by host;
 ```
 
 ### Run infrastructure-related scripts like in GitLab pipeline
