@@ -724,6 +724,24 @@ If there's no error logged you can only guess what's wrong:
 * DB authentication doesn't work
 * Access for specific table is not granted (can be granted via `grant select on table TABLE_NAME to USER_NAME;`)
 
+### Useful commands/examples
+Show fields of measurement:
+```
+show field keys from apache_log
+```
+
+Show required disk space by measurement:
+```
+sudo influx_inspect report-disk -detailed /var/lib/influxdb/data > influx-disk-usage.json
+jq -r '["measurement","size_gb"], (.Measurement | sort_by(.size) | reverse[] | [select(.db == "telegraf")] | map(.measurement,.size / 1024 / 1024 / 1024)) | @tsv' influx-disk-usage.json
+```
+
+Delete old data:
+```
+delete where time < '2019-11-22'                   # affects all data
+delete from "apache_log" where time < '2020-11-22' # affects data from measurement
+```
+
 ## Run aarch64 tests locally on x86_64 machine
 
 1. Install `qemu-arm` and `qemu-uefi-aarch64` (grab the latter from http://download.opensuse.org/ports/aarch64/tumbleweed/repo/oss/noarch)
