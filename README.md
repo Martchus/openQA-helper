@@ -899,6 +899,17 @@ Fail ratio of jobs on selected worker hosts:
 with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2021-10-28' group by host;
 ```
 
+Recent job results with a certain setting:
+```
+select job_id, value, (select result from jobs where id = job_id) from job_settings where key = 'UEFI_PFLASH_VARS' and value like '%ovmf%' order by job_id desc limit 50;
+```
+
+Resolve chain of ID/relations recursively:
+```
+with recursive orig_id as (select 2301 as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id and level < 50) select orig_id, level from orig_id;
+with recursive orig_id as (select 2301 as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id) select level from orig_id order by level desc limit 1;
+```
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
