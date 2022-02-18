@@ -235,6 +235,18 @@ There's also `openqa-branchdb` which does the same as `openqa-renewdb` except th
 ### Migrating database to newer PostgreSQL version on openSUSE
 See [official documentation](https://open.qa/docs/#_migrating_postgresql_database_on_opensuse).
 
+### Move PostgreSQL database to another drive
+```
+src=/var/lib/pgsql dst=/hdd/pgsql
+sudo systemctl stop postgresql.service
+sudo usermod -d "$dst" postgres
+mkdir "$dst"
+sudo chown postgres:postgres "$dst"
+sudo sudo -u postgres rsync -ahPHAX "$src"/ "$dst"/
+sudo mv "$src"{,.bak}
+sudo systemctl start postgresql.service
+```
+
 ### Misc
 #### Delete database
 ```
