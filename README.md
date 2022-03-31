@@ -572,6 +572,25 @@ Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it 
 Keeping too much profiling data around slows down Docker startup for the testsuite significantly as it
 copies all the data of your openQA repository checkout.
 
+## Schedule jobs with dependencies locally
+At this point `openqa-clone-job` is able to handle any kind of dependencies just
+fine. So you can use it to clone a cluster from production (instead of following
+the more complicated approach mentioned in the next section).
+
+Often those jobs cannot be executed locally because they use special backends
+(e.g. IPMI) or require special setup (e.g. openvswitch). You can nevertheless
+just clone a cluster and override all variables to make them regular QEMU jobs:
+
+```
+openqa-start cj --skip-download --parental-inheritance http://openqa.qam.suse.cz/tests/39746 \
+  DESKTOP=minimalx SCHEDULE=tests/installation/isosize,tests/installation/bootloader_start \
+  YAML_SCHEDULE=schedule/yast/raid/raid0_sle_gpt.yaml \
+  ISO=openSUSE-Tumbleweed-DVD-x86_64-Snapshot20220322-Media.iso ISO_MAXSIZE=4700372992 \
+  DISTRI=opensuse ARCH=x86_64 FLAVOR=DVD VERSION=Tumbleweed BUILD=20220322 \
+  MAX_JOB_TIME=240 \
+  WORKER_CLASS=qemu_x86_64 BACKEND=qemu
+```
+
 ## Schedule jobs via "isos post" locally to test dependency handling
 This example is about creating directly chained dependencies but the same applies to other dependency
 types.
