@@ -572,7 +572,7 @@ Profiling data is extensive. Use `openqa-clear-profiling-data` to get rid of it 
 Keeping too much profiling data around slows down Docker startup for the testsuite significantly as it
 copies all the data of your openQA repository checkout.
 
-## Schedule jobs with dependencies locally
+## Schedule jobs with dependencies locally to test dependency handling
 At this point `openqa-clone-job` is able to handle any kind of dependencies just
 fine. So you can use it to clone a cluster from production (instead of following
 the more complicated approach mentioned in the next section).
