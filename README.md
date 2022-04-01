@@ -941,6 +941,15 @@ with recursive orig_id as (select 2301 as orig_id, 1 as level union all select i
 with recursive orig_id as (select 2301 as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id) select level from orig_id order by level desc limit 1;
 ```
 
+Search within JSON columns:
+```
+select id as error from scheduled_products where results ->> 'error' like '%unique constraint%' order by id desc limit 10;
+```
+
+* `data -> 'foo'`: accesses a field keeping it JSON
+* `data ->> 'foo'`: accesses a field turning it into text
+* `CAST (data ->> 'foo' AS INTEGER)`: accesses a field turning it into a certain type
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
