@@ -950,6 +950,12 @@ select id as error from scheduled_products where results ->> 'error' like '%uniq
 * `data ->> 'foo'`: accesses a field turning it into text
 * `CAST (data ->> 'foo' AS INTEGER)`: accesses a field turning it into a certain type
 
+JSON-array length:
+
+```
+select id, t_created, t_updated, jsonb_array_length(results -> 'failed_job_info') as failed_jobs from scheduled_products where jsonb_array_length(results -> 'failed_job_info') > 0 order by id desc limit 50;
+```
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
