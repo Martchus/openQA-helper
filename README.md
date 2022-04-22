@@ -925,9 +925,9 @@ Ratio of job results within a certain set of jobs (here jobs with parallel depen
 with mm_jobs as (select distinct id, result from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select result, count(id) * 100. / (select count(id) from mm_jobs) as ratio from mm_jobs group by mm_jobs.result order by ratio desc;
 ```
 
-Fail ratio of jobs on selected worker hosts:
+Fail/incomplete ratio of jobs on selected worker hosts:
 ```
-with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2021-10-28' group by host;
+with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed' or result='incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2022-04-22' group by host order by ratio_failed_by_host desc;
 ```
 
 Recent job results with a certain setting:
