@@ -992,3 +992,6 @@ docker run --rm --env EMAIL=foo --env MACHINE=bar --volume "$PWD:/pwd" a59105e4d
 * MOJO_MAX_LINE_SIZE (https://docs.mojolicious.org/Mojo/Message#max_line_size)
 
 Outdated but maybe still useful: https://github.com/mojolicious/mojo/wiki/%25ENV
+
+## Issues/workarounds
+* https://github.com/pjcj/Devel--Cover/issues/292
