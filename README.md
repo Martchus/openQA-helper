@@ -956,6 +956,15 @@ JSON-array length:
 select id, t_created, t_updated, jsonb_array_length(results -> 'failed_job_info') as failed_jobs from scheduled_products where jsonb_array_length(results -> 'failed_job_info') > 0 order by id desc limit 50;
 ```
 
+Example for exporting job IDs from a query and using them in another command:
+```
+\copy (select distinct jobs.id from jobs join job_settings on jobs.id = job_settings.job_id left join job_dependencies on (jobs.id = child_job_id or jobs.id = parent_job_id) where dependency != 2 and result = 'passed' and job_settings.key = 'WORKER_CLASS' and job_settings.value = 'qemu_aarch64' order by id desc limit 100) to '/tmp/jobs_to_clone_arm' csv;
+```
+
+```
+for job_id in $(cat /tmp/jobs_to_clone_arm) ; do openqa-clone-job --host https://openqa.suse.de --skip-download --skip-chained-deps --clone-children --parental-inheritance "https://openqa.suse.de/tests/$job_id" _GROUP=0 TEST+=-arm4-test BUILD=test-arm4 WORKER_CLASS=openqaworker-arm-4 ; done
+```
+
 ### Run infrastructure-related scripts like in GitLab pipeline
 
 Example:
