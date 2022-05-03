@@ -494,56 +494,10 @@ worker slot is necessary to avoid multiple jobs from using the same svirt host i
 Please inform team members about this before, leave a note in the corresponding ticket and take the production
 worker slot back-in when you're done.
 
-### Using QEMU/KVM to test completely locally (might not work)
-This backend basically connects to another machine via SSH and runs some
-`virsh` commands there to start a virtual machine via libvirt from there.
-
-#### Configuration
-Example config for local testing (add to `$OPENQA_CONFIG/workers.ini`):
-```
-[2]
-BACKEND=svirt
-VIRSH_HOSTNAME=127.0.0.1 # use our own machine as svirt host
-VIRSH_USERNAME=root # see notes
-VIRSH_CMDLINE=ifcfg=dhcp
-VIRSH_MAC=52:54:00:12:34:56 # not sure at which point this is used
-VIRSH_OPENQA_BASEDIR=/hdd/openqa-devel
-WORKER_CLASS=svirt,svirt-kvm
-VIRSH_INSTANCE=1
-#VIRSH_PASSWORD=# see notes
-VIRSH_GUEST=127.0.0.1
-VIRSH_VMM_FAMILY=kvm
-VIRSH_VMM_TYPE=hvm
-```
-
-Packages to install:
-```
-sudo zypper in libvirt-client libvirt-daemon libvirt-daemon-driver-interface libvirt-daemon-driver-qemu libvirt-daemon-qemu
-sudo zypper in virt-manager # for GUI
-```
-
-Services to start:
-```
-sudo systemctl start libvirtd
-sudo systemctl start sshd
-```
-
-#### Notes
-* So this setup for the svirt backend will connect via SSH to the local machine and start qemu via libvirtd/virsh.
-* Either put your (root) password in the worker config or even use
- `bash -c "cat /home/$USER/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"`. Or preferably allow some other user to use
- `virsh` and manipulate contents of `/var/lib/libvirt/images` and set its name via `VIRSH_USERNAME`.
-* Usually QEMU isn't used via svirt so this setup isn't well tested. When I tried it recently, the QEMU line was wrong
-  preventing the system to boot from the image.
-
-#### Running a job
-So far I have just cloned an arbitrary job (opensuse-15.0-KDE-Live-x86_64-Build20.71-kde-live-wayland@64bit_virtio-2G)
-which I had usually running via qemu backend and started the previously configured worker instance:
-
-```
-openqa-start cj --from http://localhost:9526 280 BACKEND=svirt WORKER_CLASS=svirt
-openqa-start wo --instance 2
-```
+### Using QEMU/KVM to test completely locally
+This section has been moved to the
+[official documentation](https://github.com/os-autoinst/os-autoinst/blob/master/doc/backends.md#svirt=).
+The following sub sections only contain configuration/commands tailored to my specific setup.
 
 ## Test with tap devices locally
 Set the worker class, eg. `WORKER_CLASS=qemu_x86_64,qemu_i686,qemu_i586,tap`. Then give yourself permissions to
