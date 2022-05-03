@@ -874,9 +874,10 @@ Scheduled jobs which have been restarted:
 select count(j1.id) from jobs as j1 where state = 'scheduled' and (select j2.id from jobs as j2 where j1.id = j2.clone_id limit 1) is not null;
 ```
 
-Ratio of job results within a certain set of jobs (here jobs with parallel dependencies):
+Ratio of job results within a certain set of jobs (here jobs with parallel dependencies or jobs of a specific build):
 ```
 with mm_jobs as (select distinct id, result from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select result, count(id) * 100. / (select count(id) from mm_jobs) as ratio from mm_jobs group by mm_jobs.result order by ratio desc;
+with test_jobs as (select distinct id, result from jobs where build = 'test-arm4-2') select result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.result order by ratio desc;
 ```
 
 Fail/incomplete ratio of jobs on selected worker hosts:
