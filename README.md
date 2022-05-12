@@ -786,9 +786,7 @@ WantedBy=multi-user.target
 see https://gitlab.suse.de/openqa/salt-states-openqa#common-salt-commands-to-use
 
 ### Useful systemd commands
-
 Take out auto-restarting workers without stopping ongoing jobs:
-
 ```
 # prevent worker services from restarting
 systemctl mask openqa-worker-auto-restart@{1..28}
@@ -799,6 +797,17 @@ systemctl kill --kill-who=main --signal HUP openqa-worker-auto-restart@{1..28}
 (see
 [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#stoppingrestarting-workers-without-interrupting-currently-running-jobs)
 for additional info)
+
+Modify a parameterized systemd-unit (e.g. `…@.path`) for each associated parameterized systemd-unit (e.g. `…@.service`):
+
+```
+systemctl list-units --output=json  'openqa-worker-auto-restart@*.service' | jq -r '.[] | .unit | sub("openqa-worker-";"openqa-reload-worker-") | sub(".service";".path")' | xargs systemctl enable --now
+```
+
+For all o3 workers:
+```
+for i in aarch64 openqaworker1 openqaworker4 openqaworker7 power8 imagetester rebel; do echo $i && ssh root@$i " systemctl list-units --output=json  'openqa-worker-auto-restart@*.service' | jq -r '.[] | .unit | sub(\"openqa-worker-\";\"openqa-reload-worker-\") | sub(\".service\";\".path\")' | xargs systemctl enable --now " ; done
+```
 
 ### View Minion dashboard from o3 workers locally
 ```
