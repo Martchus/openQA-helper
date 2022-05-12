@@ -880,6 +880,12 @@ with mm_jobs as (select distinct id, result from jobs left join job_dependencies
 with test_jobs as (select distinct id, result from jobs where build = 'test-arm4-2') select result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.result order by ratio desc;
 ```
 
+Change of ratio of specific job failures grouped by month (here jobs with a specific reason *within* failing/incompleting jobs of a specific arch):
+
+```
+with finished as (select result, reason, t_finished from jobs where arch='s390x' and (result='failed' or result='incomplete')) select (extract(YEAR from t_finished)) as year, (extract(MONTH from t_finished)) as month, round(count(*) filter (where reason like '%Error connecting to VNC server%') * 100. / count(*), 2)::numeric(5,2)::float as ratio_of_vnc_issues, count(*) total from finished where t_finished >= '2021-01-01' group by year, month order by year, month asc;
+```
+
 Fail/incomplete ratio of jobs on selected worker hosts:
 ```
 with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed' or result='incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2022-04-22' group by host order by ratio_failed_by_host desc;
