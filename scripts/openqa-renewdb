@@ -12,8 +12,10 @@ if ! [[ $db_base_name ]] || ! [[ $db_branch_name ]]; then
 fi
 
 echo "Update SQL statements for db init and migration"
-openqa-start initdb --prepare_init --force
-openqa-start upgradedb --prepare_upgrades --force
+if ! [[ $NO_CODEGEN ]]; then
+    openqa-start initdb --prepare_init --force
+    openqa-start upgradedb --prepare_upgrades --force
+fi
 
 echo "Dropping previous devel DB"
 if ! sudo sudo -u postgres dropdb "$db_branch_name"; then
