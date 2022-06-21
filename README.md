@@ -484,20 +484,9 @@ openqa-start workercache
 openqa-start workercache-minion
 ```
 
-## Test/run svirt backend locally
-### Using an svirt host from production
-One can try to [take out](#useful-systemd-commands) an svirt worker slot from production and configure a local
-worker slot to use the production svirt host. For that, just copy the settings found in the worker config on the
-production host for the particular worker slot to the local worker config. Note that taking out the production
-worker slot is necessary to avoid multiple jobs from using the same svirt host in parallel.
-
-Please inform team members about this before, leave a note in the corresponding ticket and take the production
-worker slot back-in when you're done.
-
-### Using QEMU/KVM to test completely locally
+## Test/run svirt and other exotic backends locally
 This section has been moved to the
-[official documentation](https://github.com/os-autoinst/os-autoinst/blob/master/doc/backends.md#svirt=).
-The following sub sections only contain configuration/commands tailored to my specific setup.
+[official documentation](https://github.com/os-autoinst/os-autoinst/blob/master/doc/backends.md).
 
 ## Test with tap devices locally
 Set the worker class, eg. `WORKER_CLASS=qemu_x86_64,qemu_i686,qemu_i586,tap`. Then give yourself permissions to
