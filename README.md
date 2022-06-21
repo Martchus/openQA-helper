@@ -886,12 +886,13 @@ select count(j1.id) from jobs as j1 where state = 'scheduled' and (select j2.id 
 Ratio of job results within a certain set of jobs (here jobs with parallel dependencies or jobs of a specific build):
 ```
 with mm_jobs as (select distinct id, result from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select result, count(id) * 100. / (select count(id) from mm_jobs) as ratio from mm_jobs group by mm_jobs.result order by ratio desc;
-with test_jobs as (select distinct id, result from jobs where build = 'test-arm4-2') select result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.result order by ratio desc;
+with test_jobs as (select distinct id, state, result from jobs where build = 'test-arm4-3') select state, result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.state, test_jobs.result order by ratio desc;
 ```
 
 Change of overall fail ratio within a set of jobs:
 ```
 with finished as (select result, t_finished from jobs where arch='s390x') select (extract(YEAR from t_finished)) as year, (extract(MONTH from t_finished)) as month, round(count(*) filter (where result = 'failed' or result = 'incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_of_all_failures_or_incompletes, count(*) total from finished where t_finished >= '2020-01-01' group by year, month order by year, month asc;
+openqa=> with finished as (select result, t_finished from jobs) select (extract(YEAR from t_finished)) as year, (extract(MONTH from t_finished)) as month, (extract(DAY from t_finished)) as day, round(count(*) filter (where result = 'failed' or result = 'incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_of_all_failures_or_incompletes, count(*) total from finished where t_finished >= '2022-05-01' group by year, month, day order by year, month, day asc;
 ```
 
 Change of ratio of specific job failures grouped by month (here jobs with a specific reason *within* failing/incompleting jobs of a specific arch):
@@ -938,6 +939,21 @@ Example for exporting job IDs from a query and using them in another command:
 
 ```
 for job_id in $(cat /tmp/jobs_to_clone_arm) ; do openqa-clone-job --host https://openqa.suse.de --skip-download --skip-chained-deps --clone-children --parental-inheritance "https://openqa.suse.de/tests/$job_id" _GROUP=0 TEST+=-arm4-test BUILD=test-arm4 WORKER_CLASS=openqaworker-arm-4 ; done
+```
+
+### Profiling expensive SQL queries via PostgreSQL extension
+#### Setup
+1. Configure `pg_statements`, see example on https://www.postgresql.org/docs/current/pgstatstatements.html.
+2. Ensure contrib package (e.g. `postgresql14-contrib`) is installed.
+3. Restart PostgreSQL.
+4. Enable the extension via `CREATE EXTENSION pg_stat_statements`.
+
+#### Useful queries
+Use `\x` in `psql` for extended mode.
+
+List similar, most time-consuming queries:
+```
+SELECT substring(query from 0 for 250) as query_start, sum(calls) as calls, max(max_exec_time) as met, sum(total_exec_time) as tet, sum(rows) as rows FROM pg_stat_statements group by query_start ORDER BY tet DESC LIMIT 10;
 ```
 
 ### Run infrastructure-related scripts like in GitLab pipeline
