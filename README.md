@@ -930,6 +930,52 @@ Example for exporting job IDs from a query and using them in another command:
 for job_id in $(cat /tmp/jobs_to_clone_arm) ; do openqa-clone-job --host https://openqa.suse.de --skip-download --skip-chained-deps --clone-children --parental-inheritance "https://openqa.suse.de/tests/$job_id" _GROUP=0 TEST+=-arm4-test BUILD=test-arm4 WORKER_CLASS=openqaworker-arm-4 ; done
 ```
 
+### UEFI boot via iPXE
+See our
+[Wiki](https://progress.opensuse.org/projects/openqav3/wiki/Wiki#Setup-guide-for-new-machines)
+for a more verbose and o3-specific documentation. (The documentation here is rather terse.)
+
+---
+
+Configure `/etc/dnsmasq.d/pxeboot.conf`:
+
+```
+enable-tftp
+tftp-root=/srv/tftpboot
+pxe-prompt="Press F8 for menu. foobar", 10
+dhcp-match=set:efi-x86_64,option:client-arch,7
+dhcp-match=set:efi-x86_64,option:client-arch,9
+dhcp-match=set:efi-x86,option:client-arch,6
+dhcp-match=set:bios,option:client-arch,0
+#dhcp-boot=tag:efi-x86_64,with/to/image
+```
+
+Provide config, build image, deploy image:
+```
+# make file that contains the iPXE commands to boot available via some http server, file contents for installing Leap 15.4 with autoyast:
+#!ipxe
+kernel http://download.opensuse.org/distribution/leap/15.4/repo/oss/boot/x86_64/loader/linux initrd=initrd console=tty0 console=ttyS1,115200 install=http://download.opensuse.org/distribution/leap/15.4/repo/oss/ autoyast=http://martchus.no-ip.biz/ipxe/ay-openqa-worker.xml rootpassword=…
+initrd http://download.opensuse.org/factory/repo/oss/boot/x86_64/loader/initrd
+boot
+
+# setup build of iPXE UEFI image like explained on https://en.opensuse.org/SDB:IPXE_booting#Setup
+git clone https://github.com/ipxe/ipxe.git
+cd ipxe
+echo "#!ipxe
+dhcp
+chain http://martchus.no-ip.biz/ipxe/leap-15.4" > myscript.ipxe
+cd src
+
+# conduct build similar to https://github.com/archlinux/svntogit-community/blob/packages/ipxe/trunk/PKGBUILD#L58
+make EMBED=../myscript.ipxe NO_WERROR=1 bin/ipxe.lkrn bin/ipxe.pxe bin-i386-efi/ipxe.efi bin-x86_64-efi/ipxe.efi
+
+# copy image to production host
+rsync bin-x86_64-efi/ipxe.efi openqa.opensuse.org:/home/martchus/ipxe.efi
+
+# use image on production host
+sudo cp /home/martchus/ipxe.efi /srv/tftpboot/ipxe-own-build/ipxe.efi
+```
+
 ### Profiling expensive SQL queries via PostgreSQL extension
 #### Setup
 1. Configure `pg_statements`, see example on https://www.postgresql.org/docs/current/pgstatstatements.html.
