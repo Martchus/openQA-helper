@@ -847,6 +847,11 @@ select relname,last_vacuum, last_autovacuum, last_analyze, last_autoanalyze from
 ```
 
 ### Useful SQL queries
+Job group containing a certain job template setting value:
+```
+select *, (select group_id from job_templates where id = job_template_id) from job_template_settings where value like '%qxl%';
+```
+
 Specific incompletes finished after some date with their workers:
 ```
 select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
