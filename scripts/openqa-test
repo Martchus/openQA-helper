@@ -16,7 +16,7 @@ export HEAVY=1
 export SCHEDULER_FULLSTACK=1
 export DEVELOPER_FULLSTACK=1
 export FULLSTACK=1
-export LANG=en_US.utf8
+export LANG=C
 export TEST_PG='DBI:Pg:dbname=openqa_test;host=/dev/shm/tpg'
 export OPENQA_BASEDIR="$basedir"
 export OPENQA_CONFIG=

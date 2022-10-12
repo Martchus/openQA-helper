@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-export LANG=en_US.utf8
+export LANG=C
 cd "$OPENQA_BASEDIR/repos/openQA"
 t/test_postgresql /dev/shm/tpg
