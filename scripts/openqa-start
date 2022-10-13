@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 export OPENQA_CODEBASE=$OPENQA_BASEDIR/repos/openQA # used to get POD from controllers
-export LANG=en_US.utf8
+export LANGUAGE= LANG=C.utf8
 cd "$OPENQA_CODEBASE"
 what=$1
 shift || true
