@@ -933,6 +933,12 @@ Example for exporting job IDs from a query and using them in another command:
 
 ```
 for job_id in $(cat /tmp/jobs_to_clone_arm) ; do openqa-clone-job --host https://openqa.suse.de --skip-download --skip-chained-deps --clone-children --parental-inheritance "https://openqa.suse.de/tests/$job_id" _GROUP=0 TEST+=-arm4-test BUILD=test-arm4 WORKER_CLASS=openqaworker-arm-4 ; done
+for i in $(cat /tmp/failed_parallel_jobs); do sudo openqa-cli api --host "openqa.suse.de" -X POST jobs/"$i"/restart ; done
+```
+
+Failing jobs with parallel dependencies:
+```
+select id, parents.parent_job_id as parallel_parent, children.child_job_id as parallel_child from jobs left join job_dependencies as parents on jobs.id = parents.child_job_id left join job_dependencies as children on jobs.id = children.parent_job_id where clone_id is null and t_finished > '2022-11-09' and result = 'failed' and (parents.dependency = 2 or children.dependency = 2) order by id desc;
 ```
 
 ### UEFI boot via iPXE
