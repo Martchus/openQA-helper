@@ -841,6 +841,11 @@ openqa=# select pg_size_pretty(sum(pg_indexes_size(quote_ident(table_name)))) fr
 (1 Zeile)
 ```
 
+Show usage statistics for indexes, e.g.:
+```
+select * from pg_stat_user_indexes where relname = 'job_settings' order by idx_scan desc;
+```
+
 Show vacuuming stats:
 ```
 select relname,last_vacuum, last_autovacuum, last_analyze, last_autoanalyze from pg_stat_user_tables;
@@ -855,6 +860,11 @@ select *, (select group_id from job_templates where id = job_template_id) from j
 Specific incompletes finished after some date with their workers:
 ```
 select id, t_finished, result, reason, (select host from workers where id = assigned_worker_id) as worker from jobs where reason like '%setup exceeded MAX_SETUP_TIME%' and t_finished >= '2021-08-05T00:00:00' order by t_finished;
+```
+
+Incompletes grouped by reason:
+```
+select count(id), array_agg(id), reason from jobs where t_finished >= '2022-11-21T12:00:00' and result = 'incomplete' group by reason order by count(id) desc;
 ```
 
 Incompletes on a specific worker host:
