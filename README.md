@@ -815,6 +815,14 @@ sudo -u geekotest /usr/share/openqa/script/openqa eval -V 'for (my ($jobs, $job)
 select * from minion_jobs where args::TEXT ~ '%7275485%';
 ```
 
+### Access management interface in the new security zone
+```
+ssh -4 -L 8090:openqaworker4-ipmi.qe-ipmi-ur:443 -N jumpy@qe-jumpy.suse.de
+```
+
+* Edit `jviewer.jnlp` via text editor so the port matches.
+* Do portscan on `qe-jumpy.suse.de` and possibly forward further ports.
+
 ### Reboot OSD workers via IPMI in loop
 ```
 for run in {01..10}; do for host in QA-Power8-4-kvm.qa QA-Power8-5-kvm.qa powerqaworker-qam-1 malbec.arch grenache-1.qa; do echo -n "run: $run, $host: ping .. " && timeout -k 5 600 sh -c "until ping -c30 $host >/dev/null; do :; done" && echo -n "ok, ssh .. " && timeout -k 5 600 sh -c "until nc -z -w 1 $host 22; do :; done" && echo -n "ok, salt .. " && timeout -k 5 600 sh -c " until salt --timeout=300 --no-color $host\* test.ping >/dev/null; do :; done" && echo -n "ok, uptime/reboot: " && salt $host\* cmd.run "uptime && systemctl disable --now openqa-worker-cacheservice.service >/dev/null" && salt $host\* system.reboot 1 || break; done || break; done
