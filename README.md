@@ -1005,6 +1005,18 @@ rsync bin-x86_64-efi/ipxe.efi openqa.opensuse.org:/home/martchus/ipxe.efi
 sudo cp /home/martchus/ipxe.efi /srv/tftpboot/ipxe-own-build/ipxe.efi
 ```
 
+### Useful commands for dealing with HMC managed machines
+The following commmands can be used by connecting to the HMC via SSH (using the same credentials as on the
+HMC web UI):
+
+```
+export MACHINE=qa-power8
+lssyscfg -m $MACHINE  -r lpar -F name,lpar_id,state --header # list partitions and virtual I/O servers
+mkvterm -m $MACHINE -p testvm                                # enter terminal on a partition
+chsysstate -m $MACHINE -r lpar -n testvm -o on -b sms        # turn partition on
+chsysstate -m $MACHINE -r lpar -n testvm -o shutdown --immed # turn partition off
+```
+
 ### Profiling expensive SQL queries via PostgreSQL extension
 #### Setup
 1. Configure `pg_statements`, see example on https://www.postgresql.org/docs/current/pgstatstatements.html.
