@@ -129,7 +129,7 @@ elif [[ $what == workercache ]]; then
     start_script script/openqa-workercache "$daemon_or_prefork" "$@"
 elif [[ $what == workercache-minion ]]; then
     set_title wm
-    start_script script/openqa-workercache minion worker "$@"
+    start_script script/openqa-workercache run "$@"
 elif [[ $what == clone-job ]]; then
     set_title cj-$OPENQA_INSTANCE
     start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --show-progress --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
