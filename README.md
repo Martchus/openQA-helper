@@ -872,6 +872,7 @@ select id, t_finished, result, reason, (select host from workers where id = assi
 Incompletes grouped by reason:
 ```
 select count(id), array_agg(id), reason from jobs where t_finished >= '2022-11-21T12:00:00' and result = 'incomplete' group by reason order by count(id) desc;
+select count(id), substring(reason from 0 for 30) as reason_substr from jobs where t_finished = '2023-05-14T00:04:00' and result = 'incomplete' group by reason_substr order by count(id) desc;
 ```
 
 Incompletes on a specific worker host:
