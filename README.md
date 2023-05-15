@@ -932,6 +932,7 @@ with recursive orig_id as (select 2301 as orig_id, 1 as level union all select i
 Search within JSON columns:
 ```
 select id as error from scheduled_products where results ->> 'error' like '%unique constraint%' order by id desc limit 10;
+select id from scheduled_products where settings ->> 'GITHUB_SHA' = '37d3c48c4c13eebcc8bb2bf14b9e1a6988fd86c5' order by id desc limit 10;
 ```
 
 * `data -> 'foo'`: accesses a field keeping it JSON
