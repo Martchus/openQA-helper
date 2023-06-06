@@ -931,8 +931,8 @@ select job_id, value, (select result from jobs where id = job_id) from job_setti
 
 Resolve chain of ID/relations recursively:
 ```
-with recursive orig_id as (select 2301 as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id and level < 50) select orig_id, level from orig_id;
-with recursive orig_id as (select 2301 as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id) select level from orig_id order by level desc limit 1;
+with recursive orig_id as (select 2301::bigint as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id and level < 50) select orig_id, level from orig_id;
+with recursive orig_id as (select 2301::bigint as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id) select level from orig_id order by level desc limit 1;
 ```
 
 Search within JSON columns:
