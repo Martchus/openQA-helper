@@ -799,6 +799,12 @@ ssh -L 9530:localhost:9530 -N openqa.opensuse.org                       # locall
 ssh -J openqa.opensuse.org -L 9530:localhost:9530 -N root@openqaworker5 # using the -J flag
 ```
 
+### View o3 Munin dashboard locally
+```
+ssh  -L 8080:localhost:80 openqa.opensuse.org # locally
+xdg-open http://127.0.0.1:8080/munin
+```
+
 ### Delete specific Minion jobs
 ```
 sudo -u geekotest /usr/share/openqa/script/openqa eval -V 'for (my ($jobs, $job) = app->minion->jobs({states => ["failed"], tasks => ["download_asset"]}); $job = $jobs->next;) { app->minion->job($job->{id})->remove }'
