@@ -152,9 +152,12 @@ To start the particular daemons, run the following commands:
 * `openqa-start cl ` - invokes the client with the options to connect to the local web UI
 * `openqa-start cmd` - invokes the specified command on the web UI app, e.g.:
     * `openqa-start cmd eval -V 'app->schema->resultset("Jobs")->count'` - do *something* with the app/database
-    * `openqa-start cmd minion job -e minion_job_name` - enqueue a Minion job
+    * `openqa-start cmd minion job -e minion_job_name` - enqueue a web UI Minion job
     * `openqa-start cmd eval -V 'print(app->minion->job(297)->info->{result})'` - view e.g. log of Minion job
     * `openqa-start cmd minion job -h` - view other options regarding Minion jobs
+* `openqa-start wcmd` - invokes the specified command on the cache service app, e.g.:
+    * `openqa-start wcmd eval -V 'app->home'` - do *something* with the cacheservice
+    * `openqa-start wcmd minion job -e minion_job_name` - enqueue a cache service Minion job
 
 Additional parameters are simply appended to the invocation. That works of course also for `--help`.
 

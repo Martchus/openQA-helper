@@ -17,6 +17,7 @@ declare -A shortcuts=(
     [wos]=worker-single-shot
     [wc]=workercache
     [wm]=workercache-minion
+    [wcmd]=workercache-cmd
     [gr]=gru
     [cj]=clone-job
     [jc]=clone-job
@@ -39,7 +40,7 @@ if [[ $what == '' ]] || [[ $what == --help ]] || [[ $what == -h ]]; then
     echo "usage: $0 service_or_script_name [args]"
     echo "where service_or_script_name is one of:"
     echo "   shortcut | long daemon name"
-    for daemon in 'wu  ' 'lv  ' 'ws  ' 'sc  ' 'wo  ' 'wos ' 'sc  ' 'wc  ' 'wm  ' 'gr  ' 'cj  ' 'cl  ' 'cmd ' 'dbup' 'doc ' 'q   '; do
+    for daemon in 'wu  ' 'lv  ' 'ws  ' 'sc  ' 'wo  ' 'wos ' 'sc  ' 'wc  ' 'wm  ' 'wcmd' 'gr  ' 'cj  ' 'cl  ' 'cmd ' 'dbup' 'doc ' 'q   '; do
         echo "   $daemon     | ${shortcuts[${daemon%% *}]}"
     done
     echo "args are forwarded to the specified service/script"
@@ -130,6 +131,9 @@ elif [[ $what == workercache ]]; then
 elif [[ $what == workercache-minion ]]; then
     set_title wm
     start_script script/openqa-workercache run "$@"
+elif [[ $what == workercache-cmd ]]; then
+    set_title wc-cmd
+    start_script script/openqa-workercache "$@"
 elif [[ $what == clone-job ]]; then
     set_title cj-$OPENQA_INSTANCE
     start_script script/openqa-clone-job --dir "$OPENQA_BASEDIR/openqa/share/factory" --show-progress --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
