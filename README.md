@@ -927,6 +927,28 @@ Fail/incomplete ratio of jobs on selected worker hosts:
 with finished as (select result, t_finished, host from jobs left join workers on jobs.assigned_worker_id = workers.id where result != 'none') select host, round(count(*) filter (where result='failed' or result='incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_failed_by_host, count(*) total from finished where host like '%-arm-%' and t_finished >= '2022-04-22' group by host order by ratio_failed_by_host desc;
 ```
 
+Tests that match a certain search criteria. Then there are two other search
+criterias (here `machine=…`) and we want to find out what tests match the first
+criteria but not the second:
+
+```
+with s390x_l2 as (
+  select distinct machine, test
+  from jobs
+  where arch='s390x' AND NOT (test ILIKE '%:investigate:%')
+    AND machine='s390x-zVM-vswitch-l2'
+  GROUP BY (machine, test)
+), s390x_l3 as (
+  select distinct machine, test
+  from jobs
+  where arch='s390x' AND NOT (test ILIKE '%:investigate:%')
+    AND machine='s390x-zVM-vswitch-l3'
+  GROUP BY (machine, test)
+)
+select test from s390x_l2 LEFT JOIN s390x_l3 USING (test)
+where s390x_l3.machine IS NULL;
+```
+
 Recent job results with a certain setting:
 ```
 select job_id, value, (select result from jobs where id = job_id) from job_settings where key = 'UEFI_PFLASH_VARS' and value like '%ovmf%' order by job_id desc limit 50;
