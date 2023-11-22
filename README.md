@@ -1053,6 +1053,23 @@ docker images # check tag/checksum of image
 docker run --rm --env EMAIL=foo --env MACHINE=bar --volume "$PWD:/pwd" a59105e4d071 /pwd/ipmi-recover-worker
 ```
 
+## Expose local instance via NGINX under sub path
+Install the BaseRewrite-plugin via `sudo zypper in perl-Mojolicious-Plugin-RequestBase` and enable it via
+`plugins = RequestBase`. Put the following in your NGINX server config:
+
+```
+location ^~ /openqa/some-sub-path/ {
+  proxy_pass http://192.168.2.8:4567;
+  rewrite /openqa/some-sub-path(/.*)$ $1 break;
+  proxy_set_header X-Request-Base "/openqa/some-sub-path";
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection $connection_upgrade;
+}
+```
+
 ## More scripts and documentation
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
