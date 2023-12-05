@@ -910,7 +910,19 @@ with mm_jobs as (select distinct id, result from jobs left join job_dependencies
 with test_jobs as (select distinct id, state, result from jobs where build = 'test-arm4-3') select state, result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.state, test_jobs.result order by ratio desc;
 ```
 
-Change of overall fail ratio within a set of jobs:
+The worst important workers when it comes to running jobs with parallel dependencies:
+```
+select distinct count(jobs.id) as total, sum(case when jobs.result in ('failed', 'incomplete') then 1 else 0 end) * 100. / count(jobs.id) as fail_rate_percent, host from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) join workers on jobs.assigned_worker_id = workers.id where dependency = 2 and t_finished >= '2023-11-20' group by host having count(jobs.id) > 50 order by fail_rate_percent desc;
+```
+
+Problematic jobs with parallel dependencies by their groups:
+```
+select distinct count(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test, (array_agg(jobs.id)) as job_ids from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2 and t_finished >= '2023-11-20' and result in ('failed', 'incomplete') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
+
+select distinct count(jobs.id), array_agg(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2 and t_finished >= '2023-12-01' and result in ('failed', 'incomplete') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
+```
+
+Change of overall fail ratio within a set of jobs (note that due to the way the cleanup works the results might not be very useful):
 ```
 with finished as (select result, t_finished from jobs where arch='s390x') select (extract(YEAR from t_finished)) as year, (extract(MONTH from t_finished)) as month, round(count(*) filter (where result = 'failed' or result = 'incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_of_all_failures_or_incompletes, count(*) total from finished where t_finished >= '2020-01-01' group by year, month order by year, month asc;
 openqa=> with finished as (select result, t_finished from jobs) select (extract(YEAR from t_finished)) as year, (extract(MONTH from t_finished)) as month, (extract(DAY from t_finished)) as day, round(count(*) filter (where result = 'failed' or result = 'incomplete') * 100. / count(*), 2)::numeric(5,2)::float as ratio_of_all_failures_or_incompletes, count(*) total from finished where t_finished >= '2022-05-01' group by year, month, day order by year, month, day asc;
@@ -989,6 +1001,12 @@ for i in $(cat /tmp/failed_parallel_jobs); do sudo openqa-cli api --host "openqa
 Failing jobs with parallel dependencies:
 ```
 select id, parents.parent_job_id as parallel_parent, children.child_job_id as parallel_child from jobs left join job_dependencies as parents on jobs.id = parents.child_job_id left join job_dependencies as children on jobs.id = children.parent_job_id where clone_id is null and t_finished > '2022-11-09' and result = 'failed' and (parents.dependency = 2 or children.dependency = 2) order by id desc;
+```
+
+### Useful CLI commands
+Stop certain jobs:
+```
+for state in scheduled running; do for job in $(openqa-cli api --osd jobs state=$state | jq -r '.jobs | .[] | select(.settings.BUILD=="20231204-1-mtu-1460") | .id'); do openqa-cli api --osd -X delete jobs/$job; done; done
 ```
 
 ### UEFI boot via iPXE
