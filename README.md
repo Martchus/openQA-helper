@@ -917,9 +917,9 @@ select distinct count(jobs.id) as total, sum(case when jobs.result in ('failed',
 
 Problematic jobs with parallel dependencies by their groups:
 ```
-select distinct count(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test, (array_agg(jobs.id)) as job_ids from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2 and t_finished >= '2023-11-20' and result in ('failed', 'incomplete') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
+select distinct count(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test, (array_agg(jobs.id)) as job_ids from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2 and t_finished >= '2023-12-13' and result in ('failed') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
 
-select distinct count(jobs.id), array_agg(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2 and t_finished >= '2023-12-01' and result in ('failed', 'incomplete') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
+select distinct count(jobs.id), array_agg(jobs.id), (select name from job_groups where id = group_id), (array_agg(test))[1] as example_test from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) and clone_id is null where dependency = 2 and t_finished >= '2023-12-01' and result in ('failed', 'incomplete') and test not like '%:investigate:%' group by group_id order by count(jobs.id) desc;
 ```
 
 Change of overall fail ratio within a set of jobs (note that due to the way the cleanup works the results might not be very useful):
