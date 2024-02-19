@@ -1111,6 +1111,12 @@ location ^~ /openqa/some-sub-path/ {
 }
 ```
 
+## Running/testing commands from GitHub workflows locally
+E.g.:
+```
+cat .github/workflows/openqa.yml | yq -r '.jobs.trigger_and_monitor_openqa.steps[1].run' | env GITHUB_OUTPUT=/tmp/gh.sh bash && cat /tmp/gh.sh
+```
+
 ## More scripts and documentation
 * https://github.com/os-autoinst/scripts
 * https://github.com/okurz/scripts - e.g.:
