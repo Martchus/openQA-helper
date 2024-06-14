@@ -12,6 +12,6 @@ source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
 export LANGUAGE= LANG=C.utf8
 export PROVE_ARGS=${PROVE_ARGS:--v}
 export OPENQA_TEST_TIMEOUT_DISABLE=1
-export WITH_COVER_OPTIONS=1
+#export WITH_COVER_OPTIONS=1
 export TESTS="$@"
 cmake --build . --target test-perl-testsuite
