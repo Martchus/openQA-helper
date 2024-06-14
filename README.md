@@ -1111,6 +1111,26 @@ location ^~ /openqa/some-sub-path/ {
 }
 ```
 
+## Use single-instance container
+See https://open.qa/docs/#_single_instance_container for creating the container.
+
+One can execute further tools like `openqa-cli` and `openqa-clone-job` via the
+same container. To clone a job from another openQA instance one can run a
+command like this:
+```
+# clone a job
+podman exec openqa openqa-clone-job https://openqa.opensuse.org/tests/… \
+  CASEDIR=https://….git NEEDLES_DIR=https://….git
+# make an API query
+podman exec openqa openqa-cli api --pretty jobs/1
+```
+
+NOTE: You need to provide test code to run tests. This example suggests you
+provide the URL to a Git repository via the `CASEDIR` variable (and possibly
+via `NEEDLES_DIR` if needles are in a separate repository). For development it
+may be easier to specify a local directory and make it available within the
+container via the `-v`-option.
+
 ## Running/testing commands from GitHub workflows locally
 E.g.:
 ```
