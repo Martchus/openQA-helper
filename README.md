@@ -74,13 +74,13 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
         * Note that the database configuration file under `/etc/openqa` or the Git checkout are not used by this
           setup and changing it will have no effect.
 * Importing database dumps from our production instances is useful for local testing. The dumps can be
-  found on `backup.qa.suse.de` (not publicly accessible). Example using `rsync`:
+  found on `backup-vm.qe.nue2.suse.org` (not publicly accessible). Example using `rsync`:
   ```
   rsync -aHP \
-    "backup.qa.suse.de:/home/rsnapshot/alpha.0/openqa.opensuse.org/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
+    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.opensuse.org/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
     "$OPENQA_BASEDIR/sql-dumps/openqa.opensuse.org"
   rsync -aHP \
-    "backup.qa.suse.de:/home/rsnapshot/alpha.0/openqa.suse.de/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
+    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.suse.de/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
     "$OPENQA_BASEDIR/sql-dumps/openqa.suse.de"
   ```
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
