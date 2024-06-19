@@ -115,6 +115,11 @@ elif [[ $what == client ]]; then
 elif [[ $what == api ]]; then
     set_title api-$OPENQA_INSTANCE
     start_script script/openqa-cli api --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
+elif [[ $what == cli ]]; then
+    cmd=$1
+    shift
+    set_title "cli-$cmd-$OPENQA_INSTANCE"
+    start_script script/openqa-cli "$cmd" --apikey $OPENQA_KEY --apisecret $OPENQA_SECRET --host $host_params "$@"
 elif [[ $what == worker ]] || [[ $what == worker-single-shot ]]; then
     read= instance=1
     for arg in "$@"; do
