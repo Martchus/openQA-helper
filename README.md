@@ -917,6 +917,12 @@ with mm_jobs as (select distinct id, result from jobs left join job_dependencies
 with test_jobs as (select distinct id, state, result from jobs where build = 'test-arm4-3') select state, result, count(id) * 100. / (select count(id) from test_jobs) as ratio from test_jobs group by test_jobs.state, test_jobs.result order by ratio desc;
 ```
 
+Jobs with parallel dependencies that ran on particular workers:
+```
+with mm_jobs as (select distinct id, result, state, t_finished, (select host from workers where id = assigned_worker_id) as worker_host from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select concat('https://openqa.suse.de/tests/', id) as url, result, t_finished, worker_host from mm_jobs where state = 'done' and worker_host in ('worker35', 'worker40') order by id desc limit 50;
+with mm_jobs as (select distinct id, result, state, t_finished, (select host from workers where id = assigned_worker_id) as worker_host from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) where dependency = 2) select concat('https://openqa.opensuse.org/tests/', id) as url, result, t_finished, worker_host from mm_jobs where state = 'done' and worker_host in ('aarch64-o3') order by id desc limit 50;
+```
+
 The worst important workers when it comes to running jobs with parallel dependencies:
 ```
 select distinct count(jobs.id) as total, sum(case when jobs.result in ('failed', 'incomplete') then 1 else 0 end) * 100. / count(jobs.id) as fail_rate_percent, host from jobs left join job_dependencies on (id = child_job_id or id = parent_job_id) join workers on jobs.assigned_worker_id = workers.id where dependency = 2 and t_finished >= '2023-11-20' group by host having count(jobs.id) > 50 order by fail_rate_percent desc;
