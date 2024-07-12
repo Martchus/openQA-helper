@@ -795,6 +795,12 @@ For all o3 workers:
 for i in aarch64 openqaworker1 openqaworker4 openqaworker7 power8 imagetester rebel; do echo $i && ssh root@$i " systemctl list-units --output=json  'openqa-worker-auto-restart@*.service' | jq -r '.[] | .unit | sub(\"openqa-worker-\";\"openqa-reload-worker-\") | sub(\".service\";\".path\")' | xargs systemctl enable --now " ; done
 ```
 
+### Restart recent incompletes
+```
+openqa-cd scripts
+host=openqa.suse.de ./openqa-advanced-retrigger-jobs
+```
+
 ### View Minion dashboard from o3 workers locally
 ```
 martchus@ariel:~> ssh -L 9530:localhost:9530 -N root@openqaworker4      # on openqa.opensuse.org (ariel)
