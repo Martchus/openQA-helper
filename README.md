@@ -896,6 +896,16 @@ Incompletes on a specific worker host:
 select id, t_finished, result, reason from jobs where (select host from workers where id = assigned_worker_id) = 'openqaworker13' and result = 'incomplete' and t_finished >= '2021-08-24T00:00:00' order by t_finished;
 ```
 
+Incompletes grouped by reason with relevant timeframes:
+```
+select count(id), min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, reason from jobs where t_finished >= '2024-07-12T18:00:00' and result = 'incomplete' group by reason order by count(id) desc;
+```
+
+Incompletes grouped by reason with relevant worker hosts:
+```
+select count(jobs.id), min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, array_agg(DISTINCT workers.host) as hosts, reason from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2024-07-12T18:00:00' and result = 'incomplete' group by reason order by count(jobs.id) desc limit 5;
+```
+
 Worker hosts and their online slot count and processed assets and jobs as of some date:
 ```
 select host, count(id) as online_slots, (select array[((select sum(size) from assets where id = any(array_agg(distinct jobs_assets.asset_id))) / 1024 / 1024 / 1024), count(distinct id)] from jobs join jobs_assets on jobs.id = jobs_assets.job_id where assigned_worker_id = any(array_agg(w.id)) and t_finished >= '2021-08-06T00:00:00') as recent_asset_size_in_gb_and_job_count from workers as w where t_updated > (timezone('UTC', now()) - interval '1 hour') group by host order by recent_asset_size_in_gb_and_job_count desc;
