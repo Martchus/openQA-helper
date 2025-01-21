@@ -906,6 +906,11 @@ Incompletes grouped by reason with relevant worker hosts:
 select count(jobs.id), min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, array_agg(DISTINCT workers.host) as hosts, reason from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2024-07-12T18:00:00' and result = 'incomplete' group by reason order by count(jobs.id) desc limit 5;
 ```
 
+Jobs with ticket reference in a certain time frame grouped by their worker slots:
+```
+select count(id), min(state) as state, min(result) as result, min(reason) as reason, min(t_finished) as t_finished_min, max(t_finished) as t_finished_max, min((select concat(host, ':', instance) from workers where workers.id = jobs.assigned_worker_id)) as worker_slot from jobs where t_started >= '2025-01-18 00:00' and t_started < '2025-01-20' and (select count(comments.id) from comments where comments.job_id = jobs.id and text ilike '%poo#170209%') > 0 group by jobs.assigned_worker_id order by count(jobs.id) desc limit 100;
+```
+
 Worker hosts and their online slot count and processed assets and jobs as of some date:
 ```
 select host, count(id) as online_slots, (select array[((select sum(size) from assets where id = any(array_agg(distinct jobs_assets.asset_id))) / 1024 / 1024 / 1024), count(distinct id)] from jobs join jobs_assets on jobs.id = jobs_assets.job_id where assigned_worker_id = any(array_agg(w.id)) and t_finished >= '2021-08-06T00:00:00') as recent_asset_size_in_gb_and_job_count from workers as w where t_updated > (timezone('UTC', now()) - interval '1 hour') group by host order by recent_asset_size_in_gb_and_job_count desc;
