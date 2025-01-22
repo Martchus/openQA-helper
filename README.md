@@ -111,7 +111,7 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
     * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9526` so the worker will directly
       connect to the web UI and websocket server (making it unnessarary to use an HTTP reverse proxy).
     * For this setup it makes most sense to set `WORKER_HOSTNAME` to `127.0.0.1` in `worker.ini`. Note that for remote workers (not covered by this setup
-      guide) the variable must be set to an IP or domin which the web UI can use to connect to the worker host
+      guide) the variable must be set to an IP or domain which the web UI can use to connect to the worker host
       (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.asciidoc#steps-to-debug-developer-mode-setup)).
     * Useful adjustments to the config for using the svirt backend, enable caching and profiling
       are given in the subsequent sections.
@@ -182,7 +182,7 @@ environment variable `CUSTOM_OS_AUTOINST_DIR` to `directory-of-custom-checkout`.
 Sometimes it can be useful to run a service with systemd to see how changes behave in this case. Maybe you also want to test
 changes within the systemd service file at the same time.
 
-As explaind **none of the services should be run as root**. Hence it is not a good idea to amend your regular systemd service
+As explained **none of the services should be run as root**. Hence it is not a good idea to amend your regular systemd service
 files. Instead, add a systemd service file to your home directory under `~/.config/systemd/user` and start it as your regular
 user via e.g. `systemctl start --user openqa-worker@1` (and follow logs via e.g. `journalctl --user -fu openqa-worker@1`).
 
@@ -975,7 +975,7 @@ with finished as (select result, t_finished, host from jobs left join workers on
 ```
 
 Tests that match a certain search criteria. Then there are two other search
-criterias (here `machine=…`) and we want to find out what tests match the first
+criteria (here `machine=…`) and we want to find out what tests match the first
 criteria but not the second:
 
 ```
@@ -1091,7 +1091,7 @@ sudo cp /home/martchus/ipxe.efi /srv/tftpboot/ipxe-own-build/ipxe.efi
 ```
 
 ### Useful commands for dealing with HMC managed machines
-The following commmands can be used by connecting to the HMC via SSH (using the same credentials as on the
+The following commands can be used by connecting to the HMC via SSH (using the same credentials as on the
 HMC web UI):
 
 ```
