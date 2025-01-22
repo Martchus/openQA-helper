@@ -430,6 +430,13 @@ $OPENQA_BASEDIR/repos/openQA/script/openqa-clone-job \
 * Use e.g. `docker exec -it webui_websockets_1 bash` to enter any of these containers for manual investigation.
 * To rebuild a container, e.g. use `docker-compose build nginx` to apply NGINX config
 
+### Debugging, development
+* Branch/commit for debugging scheduler and worker: https://github.com/Martchus/openQA/commit/worker-debugging
+* Run worker with fake isotovideo: `openqa-start wo --instance 2002 --isotovideo "$OPENQA_BASEDIR/repos/openQA-helper/lib/fake-isotovideo.sh"`
+* Example commit for testing stability in CI
+    * UI test: https://github.com/Martchus/openQA/commit/stability
+    * Fullstack test: https://github.com/Martchus/openQA/commit/stability-fullstack
+
 ## Checking for JavaScript errors
 ```
 sudo zypper in npm
