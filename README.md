@@ -913,6 +913,11 @@ Incompletes grouped by reason with relevant worker hosts:
 select count(jobs.id), min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, array_agg(DISTINCT workers.host) as hosts, reason from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2024-07-12T18:00:00' and result = 'incomplete' group by reason order by count(jobs.id) desc limit 5;
 ```
 
+Timeouted jobs grouped by worker slot:
+```
+select count(jobs.id) as timeouted_job_count, min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, string_agg(DISTINCT concat(jobs.ARCH, '@', jobs.MACHINE), ', ') as job_type, string_agg(DISTINCT concat(workers.host, ':', workers.instance), ', ') as worker_name, jobs.assigned_worker_id as worker_id from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2025-01-22T00:00:00' and result = 'timeout_exceeded' group by jobs.assigned_worker_id order by count(jobs.id) desc limit 50;
+```
+
 Jobs with ticket reference in a certain time frame grouped by their worker slots:
 ```
 select count(id), min(state) as state, min(result) as result, min(reason) as reason, min(t_finished) as t_finished_min, max(t_finished) as t_finished_max, min((select concat(host, ':', instance) from workers where workers.id = jobs.assigned_worker_id)) as worker_slot from jobs where t_started >= '2025-01-18 00:00' and t_started < '2025-01-20' and (select count(comments.id) from comments where comments.job_id = jobs.id and text ilike '%poo#170209%') > 0 group by jobs.assigned_worker_id order by count(jobs.id) desc limit 100;
