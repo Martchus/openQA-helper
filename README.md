@@ -778,6 +778,14 @@ WantedBy=multi-user.target
 ### Useful Salt commands
 see https://gitlab.suse.de/openqa/salt-states-openqa#common-salt-commands-to-use
 
+### Hot-patch all workers
+Via Salt on web UI host:
+```
+$ cd /var/lib/openqa/share/factory/tmp/
+$ wget 'https://github.com/Martchus/os-autoinst/commit/….patch'
+$ sudo salt -C 'G@roles:worker' cmd.run 'patch -d /usr/lib/os-autoinst -p1 -i /var/lib/openqa/share/factory/tmp/….patch'
+```
+
 ### Useful systemd commands
 Take out auto-restarting workers without stopping ongoing jobs:
 ```
