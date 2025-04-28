@@ -1051,6 +1051,11 @@ Failing jobs with parallel dependencies:
 select id, parents.parent_job_id as parallel_parent, children.child_job_id as parallel_child from jobs left join job_dependencies as parents on jobs.id = parents.child_job_id left join job_dependencies as children on jobs.id = children.parent_job_id where clone_id is null and t_finished > '2022-11-09' and result = 'failed' and (parents.dependency = 2 or children.dependency = 2) order by id desc;
 ```
 
+Make new job IDs start at a certain number:
+```
+ALTER SEQUENCE jobs_id_seq RESTART WITH 17400000;
+```
+
 ### Useful CLI commands
 Stop certain jobs:
 ```
