@@ -461,9 +461,10 @@ sudo zypper in perl-App-cpanminus
 
 Install and use the Perl dependency, e.g.:
 ```
-version_number=20191203
+version_number=20250311
 openqa-perl-prefix-install perltidy-$version_number Perl::Tidy@$version_number
 openqa-perl-prefix-run perltidy-$version_number tools/tidy --only-changed
+openqa-perl-prefix-run perltidy-$version_number make tidy-perl
 ```
 
 or for `Pod::AsciiDoctor` to generate documentation:
