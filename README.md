@@ -1148,8 +1148,10 @@ docker run --rm --env EMAIL=foo --env MACHINE=bar --volume "$PWD:/pwd" a59105e4d
 ```
 
 ## Expose local instance via NGINX under sub path
-Install the BaseRewrite-plugin via `sudo zypper in perl-Mojolicious-Plugin-RequestBase` and enable it via
-`plugins = RequestBase`. Put the following in your NGINX server config:
+Install the BaseRewrite-plugin via `openqa-perl-prefix-install request-base Mojolicious::Plugin::RequestBase`
+and enable it via `plugins = RequestBase`. Start the server via e.g.
+`openqa-perl-prefix-run request-base openqa-start wu -l http://0.0.0.0:4567`. Put something like the following
+in your NGINX server config:
 
 ```
 location ^~ /openqa/some-sub-path/ {
