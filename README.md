@@ -623,6 +623,12 @@ Tests with dependencies found in production also sometimes use to use the `YAML_
 `YAML_SCHEDULE=schedule/yast/raid/raid0_opensuse_gpt.yaml` is set as schedule for the parent and
 `YAML_SCHEDULE=schedule/yast/raid/raid1_opensuse_gpt.yaml` for the child.
 
+## Schedule openQA-in-openQA tests on o3 for a PR
+```
+cd "$OPENQA_BASEDIR/openqa/share/tests/openqa"
+openqa-cli schedule --o3 --monitor --param-file SCENARIO_DEFINITIONS_YAML=scenario-definitions.yaml VERSION=Tumbleweed DISTRI=openqa FLAVOR=dev ARCH=x86_64 HDD_1=….qcow BUILD=:TW.… _GROUP=0 OPENQA_OBS_PROJECT=devel:openQA:GitHub:os-autoinst:openQA:PR-… OPENQA_HOST=http://openqa.opensuse.org
+```
+
 ## Testing AMQP
 1. Follow https://github.com/openSUSE/suse_msg/blob/master/amqp_infra.md#the-amqp-server to
    setup and start the AMQP server. It needs the ports 15672 and 5672.
