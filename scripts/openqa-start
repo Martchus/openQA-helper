@@ -1,12 +1,13 @@
 #!/bin/bash
 set -e
-export OPENQA_CODEBASE=$OPENQA_BASEDIR/repos/openQA # used to get POD from controllers
+export OPENQA_CODEBASE=${OPENQA_CODEBASE:-$OPENQA_BASEDIR/repos/openQA} # used to get POD from controllers
 export LANGUAGE= LANG=C.utf8
 cd "$OPENQA_CODEBASE"
 what=$1
 shift || true
 
-source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
+OPENQA_HELPER_DIR=${OPENQA_HELPER_DIR:-$OPENQA_BASEDIR/repos/openQA-helper}
+source "$OPENQA_HELPER_DIR/lib/customize_dirs.sh"
 
 declare -A shortcuts=(
     [wu]=webui
