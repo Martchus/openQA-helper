@@ -60,7 +60,7 @@ alias openqa-cd='source openqa-cd' # allows to type openqa-cd to cd into the ope
 ```
 
 Replace `/hdd/openqa-devel` with the location you want to have all your openQA stuff. Consider that
-it will need a considerably amount of disk space. The `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
+it will need a considerably amount of disk space. `OPENQA_KEY` and `OPENQA_SECRET` must be adjusted later when
 created via the web UI (see step 6 of subsequent section "Clone and configure all required repos").
 
 ### Create PostgreSQL user, maybe import some data
