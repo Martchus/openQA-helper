@@ -1,7 +1,8 @@
 #!/bin/bash
 repo=${1:-openQA}
+[[ -d "$OPENQA_BASEDIR/build/os-autoinst-$repo" ]] && dir="$OPENQA_BASEDIR/build/os-autoinst-$repo"
 [[ -d "$OPENQA_BASEDIR/$repo" ]] && dir="$OPENQA_BASEDIR/$repo"
 [[ -d "$OPENQA_BASEDIR/repos/$repo" ]] && dir="$OPENQA_BASEDIR/repos/$repo"
-[[ -d "$OPENQA_BASEDIR/openqa/share/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/$repo"
-[[ -d "$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/tests/opensuse/products/$repo"
+[[ -d "$OPENQA_BASEDIR/openqa/share/tests/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/tests/$repo"
+[[ -d "$OPENQA_BASEDIR/openqa/share/tests/${repo##products/}/$repo" ]] && dir="$OPENQA_BASEDIR/openqa/share/tests/${repo##products/}/$repo"
 [[ $dir ]] && cd "$dir" || echo "$repo does not exist"
