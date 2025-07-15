@@ -1021,11 +1021,142 @@ Recent job results with a certain setting:
 select job_id, value, (select result from jobs where id = job_id) from job_settings where key = 'UEFI_PFLASH_VARS' and value like '%ovmf%' order by job_id desc limit 50;
 ```
 
-Resolve chain of ID/relations recursively:
+Use grouping to compute statistics, e.g. of scheduled product:
 ```
-with recursive orig_id as (select 2301::bigint as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id and level < 50) select orig_id, level from orig_id;
+select state, result, count(result) from scheduled_products join jobs on scheduled_products.id = jobs.scheduled_product_id where scheduled_products.id = 2943243 group by state, result;
+```
+
+Resolve chain of ID/relations recursively, e.g. to find the original job:
+```
 with recursive orig_id as (select 2301::bigint as orig_id, 1 as level union all select id as orig_id, orig_id.level + 1 as level from jobs join orig_id on orig_id.orig_id = jobs.clone_id) select level from orig_id order by level desc limit 1;
 ```
+Or to find the lastest job:
+```
+with recursive latest_id as (select 18372083::bigint as latest_id, 1 as level union all select clone_id as latest_id, latest_id.level + 1 as level from jobs join latest_id on latest_id.latest_id = jobs.id and level < 50) select latest_id from latest_id where latest_id is not null order by level desc limit 1;
+```
+
+Combining recursion with other queries:
+```
+WITH RECURSIVE
+  -- get the initial set of jobs in the scheduled product
+  initial_job_ids AS (
+    SELECT
+      jobs.id as job_id,
+      jobs.clone_id
+    FROM
+      scheduled_products
+      JOIN jobs ON scheduled_products.id = jobs.scheduled_product_id
+    WHERE
+      scheduled_products.id = 2943243
+  ),
+  -- find more recent jobs for each initial job recursively
+  latest_id_resolver AS (
+    -- start with each job_id from initial_job_ids
+    SELECT
+      ij.job_id,
+      ij.job_id AS latest_job_id,
+      1 AS level
+    FROM
+      initial_job_ids AS ij
+    UNION ALL
+    -- find the clone_id for the current latest_job_id
+    SELECT
+      lir.job_id,
+      j.clone_id AS latest_job_id,
+      lir.level + 1 AS level
+    FROM
+      jobs AS j
+      JOIN latest_id_resolver AS lir ON lir.latest_job_id = j.id
+    -- limit the recursion
+    WHERE
+      lir.level < 50
+  )
+-- filter jobs to only get the latest
+SELECT DISTINCT ON (job_id)
+  job_id as initial_job_id,
+  latest_job_id,
+  mrj.state,
+  mrj.result,
+  level as chain_length
+FROM
+  latest_id_resolver
+JOIN jobs AS mrj ON mrj.id = latest_job_id
+WHERE
+  latest_job_id IS NOT NULL
+ORDER BY
+  job_id,
+  level DESC;
+```
+
+One can chain as many queries toghether as needed, e.g. to do additional grouping like this
+query which computes statistics of a scheduled product based on the most recent jobs:
+```
+WITH RECURSIVE
+  -- get the initial set of jobs in the scheduled product
+  initial_job_ids AS (
+    SELECT
+      jobs.id AS job_id
+    FROM
+      scheduled_products
+      JOIN jobs ON scheduled_products.id = jobs.scheduled_product_id
+    WHERE
+      scheduled_products.id = 2943243
+  ),
+  -- find more recent jobs for each initial job recursively
+  latest_id_resolver AS (
+    -- start with each job_id from initial_job_ids
+    SELECT
+      ij.job_id,
+      ij.job_id AS latest_job_id,
+      1 AS level
+    FROM
+      initial_job_ids AS ij
+    UNION ALL
+    -- find the clone_id for the current latest_job_id
+    SELECT
+      lir.job_id,
+      j.clone_id AS latest_job_id,
+      lir.level + 1 AS level
+    FROM
+      jobs AS j
+      JOIN latest_id_resolver AS lir ON lir.latest_job_id = j.id
+    -- limit the recursion
+    WHERE
+      lir.level < 50
+  ),
+  -- filter jobs to only get the latest
+  most_recent_jobs AS (
+    SELECT DISTINCT ON (job_id)
+        job_id as initial_job_id,
+        latest_job_id,
+        mrj.state as latest_job_state,
+        mrj.result as latest_job_result,
+        level as chain_length
+    FROM
+        latest_id_resolver
+    JOIN jobs AS mrj ON mrj.id = latest_job_id
+    WHERE
+        latest_job_id IS NOT NULL
+    ORDER BY
+        job_id,
+        level DESC
+  )
+SELECT
+  latest_job_state,
+  latest_job_result,
+  count(latest_job_result) as job_count,
+  array_agg(latest_job_id) as job_ids
+FROM
+  most_recent_jobs
+WHERE
+  latest_job_id IS NOT NULL
+GROUP BY
+  latest_job_state,
+  latest_job_result;
+```
+
+See also the [PostgreSQL documentation](https://www.postgresql.org/docs/current/queries-with.html) for more information on
+`WITH` queries.
 
 Search within JSON columns:
 ```
