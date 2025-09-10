@@ -77,10 +77,10 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
   found on `backup-vm.qe.nue2.suse.org` (not publicly accessible). Example using `rsync`:
   ```
   rsync -aHP \
-    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.opensuse.org/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
+    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.opensuse.org/var/lib/openqa/backup/$(date --date="1 day ago" +%F).dump" \
     "$OPENQA_BASEDIR/sql-dumps/openqa.opensuse.org"
   rsync -aHP \
-    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.suse.de/var/lib/openqa/SQL-DUMPS/$(date --date="1 day ago" +%F).dump" \
+    "backup-vm.qe.nue2.suse.org:/home/rsnapshot/alpha.0/openqa.suse.de/var/lib/openqa/backup/$(date --date="1 day ago" +%F).dump" \
     "$OPENQA_BASEDIR/sql-dumps/openqa.suse.de"
   ```
 * Note that you'll have to migrate your database when upgrading major or minor PostgreSQL release.
