@@ -2,11 +2,10 @@
 # checks the NPM package cache for problematic packages
 # based on https://www.ox.security/blog/npm-packages-compromised/
 
-set -euo pipefail
-
 OPENQA_HELPER_DIR=${OPENQA_HELPER_DIR:-$OPENQA_BASEDIR/repos/openQA-helper}
 source "$OPENQA_HELPER_DIR/lib/problematic-npm-packages.sh"
 
+set -euo pipefail
 echo "Checking npm cache..."
 npm_output="$(npm cache ls 2>/dev/null || true)"
 

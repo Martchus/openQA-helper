@@ -5,6 +5,8 @@
 OPENQA_HELPER_DIR=${OPENQA_HELPER_DIR:-$OPENQA_BASEDIR/repos/openQA-helper}
 source "$OPENQA_HELPER_DIR/lib/problematic-npm-packages.sh"
 
+found=
+
 for p in "${packages[@]}"; do
   pkg=${p%@*} vuln=${p##*@}
   IFS=$','
@@ -16,6 +18,7 @@ for p in "${packages[@]}"; do
   for installed_version in "${installed_versions[@]}"; do
     for vuln_version in "${vuln_versions[@]}"; do
       if [[ $installed_version == "$vuln_version" ]]; then
+        found=1
         echo " - vulnerable version installed: $installed_version"
       fi
     done
@@ -23,8 +26,11 @@ for p in "${packages[@]}"; do
   for locked_version in "${locked_versions[@]}"; do
     for vuln_version in "${vuln_versions[@]}"; do
       if [[ $locked_version == "$vuln_version" ]]; then
+        found=1
         echo " - vulnerable version listed in package-lock.json: $locked_version"
       fi
     done
   done
 done
+
+[[ $found ]] && exit 1
