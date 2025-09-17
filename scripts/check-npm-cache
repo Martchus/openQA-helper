@@ -12,12 +12,16 @@ npm_output="$(npm cache ls 2>/dev/null || true)"
 
 found=false
 for p in "${packages[@]}"; do
-  name=${p%@*}
-  ver=${p##*@}
-  if grep -q "${name}-${ver}" <<<"$npm_output"; then
-    echo "• $p"
-    found=true
-  fi
+  name=${p%@*} vuln=${p##*@}
+  IFS=$','
+  vuln_versions=(${vuln})
+  IFS=$' '
+  for ver in "${vuln_versions[@]}"; do
+    if grep -q "${name}-${ver}" <<<"$npm_output"; then
+      echo "• $p"
+      found=true
+    fi
+  done
 done
 
 $found || echo "(none)"

@@ -6,11 +6,25 @@ OPENQA_HELPER_DIR=${OPENQA_HELPER_DIR:-$OPENQA_BASEDIR/repos/openQA-helper}
 source "$OPENQA_HELPER_DIR/lib/problematic-npm-packages.sh"
 
 for p in "${packages[@]}"; do
-  pkg=${p%@*}; vuln=${p##*@}
+  pkg=${p%@*} vuln=${p##*@}
+  IFS=$','
+  vuln_versions=(${vuln})
+  IFS=$' '
   echo "$pkg (vuln: $vuln)"
-  npm ls "$pkg" --all --depth=Infinity 2>/dev/null \
-    | grep -o "$pkg@[^ ]*" | cut -d@ -f2 | sort -u | sed 's/^/  - /' \
-    || echo "  - Not installed"
-  # also check package-lock.json for any version of the package (should be improved for better output and consider version)
-  grep "$pkg" package-lock.json
+  installed_versions=$(npm ls "$pkg" --all --depth=Infinity 2>/dev/null | grep -o "$pkg@[^ ]*" | cut -d@ -f2 | sort -u)
+  locked_versions=$(npm ls --package-lock-only "$pkg" --all --depth=Infinity 2>/dev/null | grep -o "$pkg@[^ ]*" | cut -d@ -f2 | sort -u)
+  for installed_version in "${installed_versions[@]}"; do
+    for vuln_version in "${vuln_versions[@]}"; do
+      if [[ $installed_version == "$vuln_version" ]]; then
+        echo " - vulnerable version installed: $installed_version"
+      fi
+    done
+  done
+  for locked_version in "${locked_versions[@]}"; do
+    for vuln_version in "${vuln_versions[@]}"; do
+      if [[ $locked_version == "$vuln_version" ]]; then
+        echo " - vulnerable version listed in package-lock.json: $locked_version"
+      fi
+    done
+  done
 done
