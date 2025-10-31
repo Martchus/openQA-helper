@@ -1194,6 +1194,11 @@ Make new job IDs start at a certain number:
 ALTER SEQUENCE jobs_id_seq RESTART WITH 17400000;
 ```
 
+Prios of Gru tasks:
+```
+select array_agg(distinct taskname) as tasks, priority from gru_tasks group by priority order by priority desc;
+```
+
 ### Useful CLI commands
 Stop certain jobs:
 ```
