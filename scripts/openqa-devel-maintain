@@ -49,9 +49,9 @@ update_repo "$OPENQA_BASEDIR/repos/openQA"
 echo "==> INFO: Updating os-autoinst"
 update_repo "$OPENQA_BASEDIR/repos/os-autoinst"
 
-if [[ -d $OPENQA_BASEDIR/repos/scripts ]]; then
+if [[ -d $OPENQA_BASEDIR/repos/os-autoinst-scripts ]]; then
     echo "==> INFO: Updating scripts"
-    update_repo "$OPENQA_BASEDIR/repos/scripts"
+    update_repo "$OPENQA_BASEDIR/repos/os-autoinst-scripts"
 fi
 
 declare -A products_by_distro=(
