@@ -1,0 +1,21 @@
+#!/bin/perl
+
+use strict;
+use warnings;
+
+use Mojo::File qw(path);
+
+my @files = split("\n", path($ARGV[0] // 'to-delete.txt')->slurp);
+my $base = ($ENV{OPENQA_BASEDIR} // '/var/lib') . '/openqa/images/';
+print("base: $base\n");
+
+for my $file (@files) {
+    next unless index($file, $base) == 0;
+    my $path = path(substr($file, length($base)));
+    my $dir = $path->dirname;
+    my $name = $path->basename;
+    my $target_dir = path('bak', $dir)->make_path;
+    my $target_file = $target_dir->child($name);
+    print("$file -> $target_file\n");
+    path($file)->move_to($target_file);
+}
