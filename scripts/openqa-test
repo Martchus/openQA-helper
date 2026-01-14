@@ -4,6 +4,12 @@ parent_dir=${PWD%/*}
 cd "$OPENQA_BASEDIR/repos/${OPENQA_CHECKOUT:-openQA}"
 [[ $1 == 't/testinstance' ]] && basedir="$OPENQA_BASEDIR/repos/openQA/t/data" || basedir=
 [[ $NOT_HEADLESS ]] || echo 'Note: use NOT_HEADLESS=1 to watch execution of UI tests.'
+if [[ $OUTPUT_CHECK ]]; then
+    prove=$PWD/tools/prove_wrapper
+else
+    prove=${PROVE:-prove}
+    echo 'Note: use OUTPUT_CHECK=1 to check for unhandled output.'
+fi
 if ! [[ -e /dev/shm/tpg ]]; then
     echo 'Start database for test with openqa-pg first.'
     exit -1
@@ -28,5 +34,5 @@ export PROVE_ARGS=${PROVE_ARGS:--l -v}
 export OPENQA_TEST_TIMEOUT_DISABLE=1
 
 echo "Using openQA checkout: $PWD"
-echo prove $PROVE_ARGS "$@"
-prove $PROVE_ARGS "$@"
+echo "$prove" $PROVE_ARGS "$@"
+"$prove" $PROVE_ARGS "$@"
