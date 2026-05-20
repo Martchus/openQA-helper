@@ -31,7 +31,7 @@ clone_repo os-autoinst
 
 # clone further repos
 clone_repo os-autoinst-scripts
-ln -s os-autoinst-scripts scripts
+ln -fs os-autoinst-scripts scripts
 
 # clone tests for openSUSE
 mkdir -p "$OPENQA_BASEDIR/openqa/share/tests"
