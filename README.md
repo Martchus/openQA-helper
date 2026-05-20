@@ -34,7 +34,7 @@ setting up my own workstation.
 It makes sense to get an idea of the *thing* you're going to install before installing it.
 
 So have a look
-at [openQA's architecture](https://github.com/os-autoinst/openQA/blob/master/docs/GettingStarted.asciidoc#architecture)
+at [openQA's architecture](https://github.com/os-autoinst/openQA/blob/master/docs/GettingStarted.md#architecture)
 to see what's going on.
 
 To really get an idea what's going on, have a look
@@ -64,7 +64,7 @@ it will need a considerably amount of disk space. `OPENQA_KEY` and `OPENQA_SECRE
 created via the web UI (see step 6 of subsequent section "Clone and configure all required repos").
 
 ### Create PostgreSQL user, maybe import some data
-* See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#setting-up-the-postgresql-database
+* See https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.md#setting-up-the-postgresql-database
     * You can of course skip `pg_restore`. Starting with an empty database is likely sufficient for the beginning.
     * It makes sense to use a different name for the database than `openqa`. I usually use `openqa-local` and when
       importing later production data from OSD and o3 `openqa-osd` and `openqa-o3`.
@@ -107,12 +107,12 @@ created via the web UI (see step 6 of subsequent section "Clone and configure al
    you need to access the web UI page http://localhost:9526/api_keys, specify an expiration date and click on "Create".
 7. The openQA config files will be located under `$OPENQA_BASEDIR/config`.
     * If you've chosen a database name other than `openqa` as suggested, update `$OPENQA_CONFIG/database.ini` accordingly
-      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#database)).
+      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.md#database)).
     * In `worker.ini` you likely want to adjust the `HOST` to `http://localhost:9526` so the worker will directly
       connect to the web UI and websocket server (making it unnessarary to use an HTTP reverse proxy).
     * For this setup it makes most sense to set `WORKER_HOSTNAME` to `127.0.0.1` in `worker.ini`. Note that for remote workers (not covered by this setup
       guide) the variable must be set to an IP or domain which the web UI can use to connect to the worker host
-      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.asciidoc#steps-to-debug-developer-mode-setup)).
+      (see [official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Pitfalls.md#steps-to-debug-developer-mode-setup)).
     * Useful adjustments to the config for using the svirt backend, enable caching and profiling
       are given in the subsequent sections.
 8. You can now also try to start the other services (as described in the next section) to check whether they're running. In practise I usually
@@ -211,7 +211,7 @@ sudo sudo -u postgres createdb -O $USER -T openqa-local openqa-local-copy
 
 ### Update migration scripts and create a fork of a database
 The official documentation describes
-[how to update the database schema](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#how-to-update-the-database-schema).
+[how to update the database schema](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.md#how-to-update-the-database-schema).
 
 One can also use `openqa-start` to invoke the scripts the official documentation mentions with `--force`:
 ```
@@ -270,7 +270,7 @@ openqa-renamedb old_name new_name
 * Be sure to stop your regular worker, scheduler, ... before starting the one of the fullstack tests.
 
 ## Run tests of openQA itself with Docker
-See [documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.asciidoc#running-tests-of-openqa-itself).
+See [documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Contributing.md#running-tests-of-openqa-itself).
 
 ### Prepare running tests via Docker
 ```
@@ -803,7 +803,7 @@ systemctl kill --kill-who=main --signal HUP openqa-worker-auto-restart@{1..28}
 ```
 
 (see
-[official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.asciidoc#stoppingrestarting-workers-without-interrupting-currently-running-jobs)
+[official documentation](https://github.com/os-autoinst/openQA/blob/master/docs/Installing.md#stoppingrestarting-workers-without-interrupting-currently-running-jobs)
 for additional info)
 
 Modify a parameterized systemd-unit (e.g. `…@.path`) for each associated parameterized systemd-unit (e.g. `…@.service`):
