@@ -11,7 +11,7 @@ function start_sessions()
 {
     declare -n term_sessions=$1
     if [[ $KONSOLE_DBUS_SESSION ]]; then
-        local konsole_service=${KONSOLE_SERVICE:-$(qdbus-qt5 | grep konsole | head -n1)}
+        local konsole_service=${KONSOLE_SERVICE:-$(qdbus6 | grep konsole | head -n1)}
         echo "Using Konsole service: $konsole_service"
     else
         # start tmux session
@@ -28,15 +28,15 @@ function start_sessions()
 
         echo "Creating $name: $command"
         if [[ $KONSOLE_DBUS_SESSION ]]; then
-            local session_num=$(qdbus-qt5 $konsole_service /Windows/1 newSession)
+            local session_num=$(qdbus6 $konsole_service /Windows/1 newSession)
             sleep 0.1
-            qdbus-qt5 $konsole_service /Sessions/$session_num setTitle 0 $name
+            qdbus6 $konsole_service /Sessions/$session_num setTitle 0 $name
             sleep 0.1
-            qdbus-qt5 $konsole_service /Sessions/$session_num setTitle 1 $name
+            qdbus6 $konsole_service /Sessions/$session_num setTitle 1 $name
             sleep 0.1
-            qdbus-qt5 $konsole_service /Sessions/$session_num sendText "openqa-start $command"
+            qdbus6 $konsole_service /Sessions/$session_num sendText "openqa-start $command"
             sleep 0.1
-            qdbus-qt5 $konsole_service /Sessions/$session_num sendText $'\n'
+            qdbus6 $konsole_service /Sessions/$session_num sendText $'\n'
             sleep 0.1
         else
             tmux neww -d -t "openqa:$((nsessions + 2))" -n "$name"
@@ -49,7 +49,7 @@ function start_sessions()
      # activate first session
     if [[ $KONSOLE_DBUS_SESSION ]]; then
         while [[ $session_count -gt 1 ]]; do
-            qdbus-qt5 "$KONSOLE_SERVICE" /Konsole prevSession
+            qdbus6 "$KONSOLE_SERVICE" /Konsole prevSession
             session_count=$((session_count - 1))
         done
     else
