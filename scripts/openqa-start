@@ -148,9 +148,8 @@ elif [[ $what == db-update ]]; then
     start_script script/upgradedb --prepare_upgrades --force "$@"
 elif [[ $what == generate-documentation ]]; then
     export KEEP_OUTPUT=1 FORMATS=html
-    echo "documentation appear under: file://$OPENQA_BASEDIR/repos/openQA/out/docs/index.html"
-    [[ -d "$OPENQA_BASEDIR/repos/openQA/out" ]] && rm -fr "$OPENQA_BASEDIR/repos/openQA/out"
-    start_script tools/"$what" "$@" || true
+    echo "documentation appear under: file://$OPENQA_BASEDIR/repos/openQA/docs/build/index.html"
+    start_script tools/generate-docs "$@" || true
 elif [[ $what == all ]]; then
     source "$OPENQA_BASEDIR/repos/openQA-helper/lib/tabs.sh"
     sessions=(
