@@ -72,11 +72,11 @@ function start_script
 {
     [[ $OPENQA_START_SILENT ]] || >&2 echo "$@"
     if [[ $PERL_DEBUGGER_GUI ]]; then
-        perl -d:ptkdb "$@"
+        exec perl -d:ptkdb "$@"
     elif [[ $PERL_ARGS ]]; then
-        perl $PERL_ARGS "$@"
+        exec perl $PERL_ARGS "$@"
     else
-        "$@"
+        exec "$@"
     fi
     exit $?
 }
