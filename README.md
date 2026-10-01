@@ -929,6 +929,10 @@ Incompletes grouped by reason with relevant worker hosts:
 select count(jobs.id), min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, array_agg(DISTINCT workers.host) as hosts, reason from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2024-07-12T18:00:00' and result = 'incomplete' group by reason order by count(jobs.id) desc limit 5;
 ```
 
+```
+select array_agg(DISTINCT jobs.id), array_agg(DISTINCT job_settings.value), min(t_started) as first_t_started, max(t_started) as last_t_started, array_agg(DISTINCT workers.host) as hosts, reason from jobs join workers on workers.id = jobs.assigned_worker_id join job_settings on jobs.id = job_settings.job_id where job_settings.key = 'WORKER_CLASS' and job_settings.value like '%tap%' and t_finished >= '2026-09-30T12:00:00' and result = 'incomplete' group by reason order by count(jobs.id) desc limit 5;
+```
+
 Timeouted jobs grouped by worker slot:
 ```
 select count(jobs.id) as timeouted_job_count, min(t_finished) as first_t_finished, max(t_finished) as last_t_finished, string_agg(DISTINCT concat(jobs.ARCH, '@', jobs.MACHINE), ', ') as job_type, string_agg(DISTINCT concat(workers.host, ':', workers.instance), ', ') as worker_name, jobs.assigned_worker_id as worker_id, (CASE WHEN string_agg(DISTINCT workers.host, '' ) = 'worker31' OR (string_agg(DISTINCT workers.host, '' ) = 'worker32' AND max(workers.instance) < 16) THEN 's390zl12' ELSE 's390zl13' END) as s390x_host from jobs join workers on workers.id = jobs.assigned_worker_id where t_finished >= '2025-01-22T00:00:00' and result = 'timeout_exceeded' group by jobs.assigned_worker_id order by count(jobs.id) desc;
