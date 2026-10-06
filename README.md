@@ -852,6 +852,11 @@ select * from minion_jobs where args::TEXT ~ '%7275485%';
 sudo -u geekotest /usr/share/openqa/script/openqa minion job -e download_asset -a '["http://download.opensuse.org/repositories/Virtualization:/Appliances:/Images:/Testing_x86:/archlinux/images/kiwi-test-image-live-disk-kis.x86_64-1.0.0-Disk-Build56.8.raw.xz", "/var/lib/openqa/share/factory/hdd/kiwi-test-image-live-disk-kis.x86_64-1.0.0-Disk-Build56.8.raw", 1]'
 ```
 
+### Run bug carry over for a particular job
+```
+sudo -u geekotest /usr/share/openqa/script/openqa eval -V 'app->schema->resultset("Jobs")->find(24712949)->carry_over_bugrefs'
+```
+
 ### Access management interface in the new security zone
 ```
 ssh -4 -L 8090:openqaworker4-ipmi.qe-ipmi-ur:443 -N jumpy@qe-jumpy.suse.de
