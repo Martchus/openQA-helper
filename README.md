@@ -1209,6 +1209,11 @@ Prios of Gru tasks:
 select array_agg(distinct taskname) as tasks, priority from gru_tasks group by priority order by priority desc;
 ```
 
+Percentage of last 500000 jobs with a certain setting:
+```
+select ((select count(distinct job_id) from job_settings where job_id > (select max(id) from jobs) - 500000 and key = 'PRETTY_SERIAL_MARKER' and value = '0')::real / (select count(id) from jobs where id > (select max(id) from jobs) - 500000 and (select count(key) from job_settings where job_id = jobs.id and key = 'PRETTY_SERIAL_MARKER' and value = '0') = 0)::real * 100.0) as pretty_serial_markers_disabled_percentage;
+```
+
 ### Useful CLI commands
 Stop certain jobs:
 ```
