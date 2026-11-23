@@ -1,3 +1,9 @@
+# allow customizing launcher; use landrun-dev if in path and no other launcher specified
+if [[ -z $OPENQA_LAUNCHER ]] && [[ -z $CURRENT_LANDRUN_BIN ]]; then
+    landrun=$(which landrun-dev 2> /dev/null)
+    [[ $landrun ]] && export OPENQA_LAUNCHER=$landrun
+fi
+
 # allow customizing some directories
 os_autoinst_dir=${CUSTOM_OS_AUTOINST_DIR:-os-autoinst}
 if [[ $CUSTOM_MOJO_IO_LOOP_READ_WRITE_PROCESS ]]; then
