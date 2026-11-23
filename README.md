@@ -1385,5 +1385,24 @@ cat .github/workflows/openqa.yml | yq -r '.jobs.trigger_and_monitor_openqa.steps
 
 Outdated but maybe still useful: https://github.com/mojolicious/mojo/wiki/%25ENV
 
+## Using AI and OpenCode
+The directory `skills` contains skills for openQA development. It is not very
+comprehensive as not much is needed for openQA development. I am focusing on
+addressing the actual issues I often see with AI generated code.
+
+You can add the skills to your `~/.config/opencode/opencode.jsonc` like this:
+```
+"skills": { "paths": ["…/openQA-helper/skills"] },
+```
+
+There also exists [openQA-skills](https://github.com/os-autoinst/openQA-skill).
+The harness snippets it contains seem very useful. The actual skills seem to be
+more tailored to specific uses of openQA rather than generic openQA development.
+
+### Confinement
+The script `scripts/landrun-dev` from `c++utilities` can be used for openQA
+development as well, check out the
+[c++utilities README](https://github.com/Martchus/cpp-utilities/blob/master/README.md#confinement).
+
 ## Issues/workarounds
 * https://github.com/pjcj/Devel--Cover/issues/292
