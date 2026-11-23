@@ -39,3 +39,11 @@ Follow these coding practices when writing code for openQA-related repositories.
 * Use optional chaining instead of manual conditions where it makes sense **if**
   an object is expected to be undefined.
 * Use template literals/strings instead of chaining `+` operations.
+
+# Permission errors
+Do not get hung up on permission errors. The following openQA tests are
+currently known to fail in a sandboxed environment:
+
+```
+t/40-script_openqa-clone-custom-git-refspec.t
+```

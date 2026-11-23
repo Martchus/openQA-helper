@@ -1404,5 +1404,10 @@ The script `scripts/landrun-dev` from `c++utilities` can be used for openQA
 development as well, check out the
 [c++utilities README](https://github.com/Martchus/cpp-utilities/blob/master/README.md#confinement).
 
+You have to use `LANDRUN_DEV_ALLOW_TMP=1` as os-autoinst and openQA do not use
+`TMPDIR` consistently (so the whole `/tmp` directory needs to be accessible).
+With this, all os-autoinst tests pass for me and only very few openQA tests
+fail (see skill).
+
 ## Issues/workarounds
 * https://github.com/pjcj/Devel--Cover/issues/292
