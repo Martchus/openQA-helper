@@ -1225,6 +1225,11 @@ Restart certain jobs (filtered by settings, result and worker slot):
 host=openqa.suse.de sql_command="select DISTINCT jobs.id from jobs join workers on workers.id = jobs.assigned_worker_id join job_settings on jobs.id = job_settings.job_id where job_settings.key = 'WORKER_CLASS' and job_settings.value like '%qemu_x86_64%' and (result not in ('passed', 'softfailed')) and workers.host = 'worker38' and workers.instance > 63 and clone_id is null order by jobs.id desc" ./openqa-advanced-retrigger-jobs
 ```
 
+Copy file to o3 worker:
+```
+rsync -e 'ssh -J openqa.opensuse.org ' -aHP ./script/os-autoinst-setup-multi-machine root@openqaworker21:/tmp/os-autoinst-setup-multi-machine
+```
+
 ### UEFI boot via iPXE
 See our
 [Wiki](https://progress.opensuse.org/projects/openqav3/wiki/Wiki#Setup-guide-for-new-machines)
