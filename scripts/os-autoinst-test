@@ -8,6 +8,10 @@ if [[ ! -f CMakeCache.txt ]]; then
 fi
 
 source "$OPENQA_BASEDIR/repos/openQA-helper/lib/customize_dirs.sh"
+if [[ $OPENQA_LAUNCHER ]]; then
+    echo "Using launcher: $OPENQA_LAUNCHER"
+    exec $OPENQA_LAUNCHER "$0" "$@"
+fi
 
 export LANGUAGE= LANG=C.utf8
 export PROVE_ARGS=${PROVE_ARGS:--v}
